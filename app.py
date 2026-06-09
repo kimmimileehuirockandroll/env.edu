@@ -1,15 +1,11 @@
 import streamlit as st
 import networkx as nx
 import matplotlib
-import matplotlib.font_manager as fm
-# Mac
-plt.rcParams['font.family'] = 'DejaVu Sans'
-plt.rcParams['axes.unicode_minus'] = False
-# Windows
-plt.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+plt.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['axes.unicode_minus'] = False
 import numpy as np
 import random
 import math
