@@ -630,7 +630,7 @@ with st.sidebar:
     st.markdown("""
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
 네트워크 사이언스 × 환경 교육<br>
-제주 중학생 대상 1시간 체험 프로그램<br><br>
+제주 대정중학교 교육 프로그램<br><br>
 동시 접속: 최대 100명<br>
 제작: 에코 네트워크 연구팀
 </div>
