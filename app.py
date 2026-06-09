@@ -360,7 +360,7 @@ _korean_font_bold = _load_korean_font(8.5)
 # 원본 이미지 해상도: 2816 x 1536
 NODE_POS = {
     "제주공항":       (0.476, 0.720),  # 핀 위쪽 (하늘)
-    "협재해변":       (0.194, 0.470),  # 핀 왼쪽 (바다)
+    "협재해변":       (0.194, 0.490),  # 핀 왼쪽 (바다)
     "대정중학교":     (0.297, 0.317),
     "서귀포치유의숲": (0.562, 0.294),
     "성산일출봉":     (0.837, 0.628),
@@ -485,22 +485,10 @@ def draw_game_graph():
             ax.text(nx_, ny_ + yoff, fallback,
                     fontsize=7.5, fontweight="bold", **txt_kwargs)
 
-    # ── 범례 ──
-    legend_items = [
-        mpatches.Patch(color="#FFD740",  label="현재 위치"),
-        mpatches.Patch(color="#69f0ae",  label="방문 완료"),
-        mpatches.Patch(color="white",    label="미방문", alpha=0.5),
-        mpatches.Patch(color="#69f0ae",  label="버스 경로"),
-        mpatches.Patch(color="#40c4ff",  label="전기렌터카 경로"),
-    ]
-    ax.legend(handles=legend_items, loc="lower right",
-              facecolor="#00000099", edgecolor="#444",
-              labelcolor="white", fontsize=7.5,
-              framealpha=0.85, ncol=2)
-
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     plt.tight_layout(pad=0.2)
+    fig.patch.set_alpha(0.0)  
     return fig
 
 # ─────────────────────────────────────────────
@@ -580,8 +568,8 @@ def draw_response_network(responses):
         return None
 
     fig, ax = plt.subplots(figsize=(10, 7))
-    fig.patch.set_facecolor("#0a0f0d")
-    ax.set_facecolor("#0a0f0d")
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
     ax.axis("off")
 
     k_val = 1.2 / math.sqrt(max(G.number_of_nodes(), 1))
