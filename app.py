@@ -569,8 +569,8 @@ def draw_response_network(responses):
         return None
 
     fig, ax = plt.subplots(figsize=(10, 7))
-    fig.patch.set_facecolor("#0a0f0d")
-    ax.set_facecolor("#0a0f0d")
+    fig.patch.set_facecolor("#none")
+    ax.set_facecolor("#none")
     ax.axis("off")
 
     k_val = 1.2 / math.sqrt(max(G.number_of_nodes(), 1))
@@ -758,14 +758,6 @@ elif menu == "🎮 삼다수 에코 레이스":
         fig = draw_game_graph()
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
-
-        # Visited nodes badges
-        visited_html = ""
-        for node in NODES:
-            cls = "node-badge visited" if node in st.session_state.visited else "node-badge"
-            icon = NODES[node]["icon"]
-            visited_html += f'<span class="{cls}">{icon} {node}</span>'
-        st.markdown(f"<div style='margin-top:.5rem;'>{visited_html}</div>", unsafe_allow_html=True)
 
     with ctrl_col:
         st.markdown("### 🧭 이동 제어판")
