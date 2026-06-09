@@ -1100,7 +1100,7 @@ elif menu == "📊 우리 반 환경행동 네트워크":
                        "규범\nSN1", "규범\nSN2", "규범\nSN3",
                        "통제\nPBC1", "통제\nPBC2", "통제\nPBC3",
                        "의도\nI1"]
-            ax3.set_xticks(range(5))
+            ax3.set_xticks(range(len(QUESTIONS)))
             ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
             if _korean_font:
                 ax3.set_ylabel("평균 점수", color="#80cbc4", fontproperties=_korean_font)
