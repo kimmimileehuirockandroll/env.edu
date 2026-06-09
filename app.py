@@ -3,7 +3,8 @@ import networkx as nx
 import matplotlib
 import matplotlib.font_manager as fm
 # Mac
-plt.rcParams['font.family'] = 'AppleGothic'
+plt.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['axes.unicode_minus'] = False
 # Windows
 # plt.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.use("Agg")
