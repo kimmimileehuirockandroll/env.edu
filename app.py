@@ -254,7 +254,7 @@ def init_state():
         "visited": ["대정중학교"],
         "path_edges": [],          # list of (from, to, transport)
         "time_left": 480,          # minutes
-        "carbon_left": 10000,       # grams
+        "carbon_left": 10000,      # grams
         "budget_left": 60000,      # won
         "game_log": [],
         "game_over": False,
@@ -281,26 +281,27 @@ NODES = {
     "함덕해변":   {"en": "Hamdeok Beach",    "lat": 33.543, "lng": 126.669, "icon": "🌊"},
 }
 
-# ── 실제 도로 거리 (km) ──
+# Edge data: 실제 도로 거리(km) 기반 자동 계산
+# 버스: 27g/km, 기본1200원+100원/km, 2분/km+10분 대기
+# 전기차: 79g/km, 200원/km, 1분/km
 ROAD_KM = {
-    ("제주공항",   "협재해변"):         34.9,
-    ("제주공항",   "함덕해변"):         21.8,
-    ("제주공항",   "성산일출봉"):       54.8,
-    ("협재해변",   "대정중학교"):       25.5,
-    ("협재해변",   "서귀포치유의숲"):   32.9,
-    ("대정중학교", "서귀포치유의숲"):   37.4,
-    ("서귀포치유의숲", "성산일출봉"):   54.3,
-    ("성산일출봉", "함덕해변"):         35.1,
-    ("함덕해변",   "협재해변"):         56.1,
-    ("대정중학교", "성산일출봉"):       90.6,
-    ("서귀포치유의숲", "함덕해변"):     32.8,
+    ("제주공항",       "협재해변"):         34.9,
+    ("제주공항",       "함덕해변"):         21.8,
+    ("제주공항",       "성산일출봉"):       54.8,
+    ("협재해변",       "대정중학교"):       25.5,
+    ("협재해변",       "서귀포치유의숲"):   32.9,
+    ("대정중학교",     "서귀포치유의숲"):   37.4,
+    ("서귀포치유의숲", "성산일출봉"):       54.3,
+    ("성산일출봉",     "함덕해변"):         35.1,
+    ("함덕해변",       "협재해변"):         56.1,
+    ("대정중학교",     "성산일출봉"):       90.6,
+    ("서귀포치유의숲", "함덕해변"):         32.8,
 }
 
 def _make_edge(km):
-    """km → (time, carbon, cost) for bus and ev"""
     return {
-        "bus": (round(km*2) + 10,  round(km*27),  1200 + round(km*100)),
-        "ev":  (round(km*1),        round(km*79),  round(km*200)),
+        "bus": (round(km * 2) + 10, round(km * 27), 1200 + round(km * 100)),
+        "ev":  (round(km * 1),      round(km * 79), round(km * 200)),
     }
 
 EDGES = {k: _make_edge(v) for k, v in ROAD_KM.items()}
@@ -358,12 +359,12 @@ _korean_font_bold = _load_korean_font(8.5)
 # 이미지 내 노드 픽셀 위치 → matplotlib 정규화 좌표 (y 반전)
 # 원본 이미지 해상도: 2816 x 1536
 NODE_POS = {
-    "제주공항":       (0.476, 0.720),  # 핀 위쪽 (하늘)
-    "협재해변":       (0.194, 0.470),  # 핀 왼쪽 (바다)
-    "대정중학교":     (0.297, 0.317),
-    "서귀포치유의숲": (0.562, 0.294),
-    "성산일출봉":     (0.837, 0.628),
-    "함덕해변":       (0.758, 0.830),  # 핀 위쪽 (바다)
+    "제주공항":       (0.476, 0.757),
+    "협재해변":       (0.194, 0.590),
+    "대정중학교":     (0.297, 0.267),
+    "서귀포치유의숲": (0.562, 0.244),
+    "성산일출봉":     (0.877, 0.628),
+    "함덕해변":       (0.758, 0.857),
 }
 
 # 배경 이미지 경로 (Streamlit Cloud: 소스코드와 같은 폴더에 jeju_map.png 있어야 함)
@@ -482,10 +483,22 @@ def draw_game_graph():
             ax.text(nx_, ny_ + yoff, fallback,
                     fontsize=7.5, fontweight="bold", **txt_kwargs)
 
+    # ── 범례 ──
+    legend_items = [
+        mpatches.Patch(color="#FFD740",  label="현재 위치"),
+        mpatches.Patch(color="#69f0ae",  label="방문 완료"),
+        mpatches.Patch(color="white",    label="미방문", alpha=0.5),
+        mpatches.Patch(color="#69f0ae",  label="버스 경로"),
+        mpatches.Patch(color="#40c4ff",  label="전기렌터카 경로"),
+    ]
+    ax.legend(handles=legend_items, loc="lower right",
+              facecolor="#00000099", edgecolor="#444",
+              labelcolor="white", fontsize=7.5,
+              framealpha=0.85, ncol=2)
+
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     plt.tight_layout(pad=0.2)
-    fig.patch.set_alpha(0.0) 
     return fig
 
 # ─────────────────────────────────────────────
@@ -565,8 +578,8 @@ def draw_response_network(responses):
         return None
 
     fig, ax = plt.subplots(figsize=(10, 7))
-    fig.patch.set_facecolor("none")
-    ax.set_facecolor("none")
+    fig.patch.set_facecolor("#0a0f0d")
+    ax.set_facecolor("#0a0f0d")
     ax.axis("off")
 
     k_val = 1.2 / math.sqrt(max(G.number_of_nodes(), 1))
@@ -628,7 +641,8 @@ with st.sidebar:
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
 네트워크 사이언스 × 환경 교육<br>
 제주 중학생 대상 1시간 체험 프로그램<br><br>
-제작: 서울대학교 샤오름
+동시 접속: 최대 100명<br>
+제작: 에코 네트워크 연구팀
 </div>
 """, unsafe_allow_html=True)
 
@@ -652,7 +666,7 @@ if menu == "🏠 홈 (소개)":
   제주도의 6개 랜드마크를 탐험하는 네트워크 게임!<br>
   대중교통 vs. 전기 렌터카 중 최적의 이동 수단을 선택하며<br>
   <b style='color:#69f0ae;'>시간 · 탄소 · 비용</b> 세 가지 자원을 관리해보세요.<br><br>
-  지름길이 항상 정답이 아닙니다. 트레이드오프를 분석해 가장 많은 여행을 떠나보세요!
+  지름길이 항상 정답이 아닙니다. 트레이드오프를 분석해 가장 많은 랜드마크를 방문하세요!
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -717,7 +731,7 @@ elif menu == "🎮 삼다수 에코 레이스":
     st.markdown("제주도 랜드마크를 최적의 경로로 탐험하세요. 탄소를 아끼고 시간과 비용도 관리해야 합니다!")
 
     # ── Resource display ──
-    time_pct   = st.session_state.time_left   / 480  * 100
+    time_pct   = st.session_state.time_left   / 480   * 100
     carbon_pct = st.session_state.carbon_left / 10000 * 100
     budget_pct = st.session_state.budget_left / 60000 * 100
 
@@ -728,7 +742,7 @@ elif menu == "🎮 삼다수 에코 레이스":
                  delta="10,000g 시작" if not st.session_state.game_started else None)
     col_b.metric("💰 잔여 비용", f"₩{st.session_state.budget_left:,}",
                  delta="₩60,000 시작" if not st.session_state.game_started else None)
-    col_v.metric("📍 랜드마크", f"{len(st.session_state.visited)}개 / 6개")
+    col_v.metric("📍 방문 거점", f"{len(st.session_state.visited)}개 / 6개")
 
     # Progress bars
     st.markdown("**자원 현황**")
@@ -754,16 +768,29 @@ elif menu == "🎮 삼다수 에코 레이스":
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
 
+        # Visited nodes badges
+        visited_html = ""
+        for node in NODES:
+            cls = "node-badge visited" if node in st.session_state.visited else "node-badge"
+            icon = NODES[node]["icon"]
+            visited_html += f'<span class="{cls}">{icon} {node}</span>'
+        st.markdown(f"<div style='margin-top:.5rem;'>{visited_html}</div>", unsafe_allow_html=True)
+
     with ctrl_col:
         st.markdown("### 🧭 이동 제어판")
 
         if st.session_state.game_over:
             if st.session_state.game_won:
-                st.success("🎉 모든 랜드마크에 방문했습니다!!")
+                st.success("🎉 모든 랜드마크를 방문했습니다! 에코 챔피언!")
             else:
-                total_v = len(st.session_state.visited)
-                st.warning(f"⚠️ 자원 소진! {total_v}개 랜드마크에 방문했습니다.")
-            st.markdown(f"**최종 방문:** {len(st.session_state.visited)}개 랜드마크")
+                # 어떤 자원이 초과됐는지 표시
+                reasons = []
+                if st.session_state.time_left   < 0: reasons.append(f"시간 초과 ({abs(st.session_state.time_left)}분 오버)")
+                if st.session_state.carbon_left < 0: reasons.append(f"탄소 초과 ({abs(st.session_state.carbon_left):,}g 오버)")
+                if st.session_state.budget_left < 0: reasons.append(f"예산 초과 (₩{abs(st.session_state.budget_left):,} 오버)")
+                reason_str = " / ".join(reasons) if reasons else "자원 소진"
+                st.error(f"❌ 실패! {reason_str}")
+            st.markdown(f"**최종 방문:** {len(st.session_state.visited)}개 생태 거점")
             st.markdown(f"**남은 탄소:** {st.session_state.carbon_left:,}g")
             if st.button("🔄 다시 시작"):
                 for k in ["game_started","current_node","visited","path_edges",
@@ -777,8 +804,8 @@ elif menu == "🎮 삼다수 에코 레이스":
             neighbors = get_neighbors(st.session_state.current_node)
 
             if not neighbors:
-                st.info("더 이상 방문할 수 있는 미방문 랜드마크가 없습니다.")
-                st.markdown(f"**총 {len(st.session_state.visited)-1}개** 랜드마크에 방문했습니다! 🎉")
+                st.info("더 이상 방문할 수 있는 미방문 거점이 없습니다.")
+                st.markdown(f"**총 {len(st.session_state.visited)}개** 랜드마크를 방문했습니다! 🎉")
                 if len(st.session_state.visited) == len(NODES):
                     st.session_state.game_won = True
                 st.session_state.game_over = True
@@ -841,13 +868,18 @@ elif menu == "🎮 삼다수 에코 레이스":
                         st.session_state.current_node = dest
                         st.session_state.game_started = True
 
-                        # Check game over
-                        if (st.session_state.time_left <= 0 or
-                            st.session_state.carbon_left <= 0 or
-                            st.session_state.budget_left <= 0):
+                        # 자원 초과 먼저 체크 (탄소/시간/예산 마이너스면 무조건 실패)
+                        resource_fail = (
+                            st.session_state.time_left   < 0 or
+                            st.session_state.carbon_left < 0 or
+                            st.session_state.budget_left < 0
+                        )
+                        if resource_fail:
                             st.session_state.game_over = True
-                        if len(st.session_state.visited) == len(NODES):
-                            st.session_state.game_won = True
+                            st.session_state.game_won  = False
+                        elif len(st.session_state.visited) == len(NODES):
+                            # 자원 여유 있고 전체 방문 완료 → 진짜 승리
+                            st.session_state.game_won  = True
                             st.session_state.game_over = True
                         st.rerun()
 
@@ -862,22 +894,22 @@ elif menu == "🎮 삼다수 에코 레이스":
     # ── Game rules ──
     with st.expander("📖 게임 규칙 & 힌트 보기"):
         st.markdown("""
-**🎯 목표**: 대정중학교에서 출발해 480분(8시간), 탄소 3,000g, 예산 ₩80,000 안에 최대한 많은 랜드마크를 방문하세요.
+**🎯 목표**: 대정중학교에서 출발해 480분, 탄소 10,000g, 예산 ₩60,000 안에 최대한 많은 랜드마크를 방문하세요.
 
 **🚌 대중교통 (버스)**
-- 탄소 배출이 **매우 적음** (친환경 ✅)
-- 대기 시간 패널티: 이동할 때마다 **0~30분**의 랜덤 추가 시간 발생 🎲
-- 비용이 저렴함
+- 탄소 배출: **27g/km** (친환경 ✅)
+- 비용: **기본 1,200원 + 100원/km**
+- 시간: **2분/km + 평균 대기 10분** 🎲
 
 **⚡ 전기 렌터카**
-- 이동 시간이 **정확하고 빠름** (패널티 없음)
-- 탄소 배출이 버스보다 **3~5배 많음**
-- 비용이 비쌈 💸
+- 탄소 배출: **79g/km** (버스의 약 3배 ⚠️)
+- 비용: **200원/km**
+- 시간: **1분/km** (빠르고 정확)
 
 **💡 전략 팁**
-- 짧은 거리는 버스가 유리할 수 있어요 (시간 패널티가 적음)
-- 탄소 예산을 아끼면 환경 점수 보너스!
-- 거점 간 거리를 고려해 효율적인 순서를 계획하세요
+- 전기차만 타면 탄소 10,000g을 금방 초과해요!
+- 탄소가 0 아래로 떨어지는 순간 즉시 실패
+- 버스와 전기차를 잘 섞어야 전체 거점 방문이 가능해요
 """)
 
 # ─────────────────────────────────────────────
