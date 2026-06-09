@@ -1066,16 +1066,21 @@ elif menu == "📊 우리 반 환경행동 네트워크":
             ax3.set_ylim(0, 5.5)
             ax3.spines[:].set_color("#1b3a2a")
             ax3.tick_params(colors="#b2dfdb", labelsize=9)
+            for bar, val in zip(bars3, avg_scores):
+                ax3.text(bar.get_x() + bar.get_width()/2, val + 0.1,
+                         f"{val:.2f}", ha="center", color="#e8f5e9", fontsize=8.5)
+            q_short = ["결과인지\n(NAM)", "책임귀속\n(NAM)", "생태가치\n(VBN)",
+                       "주관규범\n(TPB)", "행동통제\n(TPB)"]
+            ax3.set_xticks(range(5))
+            ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
             if _korean_font:
                 ax3.set_ylabel("평균 점수", color="#80cbc4", fontproperties=_korean_font)
-                ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
                 for tick in ax3.get_xticklabels():
                     tick.set_fontproperties(_korean_font)
                     tick.set_fontsize(7.5)
                     tick.set_color("#b2dfdb")
             else:
                 ax3.set_ylabel("평균 점수", color="#80cbc4")
-                ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
             plt.tight_layout(pad=0.5)
             st.pyplot(fig3, use_container_width=True)
             plt.close(fig3)
