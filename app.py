@@ -1039,8 +1039,8 @@ elif menu == "📊 우리 반 환경행동 네트워크":
             avg_scores = all_scores.mean(axis=0)
 
             stat_col1.metric("👥 참여 인원", f"{len(responses)}명")
-            stat_col2.metric("🌿 평균 생태 가치관(Q3)", f"{avg_scores[2]:.2f} / 5")
-            stat_col3.metric("💪 평균 실천 자신감(Q5)", f"{avg_scores[4]:.2f} / 5")
+            stat_col2.metric("🌿 평균 태도", f"{(avg_scores[0]+avg_scores[1]+avg_scores[2])/3:.2f} / 5")
+            stat_col3.metric("💪 평균 행동 의도", f"{avg_scores[9]:.2f} / 5")
 
             # Network graph
             with st.spinner("네트워크 그래프를 그리는 중..."):
@@ -1081,11 +1081,14 @@ elif menu == "📊 우리 반 환경행동 네트워크":
 
             # Q-by-Q avg bar
             st.markdown("### 📈 문항별 평균 점수")
-            q_labels = [f"Q{i+1}" for i in range(5)]
-            fig3, ax3 = plt.subplots(figsize=(8, 2.5))
+            q_labels = [f"Q{i+1}" for i in range(len(QUESTIONS))]
+            fig3, ax3 = plt.subplots(figsize=(11, 2.5))
             fig3.patch.set_facecolor("#0a0f0d")
             ax3.set_facecolor("#0a0f0d")
-            bar_colors = ["#69f0ae","#40c4ff","#ffd740","#ff6e40","#b39ddb"]
+            bar_colors = ["#69f0ae","#69f0ae","#69f0ae",
+                          "#40c4ff","#40c4ff","#40c4ff",
+                          "#ffd740","#ffd740","#ffd740",
+                          "#ff6e40"]
             bars3 = ax3.bar(q_labels, avg_scores, color=bar_colors, width=0.5)
             ax3.set_ylim(0, 5.5)
             ax3.spines[:].set_color("#1b3a2a")
