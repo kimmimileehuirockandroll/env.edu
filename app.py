@@ -1068,8 +1068,11 @@ elif menu == "📊 우리 반 환경행동 네트워크":
             ax3.tick_params(colors="#b2dfdb", labelsize=9)
             if _korean_font:
                 ax3.set_ylabel("평균 점수", color="#80cbc4", fontproperties=_korean_font)
-                ax3.set_xticklabels(q_short, fontproperties=_korean_font,
-                                    fontsize=7.5, color="#b2dfdb")
+                ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
+                for tick in ax3.get_xticklabels():
+                    tick.set_fontproperties(_korean_font)
+                    tick.set_fontsize(7.5)
+                    tick.set_color("#b2dfdb")
             else:
                 ax3.set_ylabel("평균 점수", color="#80cbc4")
                 ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
