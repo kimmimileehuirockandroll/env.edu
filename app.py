@@ -250,8 +250,8 @@ def init_state():
     defaults = {
         # Game state
         "game_started": False,
-        "current_node": "제주공항",
-        "visited": ["제주공항"],
+        "current_node": "대정중학교",
+        "visited": ["대정중학교"],
         "path_edges": [],          # list of (from, to, transport)
         "time_left": 480,          # minutes
         "carbon_left": 3000,       # grams
@@ -875,7 +875,7 @@ elif menu == "🎮 삼다수 에코 레이스":
     # ── Game rules ──
     with st.expander("📖 게임 규칙 & 힌트 보기"):
         st.markdown("""
-**🎯 목표**: 제주공항에서 출발해 480분(8시간), 탄소 3,000g, 예산 ₩80,000 안에 최대한 많은 생태 거점을 방문하세요.
+**🎯 목표**: 대정중학교에서 출발해 480분(8시간), 탄소 3,000g, 예산 ₩80,000 안에 최대한 많은 생태 거점을 방문하세요.
 
 **🚌 대중교통 (버스)**
 - 탄소 배출이 **매우 적음** (친환경 ✅)
