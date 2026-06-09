@@ -772,7 +772,7 @@ elif menu == "🎮 삼다수 에코 레이스":
 
         if st.session_state.game_over:
             if st.session_state.game_won:
-                st.success("🎉 모든 랜드마크에 들렀습니다!!")
+                st.success("🎉 모든 랜드마크에 방문했습니다!!")
             else:
                 total_v = len(st.session_state.visited) - 1
                 st.warning(f"⚠️ 자원 소진! {total_v}개 랜드마크에 방문했습니다.")
