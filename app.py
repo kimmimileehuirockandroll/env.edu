@@ -1,6 +1,11 @@
 import streamlit as st
 import networkx as nx
 import matplotlib
+import matplotlib.font_manager as fm
+# Mac
+plt.rcParams['font.family'] = 'AppleGothic'
+# Windows
+# plt.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
