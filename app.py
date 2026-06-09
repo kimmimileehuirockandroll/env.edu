@@ -282,7 +282,7 @@ NODES = {
 }
 
 # Edge data: 실제 도로 거리(km) 기반 자동 계산
-# 버스: 27g/km, 기본1200원+100원/km, 2분/km+10분 대기
+# 버스: 27g/km, 기본1200원+100원/km, 3분/km+10분 대기
 # 전기차: 79g/km, 200원/km, 1분/km
 ROAD_KM = {
     ("제주공항",       "협재해변"):         34.9,
@@ -300,7 +300,7 @@ ROAD_KM = {
 
 def _make_edge(km):
     return {
-        "bus": (round(km * 2) + 10, round(km * 27), 1200 + round(km * 100)),
+        "bus": (round(km * 3) + 10, round(km * 27), 1200 + round(km * 100)),
         "ev":  (round(km * 1),      round(km * 79), round(km * 200)),
     }
 
