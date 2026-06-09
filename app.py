@@ -474,19 +474,6 @@ def draw_game_graph():
             ax.text(nx_, ny_ + yoff, fallback,
                     fontsize=7.5, fontweight="bold", **txt_kwargs)
 
-    # ── 범례 ──
-    legend_items = [
-        mpatches.Patch(color="#FFD740",  label="현재 위치"),
-        mpatches.Patch(color="#69f0ae",  label="방문 완료"),
-        mpatches.Patch(color="white",    label="미방문", alpha=0.5),
-        mpatches.Patch(color="#69f0ae",  label="버스 경로"),
-        mpatches.Patch(color="#40c4ff",  label="전기렌터카 경로"),
-    ]
-    ax.legend(handles=legend_items, loc="lower right",
-              facecolor="#00000099", edgecolor="#444",
-              labelcolor="white", fontsize=7.5,
-              framealpha=0.85, ncol=2)
-
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     plt.tight_layout(pad=0.2)
