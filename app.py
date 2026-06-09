@@ -254,8 +254,8 @@ def init_state():
         "visited": ["대정중학교"],
         "path_edges": [],          # list of (from, to, transport)
         "time_left": 480,          # minutes
-        "carbon_left": 3000,       # grams
-        "budget_left": 80000,      # won
+        "carbon_left": 10000,       # grams
+        "budget_left": 60000,      # won
         "game_log": [],
         "game_over": False,
         "game_won": False,
@@ -620,8 +620,7 @@ with st.sidebar:
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
 네트워크 사이언스 × 환경 교육<br>
 제주 중학생 대상 1시간 체험 프로그램<br><br>
-동시 접속: 최대 100명<br>
-제작: 에코 네트워크 연구팀
+제작: 서울대학교 샤오름
 </div>
 """, unsafe_allow_html=True)
 
@@ -711,8 +710,8 @@ elif menu == "🎮 삼다수 에코 레이스":
 
     # ── Resource display ──
     time_pct   = st.session_state.time_left   / 480  * 100
-    carbon_pct = st.session_state.carbon_left / 3000 * 100
-    budget_pct = st.session_state.budget_left / 80000 * 100
+    carbon_pct = st.session_state.carbon_left / 10000 * 100
+    budget_pct = st.session_state.budget_left / 60000 * 100
 
     col_t, col_c, col_b, col_v = st.columns(4)
     col_t.metric("⏱️ 남은 시간", f"{st.session_state.time_left}분",
