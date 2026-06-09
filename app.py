@@ -490,6 +490,7 @@ def draw_game_graph():
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     plt.tight_layout(pad=0.2)
+    fig.patch.set_alpha(0.0) 
     return fig
 
 # ─────────────────────────────────────────────
@@ -569,8 +570,8 @@ def draw_response_network(responses):
         return None
 
     fig, ax = plt.subplots(figsize=(10, 7))
-    fig.patch.set_facecolor("#none")
-    ax.set_facecolor("#none")
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
     ax.axis("off")
 
     k_val = 1.2 / math.sqrt(max(G.number_of_nodes(), 1))
