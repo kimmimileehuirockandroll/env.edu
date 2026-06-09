@@ -312,17 +312,47 @@ def get_neighbors(node):
     return neighbors
 
 # ─────────────────────────────────────────────
-#  GRAPH DRAWING (matplotlib / networkx)
+#  GRAPH DRAWING — 제주 지도 이미지 배경 오버레이
 # ─────────────────────────────────────────────
-# Fixed positions based on approximate lat/lng mapped to canvas
+import os
+from matplotlib.image import imread
+import matplotlib.font_manager as fm
+
+# 한글 폰트 설정 (Streamlit Cloud: 나눔고딕 사용)
+_KOREAN_FONT_PATHS = [
+    "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf",
+    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+    "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",
+    "/System/Library/Fonts/AppleSDGothicNeo.ttc",   # Mac
+]
+_korean_font = None
+for _fp in _KOREAN_FONT_PATHS:
+    if os.path.exists(_fp):
+        _korean_font = fm.FontProperties(fname=_fp, size=8.5)
+        break
+
+# 이미지 내 노드 픽셀 위치 → matplotlib 정규화 좌표 (y 반전)
+# 원본 이미지 해상도: 2816 x 1536
 NODE_POS = {
-    "제주공항":       (0.42, 0.72),
-    "협재해변":       (0.10, 0.45),
-    "곶자왈도립공원": (0.25, 0.28),
-    "서귀포치유의숲": (0.45, 0.10),
-    "성산일출봉":     (0.90, 0.55),
-    "함덕해변":       (0.72, 0.82),
+    "제주공항":       (0.327, 0.805),
+    "협재해변":       (0.103, 0.688),
+    "곶자왈도립공원": (0.270, 0.434),
+    "서귀포치유의숲": (0.153, 0.460),
+    "성산일출봉":     (0.661, 0.674),
+    "함덕해변":       (0.540, 0.870),
 }
+
+# 배경 이미지 경로 (Streamlit Cloud: 소스코드와 같은 폴더에 jeju_map.png 있어야 함)
+MAP_IMG_PATHS = [
+    "jeju_map.png",                         # 로컬 / Cloud (repo 루트)
+    os.path.join(os.path.dirname(__file__) if "__file__" in dir() else ".", "jeju_map.png"),
+]
+
+def load_map_img():
+    for p in MAP_IMG_PATHS:
+        if os.path.exists(p):
+            return imread(p)
+    return None
 
 def draw_game_graph():
     G = nx.Graph()
@@ -331,76 +361,117 @@ def draw_game_graph():
     for (a, b) in EDGES:
         G.add_edge(a, b)
 
-    fig, ax = plt.subplots(figsize=(9, 6))
+    # 이미지 비율에 맞춰 figsize 설정 (2816:1536 ≈ 11:6)
+    fig, ax = plt.subplots(figsize=(11, 6))
     fig.patch.set_facecolor("#0a0f0d")
     ax.set_facecolor("#0a0f0d")
     ax.axis("off")
 
     pos = NODE_POS
 
-    # Draw background island silhouette hint
-    ellipse = mpatches.Ellipse((0.5, 0.45), 0.92, 0.78,
-                                angle=10, linewidth=0,
-                                facecolor="#0d2418", alpha=0.5)
-    ax.add_patch(ellipse)
+    # ── 배경 이미지 렌더링 ──
+    map_img = load_map_img()
+    if map_img is not None:
+        ax.imshow(map_img, extent=[0, 1, 0, 1], aspect="auto",
+                  zorder=0, alpha=0.92)
+    else:
+        # 이미지 없을 때 기존 섬 모양 폴백
+        ellipse = mpatches.Ellipse((0.4, 0.58), 0.75, 0.60,
+                                    angle=8, linewidth=0,
+                                    facecolor="#1a4a2a", alpha=0.6)
+        ax.add_patch(ellipse)
 
-    # Collect traversed edges
-    traversed = set()
-    for (frm, to, _) in st.session_state.path_edges:
-        traversed.add((frm, to))
-        traversed.add((to, frm))
-
-    # Draw all edges (faint)
+    # ── 전체 엣지 (반투명 흰 점선) ──
     for (a, b) in EDGES:
         x = [pos[a][0], pos[b][0]]
         y = [pos[a][1], pos[b][1]]
-        ax.plot(x, y, color="#1b3a2a", linewidth=1.2, zorder=1, alpha=0.7)
+        ax.plot(x, y, color="white", linewidth=1.5, zorder=2,
+                alpha=0.35, linestyle="--")
 
-    # Draw traversed edges (bright)
-    for (a, b) in set([(f, t) for (f, t, _) in st.session_state.path_edges]):
-        ed = get_edge(a, b)
-        if ed is None: continue
-        x = [pos[a][0], pos[b][0]]
-        y = [pos[a][1], pos[b][1]]
-        ax.plot(x, y, color="#69f0ae", linewidth=4, zorder=2, alpha=0.9)
-        # Arrow mid-point
+    # ── 이동한 엣지 (밝은 민트 실선 + 화살표) ──
+    for (frm, to, transport) in st.session_state.path_edges:
+        x = [pos[frm][0], pos[to][0]]
+        y = [pos[frm][1], pos[to][1]]
+        color = "#69f0ae" if transport == "bus" else "#40c4ff"
+        # 굵은 발광 효과 (shadow)
+        ax.plot(x, y, color=color, linewidth=7, zorder=3, alpha=0.3)
+        ax.plot(x, y, color=color, linewidth=3, zorder=4, alpha=1.0)
+        # 화살표
         mx, my = (x[0]+x[1])/2, (y[0]+y[1])/2
         ax.annotate("", xy=(x[1], y[1]), xytext=(mx, my),
-                    arrowprops=dict(arrowstyle="->", color="#69f0ae", lw=1.5),
-                    zorder=3)
+                    arrowprops=dict(arrowstyle="-|>", color=color,
+                                   lw=2, mutation_scale=14),
+                    zorder=5)
 
-    # Draw nodes
+    # ── 노드 마커 + 라벨 ──
     for node, (nx_, ny_) in pos.items():
         visited = node in st.session_state.visited
         current = node == st.session_state.current_node
 
-        outer_c = "#69f0ae" if current else ("#1de9b6" if visited else "#1b3a2a")
-        inner_c = "#003d1f" if visited else "#0a0f0d"
-        size_out = 280 if current else 200
-        size_in  = 160 if current else 130
+        # 마커 색상 결정
+        if current:
+            ring_color  = "#FFD740"
+            dot_color   = "#FF6F00"
+            ring_size   = 460
+            dot_size    = 190
+        elif visited:
+            ring_color  = "#69f0ae"
+            dot_color   = "#00695c"
+            ring_size   = 300
+            dot_size    = 120
+        else:
+            ring_color  = "white"
+            dot_color   = "#cccccc"
+            ring_size   = 240
+            dot_size    = 80
 
-        ax.scatter(nx_, ny_, s=size_out, color=outer_c, zorder=4, alpha=0.95)
-        ax.scatter(nx_, ny_, s=size_in,  color=inner_c, zorder=5)
+        # 외곽 링 (glow 효과)
+        ax.scatter(nx_, ny_, s=ring_size * 1.5, color=ring_color,
+                   zorder=6, alpha=0.25, linewidths=0)
+        # 메인 링
+        ax.scatter(nx_, ny_, s=ring_size, color=ring_color,
+                   zorder=7, edgecolors="white", linewidths=2.2, alpha=0.95)
+        # 내부 점
+        ax.scatter(nx_, ny_, s=dot_size, color=dot_color, zorder=8)
 
-        icon = NODES[node]["icon"]
-        # Label: Korean + English
-        short_en = NODES[node]["en"].replace(" ", "\n")
-        label = f'{icon}\n{node}\n({NODES[node]["en"]})'
-        yoff = -0.09 if ny_ > 0.5 else 0.09
-        ax.text(nx_, ny_ + yoff, f"{icon} {node}", ha="center", va="center",
-                fontsize=7.5, color="#e8f5e9",
-                fontproperties=None,
-                bbox=dict(boxstyle="round,pad=0.25", facecolor="#0d2418",
-                          edgecolor="#1b3a2a", alpha=0.85),
-                zorder=6)
+        # ── 이름 라벨: 흰색 반투명 라운드 박스 ──
+        yoff = -0.08 if ny_ > 0.60 else 0.08
+        border_color = "#FFD740" if current else ("#4caf50" if visited else "#cccccc")
+        label_fp = _korean_font if _korean_font else None
+        ax.text(
+            nx_, ny_ + yoff,
+            node,
+            ha="center", va="center",
+            fontproperties=label_fp,
+            fontsize=8.5 if label_fp is None else None,
+            color="#1a1a1a",
+            fontweight="bold" if label_fp is None else None,
+            bbox=dict(
+                boxstyle="round,pad=0.4",
+                facecolor="white",
+                edgecolor=border_color,
+                linewidth=2.0,
+                alpha=0.85,
+            ),
+            zorder=9,
+        )
 
-    # Title
-    ax.text(0.5, 0.97, "🗺️ 제주 에코 레이스 — 이동 경로", ha="center", va="top",
-            transform=ax.transAxes, fontsize=11, color="#69f0ae", fontweight="bold")
+    # ── 범례 ──
+    legend_items = [
+        mpatches.Patch(color="#FFD740",  label="현재 위치"),
+        mpatches.Patch(color="#69f0ae",  label="방문 완료"),
+        mpatches.Patch(color="white",    label="미방문", alpha=0.5),
+        mpatches.Patch(color="#69f0ae",  label="버스 경로"),
+        mpatches.Patch(color="#40c4ff",  label="전기렌터카 경로"),
+    ]
+    ax.legend(handles=legend_items, loc="lower right",
+              facecolor="#00000099", edgecolor="#444",
+              labelcolor="white", fontsize=7.5,
+              framealpha=0.85, ncol=2)
 
-    ax.set_xlim(-0.05, 1.05)
-    ax.set_ylim(-0.05, 1.05)
-    plt.tight_layout(pad=0.5)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    plt.tight_layout(pad=0.2)
     return fig
 
 # ─────────────────────────────────────────────
