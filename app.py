@@ -654,10 +654,10 @@ if menu == "🏠 홈 (소개)":
 <div class='eco-card'>
   <h3>🎮 삼다수 에코 레이스</h3>
   <p style='color:#80cbc4; font-size:.95rem;'>
-  제주도의 6개 생태 거점을 탐험하는 네트워크 게임!<br>
+  제주도의 6개 랜드마크를 탐험하는 네트워크 게임!<br>
   대중교통 vs. 전기 렌터카 중 최적의 이동 수단을 선택하며<br>
   <b style='color:#69f0ae;'>시간 · 탄소 · 비용</b> 세 가지 자원을 관리해보세요.<br><br>
-  지름길이 항상 정답이 아닙니다. 트레이드오프를 분석해 가장 많은 생태 거점을 복구하세요!
+  지름길이 항상 정답이 아닙니다. 트레이드오프를 분석해 가장 많은 여행을 떠나보세요!
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -719,7 +719,7 @@ if menu == "🏠 홈 (소개)":
 # ─────────────────────────────────────────────
 elif menu == "🎮 삼다수 에코 레이스":
     st.markdown("## 🎮 삼다수 에코 레이스")
-    st.markdown("제주도 생태 거점을 최적의 경로로 탐험하세요. 탄소를 아끼고 시간과 비용도 관리해야 합니다!")
+    st.markdown("제주도 랜드마크를 최적의 경로로 탐험하세요. 탄소를 아끼고 시간과 비용도 관리해야 합니다!")
 
     # ── Resource display ──
     time_pct   = st.session_state.time_left   / 480  * 100
@@ -733,7 +733,7 @@ elif menu == "🎮 삼다수 에코 레이스":
                  delta="3,000g 시작" if not st.session_state.game_started else None)
     col_b.metric("💰 잔여 비용", f"₩{st.session_state.budget_left:,}",
                  delta="₩80,000 시작" if not st.session_state.game_started else None)
-    col_v.metric("📍 방문 거점", f"{len(st.session_state.visited)}개 / 6개")
+    col_v.metric("📍 랜드마크", f"{len(st.session_state.visited)}개 / 6개")
 
     # Progress bars
     st.markdown("**자원 현황**")
@@ -772,11 +772,11 @@ elif menu == "🎮 삼다수 에코 레이스":
 
         if st.session_state.game_over:
             if st.session_state.game_won:
-                st.success("🎉 모든 생태 거점을 복구했습니다! 에코 챔피언!")
+                st.success("🎉 모든 랜드마크에 들렀습니다!!")
             else:
                 total_v = len(st.session_state.visited) - 1
-                st.warning(f"⚠️ 자원 소진! {total_v}개 거점을 복구했습니다.")
-            st.markdown(f"**최종 방문:** {len(st.session_state.visited)-1}개 생태 거점")
+                st.warning(f"⚠️ 자원 소진! {total_v}개 랜드마크에 방문했습니다.")
+            st.markdown(f"**최종 방문:** {len(st.session_state.visited)-1}개 랜드마크")
             st.markdown(f"**남은 탄소:** {st.session_state.carbon_left:,}g")
             if st.button("🔄 다시 시작"):
                 for k in ["game_started","current_node","visited","path_edges",
@@ -790,8 +790,8 @@ elif menu == "🎮 삼다수 에코 레이스":
             neighbors = get_neighbors(st.session_state.current_node)
 
             if not neighbors:
-                st.info("더 이상 방문할 수 있는 미방문 거점이 없습니다.")
-                st.markdown(f"**총 {len(st.session_state.visited)-1}개** 생태 거점을 복구했습니다! 🎉")
+                st.info("더 이상 방문할 수 있는 미방문 랜드마크가 없습니다.")
+                st.markdown(f"**총 {len(st.session_state.visited)-1}개** 랜드마크에 방문했습니다! 🎉")
                 if len(st.session_state.visited) == len(NODES):
                     st.session_state.game_won = True
                 st.session_state.game_over = True
@@ -875,7 +875,7 @@ elif menu == "🎮 삼다수 에코 레이스":
     # ── Game rules ──
     with st.expander("📖 게임 규칙 & 힌트 보기"):
         st.markdown("""
-**🎯 목표**: 대정중학교에서 출발해 480분(8시간), 탄소 3,000g, 예산 ₩80,000 안에 최대한 많은 생태 거점을 방문하세요.
+**🎯 목표**: 대정중학교에서 출발해 480분(8시간), 탄소 3,000g, 예산 ₩80,000 안에 최대한 많은 랜드마크를 방문하세요.
 
 **🚌 대중교통 (버스)**
 - 탄소 배출이 **매우 적음** (친환경 ✅)
