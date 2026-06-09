@@ -273,12 +273,12 @@ init_state()
 #  GAME DATA
 # ─────────────────────────────────────────────
 NODES = {
-    "제주공항":       {"en": "Jeju Airport",       "lat": 33.511, "lng": 126.493, "icon": "✈️"},
-    "협재해변":       {"en": "Hyeopjae Beach",      "lat": 33.394, "lng": 126.240, "icon": "🏖️"},
-    "곶자왈도립공원": {"en": "Gotjawal Park",       "lat": 33.318, "lng": 126.320, "icon": "🌳"},
-    "서귀포치유의숲": {"en": "Seogwipo Forest",     "lat": 33.252, "lng": 126.498, "icon": "🌲"},
-    "성산일출봉":     {"en": "Seongsan Sunrise",    "lat": 33.459, "lng": 126.942, "icon": "🏔️"},
-    "함덕해변":       {"en": "Hamdeok Beach",       "lat": 33.543, "lng": 126.669, "icon": "🌊"},
+    "제주공항":   {"en": "Jeju Airport",     "lat": 33.511, "lng": 126.493, "icon": "✈️"},
+    "협재해변":   {"en": "Hyeopjae Beach",   "lat": 33.394, "lng": 126.240, "icon": "🏖️"},
+    "대정중학교": {"en": "Daejeong Middle",  "lat": 33.218, "lng": 126.250, "icon": "🏫"},
+    "서귀포치유의숲": {"en": "Seogwipo Forest", "lat": 33.252, "lng": 126.498, "icon": "🌲"},
+    "성산일출봉": {"en": "Seongsan Sunrise", "lat": 33.459, "lng": 126.942, "icon": "🏔️"},
+    "함덕해변":   {"en": "Hamdeok Beach",    "lat": 33.543, "lng": 126.669, "icon": "🌊"},
 }
 
 # Edge data: (nodeA, nodeB) -> {bus: (time,carbon,cost), ev: (time,carbon,cost)}
@@ -287,13 +287,13 @@ EDGES = {
     ("제주공항", "협재해변"):       {"bus": (60, 120, 1500),  "ev": (35, 350, 12000)},
     ("제주공항", "함덕해변"):       {"bus": (30,  60, 1200),  "ev": (20, 250, 8000)},
     ("제주공항", "성산일출봉"):     {"bus": (90, 180, 3000),  "ev": (55, 450, 18000)},
-    ("협재해변", "곶자왈도립공원"): {"bus": (40,  80, 1200),  "ev": (25, 300, 9000)},
+    ("협재해변", "대정중학교"):     {"bus": (40,  80, 1200),  "ev": (25, 300, 9000)},
     ("협재해변", "서귀포치유의숲"): {"bus": (80, 160, 2500),  "ev": (50, 420, 16000)},
-    ("곶자왈도립공원", "서귀포치유의숲"): {"bus": (45, 90, 1500), "ev": (30, 310, 10000)},
+    ("대정중학교", "서귀포치유의숲"): {"bus": (45, 90, 1500), "ev": (30, 310, 10000)},
     ("서귀포치유의숲", "성산일출봉"): {"bus": (100, 200, 3500), "ev": (65, 500, 20000)},
     ("성산일출봉", "함덕해변"):     {"bus": (50, 100, 1800),  "ev": (32, 320, 11000)},
     ("함덕해변", "협재해변"):       {"bus": (70, 140, 2000),  "ev": (45, 380, 14000)},
-    ("곶자왈도립공원", "성산일출봉"): {"bus": (95, 190, 3200), "ev": (60, 470, 19000)},
+    ("대정중학교", "성산일출봉"):   {"bus": (95, 190, 3200),  "ev": (60, 470, 19000)},
     ("서귀포치유의숲", "함덕해변"): {"bus": (110, 220, 3800), "ev": (70, 520, 22000)},
 }
 
@@ -314,32 +314,48 @@ def get_neighbors(node):
 # ─────────────────────────────────────────────
 #  GRAPH DRAWING — 제주 지도 이미지 배경 오버레이
 # ─────────────────────────────────────────────
+#  GRAPH DRAWING — 제주 지도 이미지 배경 오버레이
+# ─────────────────────────────────────────────
 import os
 from matplotlib.image import imread
 import matplotlib.font_manager as fm
 
-# 한글 폰트 설정 (Streamlit Cloud: 나눔고딕 사용)
-_KOREAN_FONT_PATHS = [
-    "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf",
-    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
-    "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",
-    "/System/Library/Fonts/AppleSDGothicNeo.ttc",   # Mac
-]
-_korean_font = None
-for _fp in _KOREAN_FONT_PATHS:
-    if os.path.exists(_fp):
-        _korean_font = fm.FontProperties(fname=_fp, size=8.5)
-        break
+# 한글 폰트 설정
+def _load_korean_font(size=8.5):
+    """나눔고딕 폰트를 찾아 FontProperties로 반환. 없으면 None."""
+    candidates = [
+        "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf",
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+        "/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+        "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+        "C:/Windows/Fonts/malgun.ttf",
+    ]
+    # fm 캐시에서도 검색
+    for f in fm.fontManager.ttflist:
+        if any(k in f.name for k in ["Nanum", "Gothic", "Malgun", "Noto Sans CJK"]):
+            candidates.insert(0, f.fname)
+    for p in candidates:
+        if p and os.path.exists(p):
+            try:
+                return fm.FontProperties(fname=p, size=size)
+            except Exception:
+                continue
+    return None
+
+_korean_font      = _load_korean_font(8.5)
+_korean_font_bold = _load_korean_font(8.5)
 
 # 이미지 내 노드 픽셀 위치 → matplotlib 정규화 좌표 (y 반전)
 # 원본 이미지 해상도: 2816 x 1536
 NODE_POS = {
-    "제주공항":       (0.327, 0.805),
-    "협재해변":       (0.103, 0.688),
-    "곶자왈도립공원": (0.270, 0.434),
-    "서귀포치유의숲": (0.153, 0.460),
-    "성산일출봉":     (0.661, 0.674),
-    "함덕해변":       (0.540, 0.870),
+    "제주공항":       (0.476, 0.757),
+    "협재해변":       (0.194, 0.590),
+    "대정중학교":     (0.297, 0.267),
+    "서귀포치유의숲": (0.562, 0.244),
+    "성산일출봉":     (0.877, 0.628),
+    "함덕해변":       (0.758, 0.857),
 }
 
 # 배경 이미지 경로 (Streamlit Cloud: 소스코드와 같은 폴더에 jeju_map.png 있어야 함)
@@ -437,15 +453,9 @@ def draw_game_graph():
         # ── 이름 라벨: 흰색 반투명 라운드 박스 ──
         yoff = -0.08 if ny_ > 0.60 else 0.08
         border_color = "#FFD740" if current else ("#4caf50" if visited else "#cccccc")
-        label_fp = _korean_font if _korean_font else None
-        ax.text(
-            nx_, ny_ + yoff,
-            node,
+        txt_kwargs = dict(
             ha="center", va="center",
-            fontproperties=label_fp,
-            fontsize=8.5 if label_fp is None else None,
             color="#1a1a1a",
-            fontweight="bold" if label_fp is None else None,
             bbox=dict(
                 boxstyle="round,pad=0.4",
                 facecolor="white",
@@ -455,6 +465,14 @@ def draw_game_graph():
             ),
             zorder=9,
         )
+        if _korean_font:
+            ax.text(nx_, ny_ + yoff, node,
+                    fontproperties=_korean_font, **txt_kwargs)
+        else:
+            # 폰트 없을 때: 영문 이름으로 fallback
+            fallback = NODES[node]["en"]
+            ax.text(nx_, ny_ + yoff, fallback,
+                    fontsize=7.5, fontweight="bold", **txt_kwargs)
 
     # ── 범례 ──
     legend_items = [
