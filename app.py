@@ -281,21 +281,29 @@ NODES = {
     "함덕해변":   {"en": "Hamdeok Beach",    "lat": 33.543, "lng": 126.669, "icon": "🌊"},
 }
 
-# Edge data: (nodeA, nodeB) -> {bus: (time,carbon,cost), ev: (time,carbon,cost)}
-# time(min), carbon(g), cost(won)
-EDGES = {
-    ("제주공항", "협재해변"):       {"bus": (60, 120, 1500),  "ev": (35, 350, 12000)},
-    ("제주공항", "함덕해변"):       {"bus": (30,  60, 1200),  "ev": (20, 250, 8000)},
-    ("제주공항", "성산일출봉"):     {"bus": (90, 180, 3000),  "ev": (55, 450, 18000)},
-    ("협재해변", "대정중학교"):     {"bus": (40,  80, 1200),  "ev": (25, 300, 9000)},
-    ("협재해변", "서귀포치유의숲"): {"bus": (80, 160, 2500),  "ev": (50, 420, 16000)},
-    ("대정중학교", "서귀포치유의숲"): {"bus": (45, 90, 1500), "ev": (30, 310, 10000)},
-    ("서귀포치유의숲", "성산일출봉"): {"bus": (100, 200, 3500), "ev": (65, 500, 20000)},
-    ("성산일출봉", "함덕해변"):     {"bus": (50, 100, 1800),  "ev": (32, 320, 11000)},
-    ("함덕해변", "협재해변"):       {"bus": (70, 140, 2000),  "ev": (45, 380, 14000)},
-    ("대정중학교", "성산일출봉"):   {"bus": (95, 190, 3200),  "ev": (60, 470, 19000)},
-    ("서귀포치유의숲", "함덕해변"): {"bus": (110, 220, 3800), "ev": (70, 520, 22000)},
+# ── 실제 도로 거리 (km) ──
+ROAD_KM = {
+    ("제주공항",   "협재해변"):         34.9,
+    ("제주공항",   "함덕해변"):         21.8,
+    ("제주공항",   "성산일출봉"):       54.8,
+    ("협재해변",   "대정중학교"):       25.5,
+    ("협재해변",   "서귀포치유의숲"):   32.9,
+    ("대정중학교", "서귀포치유의숲"):   37.4,
+    ("서귀포치유의숲", "성산일출봉"):   54.3,
+    ("성산일출봉", "함덕해변"):         35.1,
+    ("함덕해변",   "협재해변"):         56.1,
+    ("대정중학교", "성산일출봉"):       90.6,
+    ("서귀포치유의숲", "함덕해변"):     32.8,
 }
+
+def _make_edge(km):
+    """km → (time, carbon, cost) for bus and ev"""
+    return {
+        "bus": (round(km*2) + 10,  round(km*27),  1200 + round(km*100)),
+        "ev":  (round(km*1),        round(km*79),  round(km*200)),
+    }
+
+EDGES = {k: _make_edge(v) for k, v in ROAD_KM.items()}
 
 def get_edge(a, b):
     if (a, b) in EDGES: return EDGES[(a, b)]
@@ -717,9 +725,9 @@ elif menu == "🎮 삼다수 에코 레이스":
     col_t.metric("⏱️ 남은 시간", f"{st.session_state.time_left}분",
                  delta=f"총 480분 중" if not st.session_state.game_started else None)
     col_c.metric("🌿 탄소 예산", f"{st.session_state.carbon_left:,}g",
-                 delta="3,000g 시작" if not st.session_state.game_started else None)
+                 delta="10,000g 시작" if not st.session_state.game_started else None)
     col_b.metric("💰 잔여 비용", f"₩{st.session_state.budget_left:,}",
-                 delta="₩80,000 시작" if not st.session_state.game_started else None)
+                 delta="₩60,000 시작" if not st.session_state.game_started else None)
     col_v.metric("📍 랜드마크", f"{len(st.session_state.visited)}개 / 6개")
 
     # Progress bars
@@ -753,9 +761,9 @@ elif menu == "🎮 삼다수 에코 레이스":
             if st.session_state.game_won:
                 st.success("🎉 모든 랜드마크에 방문했습니다!!")
             else:
-                total_v = len(st.session_state.visited) - 1
+                total_v = len(st.session_state.visited)
                 st.warning(f"⚠️ 자원 소진! {total_v}개 랜드마크에 방문했습니다.")
-            st.markdown(f"**최종 방문:** {len(st.session_state.visited)-1}개 랜드마크")
+            st.markdown(f"**최종 방문:** {len(st.session_state.visited)}개 랜드마크")
             st.markdown(f"**남은 탄소:** {st.session_state.carbon_left:,}g")
             if st.button("🔄 다시 시작"):
                 for k in ["game_started","current_node","visited","path_edges",
