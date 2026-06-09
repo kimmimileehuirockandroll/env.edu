@@ -605,13 +605,20 @@ def draw_response_network(responses):
         if prof in seen_profiles:
             legend_items.append(mpatches.Patch(color=col, label=prof))
     if legend_items:
-        ax.legend(handles=legend_items, loc="lower left",
-                  facecolor="#0d2418", edgecolor="#1b3a2a",
-                  labelcolor="#e8f5e9", fontsize=8,
-                  framealpha=0.9)
+        leg = ax.legend(handles=legend_items, loc="lower left",
+                        facecolor="#0d2418", edgecolor="#1b3a2a",
+                        labelcolor="#e8f5e9", fontsize=8, framealpha=0.9)
+        if _korean_font:
+            for text in leg.get_texts():
+                text.set_fontproperties(_korean_font)
+                text.set_fontsize(8)
 
-    ax.set_title(f"우리 반 환경행동 네트워크 — 참여자 {G.number_of_nodes()}명 / 연결 {G.number_of_edges()}개",
-                 color="#69f0ae", fontsize=11, pad=12)
+    title_str = f"우리 반 환경행동 네트워크 — 참여자 {G.number_of_nodes()}명 / 연결 {G.number_of_edges()}개"
+    if _korean_font:
+        ax.set_title(title_str, fontproperties=_korean_font, color="#69f0ae", fontsize=11, pad=12)
+    else:
+        ax.set_title(title_str, color="#69f0ae", fontsize=11, pad=12)
+        
     plt.tight_layout(pad=0.5)
     return fig
 
@@ -1032,8 +1039,14 @@ elif menu == "📊 우리 반 환경행동 네트워크":
             ax2.set_facecolor("#0a0f0d")
             colors = [PROFILE_COLORS.get(l, "#80cbc4") for l in bar_data_labels]
             bars = ax2.barh(bar_data_labels, bar_data_values, color=colors, height=0.5)
-            ax2.set_xlabel("인원 수", color="#80cbc4")
-            ax2.tick_params(colors="#b2dfdb", labelsize=9)
+            if _korean_font:
+                ax2.set_xlabel("인원 수", color="#80cbc4", fontproperties=_korean_font)
+                ax2.set_yticklabels(bar_data_labels, fontproperties=_korean_font,
+                                    color="#b2dfdb", fontsize=9)
+                ax2.tick_params(axis='x', colors="#b2dfdb", labelsize=9)
+            else:
+                ax2.set_xlabel("인원 수", color="#80cbc4")
+                ax2.tick_params(colors="#b2dfdb", labelsize=9)
             ax2.spines[:].set_color("#1b3a2a")
             for bar, val in zip(bars, bar_data_values):
                 ax2.text(bar.get_width() + 0.3, bar.get_y() + bar.get_height()/2,
@@ -1051,16 +1064,15 @@ elif menu == "📊 우리 반 환경행동 네트워크":
             bar_colors = ["#69f0ae","#40c4ff","#ffd740","#ff6e40","#b39ddb"]
             bars3 = ax3.bar(q_labels, avg_scores, color=bar_colors, width=0.5)
             ax3.set_ylim(0, 5.5)
-            ax3.set_ylabel("평균 점수", color="#80cbc4")
-            ax3.tick_params(colors="#b2dfdb", labelsize=9)
             ax3.spines[:].set_color("#1b3a2a")
-            for bar, val in zip(bars3, avg_scores):
-                ax3.text(bar.get_x() + bar.get_width()/2, val + 0.1,
-                         f"{val:.2f}", ha="center", color="#e8f5e9", fontsize=8.5)
-            q_short = ["결과인지\n(NAM)", "책임귀속\n(NAM)", "생태가치\n(VBN)",
-                       "주관규범\n(TPB)", "행동통제\n(TPB)"]
-            ax3.set_xticks(range(5))
-            ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
+            ax3.tick_params(colors="#b2dfdb", labelsize=9)
+            if _korean_font:
+                ax3.set_ylabel("평균 점수", color="#80cbc4", fontproperties=_korean_font)
+                ax3.set_xticklabels(q_short, fontproperties=_korean_font,
+                                    fontsize=7.5, color="#b2dfdb")
+            else:
+                ax3.set_ylabel("평균 점수", color="#80cbc4")
+                ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
             plt.tight_layout(pad=0.5)
             st.pyplot(fig3, use_container_width=True)
             plt.close(fig3)
