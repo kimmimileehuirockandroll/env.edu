@@ -6,7 +6,7 @@ import matplotlib.font_manager as fm
 plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['axes.unicode_minus'] = False
 # Windows
-# plt.rcParams['font.family'] = 'Malgun Gothic'
+plt.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
