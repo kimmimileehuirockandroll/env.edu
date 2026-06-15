@@ -265,14 +265,14 @@ def draw_dynamic_response_network(responses, height=650):
     edges.forEach((edge, i) => {
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
             graph.addEdgeWithKey("edge-" + i, edge.source, edge.target, {
-                size: edge.weight * 5,
-                color: "#00897b"
+                size: edge.weight * 1,
+                color: "#90a4ae"
             });
         }
     });
     
     const renderer = new Sigma(graph, container, {
-        renderEdgeLabels: "#00897b",
+        renderEdgeLabels: "#90a4ae",
         defaultEdgeColor: false,
         labelColor: { color: "#1b3a2a" },
         labelSize: 10,
