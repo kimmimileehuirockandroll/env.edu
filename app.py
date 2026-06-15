@@ -8,28 +8,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-apply_css(
-/* 사이드바 첫 번째 링크: Eco Lab. Jeju 크게 */
-[data-testid="stSidebar"] a:first-of-type p {
-    font-size: 1.35rem !important;
-    font-weight: 800 !important;
-    color: var(--accent-primary) !important;
-}
-
-/* 사이드바 첫 번째 링크 아이콘 */
-[data-testid="stSidebar"] a:first-of-type span {
-    font-size: 1.25rem !important;
-}
-
-/* 에코랩 제주 subtitle */
-.sidebar-subtitle {
-    margin-top: -0.6rem;
-    margin-left: 2.25rem;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    font-weight: 600;
-}
-)
+apply_css()
 
 # 페이지 등록
 home = st.Page("home.py", title="HOME", icon="🏠")
