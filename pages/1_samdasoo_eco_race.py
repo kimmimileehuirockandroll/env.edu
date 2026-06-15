@@ -1,6 +1,7 @@
 import os
 import random
 import streamlit as st
+import time
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -349,6 +350,15 @@ with ctrl_col:
 """, unsafe_allow_html=True)
 
                 if st.button(f"🚀 {dest}(으)로 이동하기!"):
+
+                    with st.spinner(f"🚍 {dest}(으)로 이동 중..."):
+                        time.sleep(1.5)
+                
+                    # Apply costs
+                    st.session_state.time_left -= preview_time
+                    st.session_state.carbon_left -= base_carbon
+                    st.session_state.budget_left -= base_cost
+    
                     # Apply costs
                     st.session_state.time_left   -= preview_time
                     st.session_state.carbon_left -= base_carbon
