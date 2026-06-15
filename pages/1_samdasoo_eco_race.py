@@ -351,9 +351,64 @@ with ctrl_col:
 
                 if st.button(f"🚀 {dest}(으)로 이동하기!"):
 
-                    with st.spinner(f"🚍 {dest}(으)로 이동 중..."):
-                        time.sleep(1.5)
+                    moving_box = st.empty()
                 
+                    if t_key == "bus":
+                        moving_messages = [
+                            "🚌 버스 정류장으로 이동 중...",
+                            "🎫 교통카드 태그!",
+                            "🚏 버스 대기 시간 반영 중...",
+                            "🌿 탄소 절감 효과 계산 중...",
+                            f"📍 {dest} 도착!",
+                        ]
+                    else:
+                        moving_messages = [
+                            "⚡ 전기차 시동 ON!",
+                            "🔋 배터리 상태 확인 중...",
+                            "🛣️ 최적 경로 탐색 중...",
+                            "🌿 탄소 배출량 계산 중...",
+                            f"📍 {dest} 도착!",
+                        ]
+                
+                    for msg in moving_messages:
+                        moving_box.markdown(f"""
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(10, 15, 13, 0.94);
+                    border: 2px solid #69f0ae;
+                    border-radius: 24px;
+                    padding: 2rem 3rem;
+                    z-index: 999999;
+                    box-shadow: 0 0 40px rgba(105, 240, 174, 0.35);
+                    text-align: center;
+                    min-width: 360px;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: .8rem;">🚀</div>
+                    <div style="
+                        color: #69f0ae;
+                        font-size: 1.5rem;
+                        font-weight: 800;
+                        margin-bottom: .5rem;
+                    ">
+                        열심히 이동 중!
+                    </div>
+                    <div style="
+                        color: #b2dfdb;
+                        font-size: 1rem;
+                        line-height: 1.6;
+                    ">
+                        {msg}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                        time.sleep(0.55)
+                
+                    moving_box.empty()
+                
+                                    
                     # Apply costs
                     st.session_state.time_left -= preview_time
                     st.session_state.carbon_left -= base_carbon
