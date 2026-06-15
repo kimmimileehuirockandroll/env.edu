@@ -175,7 +175,6 @@ def draw_response_network(responses):
     return fig
 
 def draw_dynamic_response_network(responses, height=650):
-    """Sigma.js + Graphology ForceAtlas2 기반 동적 네트워크."""
     if not responses:
         return
 
@@ -186,9 +185,9 @@ def draw_dynamic_response_network(responses, height=650):
         profile = data.get("profile", "")
         nodes.append({
             "id": node,
-            "label": node if profile == "나(직접 참여)" else "",
+            "label": node if profile == "나(직접 참여)" else node,
             "profile": profile,
-            "size": 12 if profile == "나(직접 참여)" else 7,
+            "size": 12 if profile == "나(직접 참여)" else 6,
             "color": PROFILE_COLORS.get(profile, "#80cbc4"),
         })
 
@@ -205,75 +204,101 @@ def draw_dynamic_response_network(responses, height=650):
 
     html = f"""
     <div id="sigma-container" style="
-        width: 100%;
-        height: {height}px;
-        background: #0a0f0d;
-        border: 1px solid #1b3a2a;
-        border-radius: 16px;
-        overflow: hidden;
+        width:100%;
+        height:{height}px;
+        background:#0a0f0d;
+        border:1px solid #1b3a2a;
+        border-radius:16px;
+        overflow:hidden;
+        position:relative;
     "></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/build/graphology-layout-forceatlas2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+    <div id="sigma-error" style="
+        display:none;
+        color:#ff8a80;
+        background:#1a0f0f;
+        border:1px solid #5c1f1f;
+        border-radius:8px;
+        padding:10px;
+        margin-top:8px;
+        font-family:sans-serif;
+        font-size:13px;
+    "></div>
 
-    <script>
+    <script type="module">
+    import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.26.0/+esm";
+    import Sigma from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
+    import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/+esm";
+
     const nodes = {nodes_json};
     const edges = {edges_json};
 
     const container = document.getElementById("sigma-container");
-    const graph = new graphology.Graph();
+    const errorBox = document.getElementById("sigma-error");
 
-    nodes.forEach((node) => {{
-        graph.addNode(node.id, {{
-            label: node.label,
-            x: Math.random() * 2 - 1,
-            y: Math.random() * 2 - 1,
-            size: node.size,
-            color: node.color
-        }});
-    }});
+    try {{
+        const graph = new Graph();
 
-    edges.forEach((edge, i) => {{
-        if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {{
-            graph.addEdgeWithKey("e" + i, edge.source, edge.target, {{
-                size: Math.max(0.5, edge.weight * 2.5),
-                color: "rgba(105, 240, 174, 0.35)"
+        nodes.forEach((node) => {{
+            graph.addNode(node.id, {{
+                label: node.label,
+                x: Math.random() * 2 - 1,
+                y: Math.random() * 2 - 1,
+                size: node.size,
+                color: node.color
             }});
-        }}
-    }});
+        }});
 
-    const renderer = new sigma.Sigma(graph, container, {{
-        renderEdgeLabels: false,
-        defaultEdgeColor: "rgba(105, 240, 174, 0.25)",
-        labelColor: {{ color: "#e8f5e9" }},
-        labelSize: 12,
-        labelWeight: "bold"
-    }});
-
-    const settings = graphologyLayoutForceatlas2.inferSettings(graph);
-
-    function animate() {{
-        graphologyLayoutForceatlas2.assign(graph, {{
-            iterations: 1,
-            settings: {{
-                ...settings,
-                gravity: 0.06,
-                scalingRatio: 12,
-                slowDown: 3,
-                strongGravityMode: false
+        edges.forEach((edge, i) => {{
+            if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {{
+                graph.addEdgeWithKey("edge-" + i, edge.source, edge.target, {{
+                    size: Math.max(0.5, edge.weight * 2.5),
+                    color: "#1de9b655"
+                }});
             }}
         }});
 
-        renderer.refresh();
-        requestAnimationFrame(animate);
-    }}
+        const renderer = new Sigma(graph, container, {{
+            renderEdgeLabels: false,
+            defaultEdgeColor: "#1de9b655",
+            labelColor: {{ color: "#e8f5e9" }},
+            labelSize: 10,
+            labelWeight: "bold"
+        }});
 
-    animate();
+        const settings = forceAtlas2.inferSettings(graph);
+
+        let frame = 0;
+
+        function animate() {{
+            forceAtlas2.assign(graph, {{
+                iterations: 1,
+                settings: {{
+                    ...settings,
+                    gravity: 0.08,
+                    scalingRatio: 15,
+                    slowDown: 5,
+                    strongGravityMode: false
+                }}
+            }});
+
+            renderer.refresh();
+            frame += 1;
+
+            requestAnimationFrame(animate);
+        }}
+
+        animate();
+
+    }} catch (err) {{
+        errorBox.style.display = "block";
+        errorBox.innerText = "네트워크 렌더링 오류: " + err.message;
+        console.error(err);
+    }}
     </script>
     """
 
-    components.html(html, height=height + 20)
+    components.html(html, height=height + 60)
 
 def init_state():
     """설문 데이터를 담을 session_state 기본값을 설정 (이미 있으면 건너뜀)."""
