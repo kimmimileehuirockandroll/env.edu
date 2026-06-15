@@ -10,28 +10,17 @@ st.set_page_config(
 apply_css()
 
 # ─────────────────────────────────────────────
-# PAGE CONFIG
-# 나중에 페이지 추가 시 여기에만 추가
-# ─────────────────────────────────────────────
-PAGES = {
-    "🏠 홈 (소개)": None,
-    "🎮 삼다수 에코 레이스": "pages/1_samdasoo_eco_race.py",
-    "📊 우리 반 환경행동 네트워크": "pages/2_environment_action_network.py",
-}
-
-# ─────────────────────────────────────────────
-# SIDEBAR NAVIGATION
+#  SIDEBAR NAVIGATION
 # ─────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🌿 Eco Lab. Jeju")
     st.markdown("##### 에코랩 제주")
     st.markdown("---")
 
-    menu = st.radio(
-        "메뉴 선택",
-        list(PAGES.keys()),
-        label_visibility="collapsed",
-    )
+    # 페이지 이동 버튼 (경로는 pages/ 폴더 안 파일명과 정확히 일치해야 함)
+    st.page_link("app.py", label="🏠 홈 (소개)")
+    st.page_link("pages/1_samdasoo_eco_race.py", label="🎮 삼다수 에코 레이스")
+    st.page_link("pages/2_environment_action_network.py", label="📊 우리 반 환경행동 네트워크")
 
     st.markdown("---")
     st.markdown("""
@@ -43,14 +32,7 @@ with st.sidebar:
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# PAGE ROUTING
-# ─────────────────────────────────────────────
-page_path = PAGES[menu]
-
-if page_path:
-    st.switch_page(page_path)
-# ─────────────────────────────────────────────
-#  PAGE: HOME
+#  HOME CONTENT
 # ─────────────────────────────────────────────
 st.markdown("""
 <div class='hero-banner'>
