@@ -7,12 +7,6 @@ import matplotlib.patches as mpatches
 from matplotlib.image import imread
 from shared import apply_css, _korean_font
 
-st.set_page_config(
-    page_title="삼다수 에코 레이스 | Eco Lab. Jeju",
-    page_icon="🎮",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 apply_css()
 
 # ─────────────────────────────────────────────
