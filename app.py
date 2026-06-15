@@ -19,7 +19,7 @@ network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크",
 pages = {
     "Home": [home],
     "Network": [game1],
-    "Survey": [network1], [network2],
+    "Survey": [network1, network2],
 }
 
 pg = st.navigation(pages, position="hidden")
