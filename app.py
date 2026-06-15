@@ -8,7 +8,28 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-apply_css()
+apply_css(
+/* 사이드바 첫 번째 링크: Eco Lab. Jeju 크게 */
+[data-testid="stSidebar"] a:first-of-type p {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    color: var(--accent-primary) !important;
+}
+
+/* 사이드바 첫 번째 링크 아이콘 */
+[data-testid="stSidebar"] a:first-of-type span {
+    font-size: 1.25rem !important;
+}
+
+/* 에코랩 제주 subtitle */
+.sidebar-subtitle {
+    margin-top: -0.6rem;
+    margin-left: 2.25rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+)
 
 # 페이지 등록
 home = st.Page("home.py", title="HOME", icon="🏠")
@@ -25,34 +46,19 @@ pg = st.navigation(pages, position="hidden")
 
 # 직접 만든 사이드바
 with st.sidebar:
-    #st.markdown("## 🌿 Eco Lab. Jeju")
-    #st.markdown("##### 에코랩 제주")
     st.page_link(
         home,
-        label="Eco Lab. Jeju · 에코랩 제주",
+        label="Eco Lab. Jeju",
         icon="🌿"
     )
-    st.markdown("##### 에코랩 제주")
-    st.markdown("---")
 
-    st.markdown("#### Network")
-    st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
-
-    st.markdown("#### Survey")
-    st.page_link(network1, label="우리 반 환경행동 네트워크", icon="📊")
-
-    st.markdown("---")
     st.markdown("""
-<div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
-데이터 사이언스 × 환경 교육<br>
-제주 대정중학교 교육 프로그램 <br><br>
-제작: 서울대학교 샤오름
+<div class="sidebar-subtitle">
+에코랩 제주
 </div>
 """, unsafe_allow_html=True)
-    
-    st.markdown("---")
 
-    # st.page_link(home, label="HOME", icon="🏠")
+    st.markdown("---")
 
     st.markdown("#### Network")
     st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
