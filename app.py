@@ -41,17 +41,11 @@ pages = [
     st.Page("pages/2_environment_action_network.py", title="우리 반 환경행동 네트워크", icon="📊"),
 ]
 
-pg = st.navigation(pages, position="hidden")
+pg = st.navigation(pages)
 
 with st.sidebar:
     st.markdown("## 🌿 Eco Lab. Jeju")
     st.markdown("##### 에코랩 제주")
-    st.markdown("---")
-
-    st.page_link("home.py", label="홈 (소개)", icon="🏠")
-    st.page_link("pages/1_samdasoo_eco_race.py", label="삼다수 에코 레이스", icon="🎮")
-    st.page_link("pages/2_environment_action_network.py", label="우리 반 환경행동 네트워크", icon="📊")
-
     st.markdown("---")
     st.markdown("""
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
@@ -60,3 +54,5 @@ with st.sidebar:
 제작: 서울대학교 샤오름
 </div>
 """, unsafe_allow_html=True)
+
+pg.run()
