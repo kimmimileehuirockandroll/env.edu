@@ -19,14 +19,14 @@ from datetime import datetime
 def apply_css():
     """전역 CSS 적용 — 각 페이지 맨 위에서 호출"""
 
-    # ── Streamlit 기본 UI(메뉴/푸터/헤더) 숨기기 ──
     st.markdown("""
     <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    /* header {visibility: hidden;} */
-    [data-testid="stToolbar"] {visibility: hidden;}
-    [data-testid="stDecoration"] {visibility: hidden;}
+    /* 우측 상단 메뉴 */
+    [data-testid="stToolbar"] {display: none;}
+    /* 상단 컬러바 */
+    [data-testid="stDecoration"] {display: none;}
+    /* 푸터 */
+    footer {display: none;}
     </style>
     """, unsafe_allow_html=True)
 
