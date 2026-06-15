@@ -42,6 +42,7 @@ with st.sidebar:
         font-weight:600;
         margin-bottom:0.8rem;
     ">
+        에코랩 제주
     </div>
 </a>
 """, unsafe_allow_html=True)
