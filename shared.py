@@ -34,9 +34,6 @@ def apply_css():
     .stAppHeader {
         background: transparent !important;
         box-shadow: none !important;}
-
-    [data-testid="stHeader"] > div,
-    .stAppToolbar {display: none !important;}
     </style>
     """, unsafe_allow_html=True)
     
