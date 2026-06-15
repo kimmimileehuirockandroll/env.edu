@@ -47,7 +47,7 @@ with st.sidebar:
 # ─────────────────────────────────────────────
 page_path = PAGES[menu]
 
-if page_path is not None:
+if page_path:
     st.switch_page(page_path)
 # ─────────────────────────────────────────────
 #  PAGE: HOME
