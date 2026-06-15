@@ -251,13 +251,25 @@ def apply_css():
         padding-top: 1rem;
         border-top: 1px solid var(--border-main);
     }
-    /* ── Sidebar Brand ── */
-    .sidebar-subtitle {
-    margin-top: -0.6rem;
-    margin-left: 2.1rem;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    font-weight: 600;
+    /* ── Sidebar Brand Link ── */
+    .brand-link {
+        text-decoration: none !important;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+    
+    .brand-title {
+        color: var(--accent-primary) !important;
+        font-size: 1.45rem !important;
+        font-weight: 850 !important;
+        line-height: 1.25;
+    }
+    
+    .brand-subtitle {
+        color: var(--text-muted) !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        margin-top: 0.15rem;
     }
     </style>
     """, unsafe_allow_html=True)
