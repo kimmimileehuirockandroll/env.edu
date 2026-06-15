@@ -273,6 +273,13 @@ def apply_css():
     #     font-size: 0.95rem;
     #     font-weight: 600;
     # }
+    .sidebar-subtitle {
+    margin-top: -0.6rem;
+    margin-left: 2.1rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    }
     </style>
     """, unsafe_allow_html=True)
 
