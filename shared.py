@@ -251,6 +251,28 @@ def apply_css():
         padding-top: 1rem;
         border-top: 1px solid var(--border-main);
     }
+    /* ── Sidebar Brand ── */
+    
+    /* Eco Lab. Jeju 링크 */
+    [data-testid="stSidebar"] a:first-of-type p {
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        color: var(--accent-primary) !important;
+    }
+    
+    /* 🌿 아이콘 */
+    [data-testid="stSidebar"] a:first-of-type span {
+        font-size: 1.25rem !important;
+    }
+    
+    /* 에코랩 제주 */
+    .sidebar-subtitle {
+        margin-top: -0.55rem;
+        margin-left: 2.1rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
     </style>
     """, unsafe_allow_html=True)
 
