@@ -21,6 +21,17 @@ def apply_css():
 
     st.markdown("""
     <style>
+    /* 우측 상단 메뉴 */
+    [data-testid="stToolbar"] {display: none;}
+    /* 상단 컬러바 */
+    [data-testid="stDecoration"] {display: none;}
+    /* 푸터 */
+    footer {display: none;}
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
 
     /* ══ CSS 변수 — 다크 모드 (기본) ══ */
