@@ -27,28 +27,27 @@ pg = st.navigation(pages, position="hidden")
 with st.sidebar:
     #st.markdown("## 🌿 Eco Lab. Jeju")
     #st.markdown("##### 에코랩 제주")
-    st.markdown("""
-<a href="/" target="_self" style="
-    text-decoration:none;
-    color:inherit;
-">
-    <div style="cursor:pointer;">
-        <div style="
-            font-size:1.4rem;
-            font-weight:700;
-            margin-bottom:0.2rem;
-        ">
-            🌿 Eco Lab. Jeju
-        </div>
+    st.page_link(
+        home,
+        label="Eco Lab. Jeju · 에코랩 제주",
+        icon="🌿"
+    )
+    st.markdown("##### 에코랩 제주")
+    st.markdown("---")
 
-        <div style="
-            font-size:0.9rem;
-            opacity:0.8;
-        ">
-            에코랩 제주
-        </div>
-    </div>
-</a>
+    st.markdown("#### Network")
+    st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
+
+    st.markdown("#### Survey")
+    st.page_link(network1, label="우리 반 환경행동 네트워크", icon="📊")
+
+    st.markdown("---")
+    st.markdown("""
+<div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
+데이터 사이언스 × 환경 교육<br>
+제주 대정중학교 교육 프로그램 <br><br>
+제작: 서울대학교 샤오름
+</div>
 """, unsafe_allow_html=True)
     
     st.markdown("---")
