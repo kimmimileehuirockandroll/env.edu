@@ -13,12 +13,13 @@ apply_css()
 # 페이지 등록
 home = st.Page("home.py", title="HOME", icon="🏠")
 game1 = st.Page("pages/1_samdasoo_eco_race.py", title="삼다수 에코 레이스", icon="🎮")
-network1 = st.Page("pages/2_environment_action_network.py", title="우리 반 환경행동 네트워크", icon="📊")
+network1 = st.Page("pages/2_environment_action_network.py", title="1반 환경행동 네트워크", icon="📊")
+network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크", icon="📊")
 
 pages = {
     "Home": [home],
     "Network": [game1],
-    "Survey": [network1],
+    "Survey": [network1], [network2],
 }
 
 pg = st.navigation(pages, position="hidden")
@@ -42,8 +43,8 @@ with st.sidebar:
     # st.page_link(game3, label="게임3", icon="🎮")
 
     st.markdown("#### Survey")
-    st.page_link(network1, label="우리 반 환경행동 네트워크", icon="📊")
-    # st.page_link(game5, label="게임5", icon="📊")
+    st.page_link(network1, label="1반 환경행동 네트워크", icon="📊")
+    st.page_link(network2, label="2반 환경행동 네트워크", icon="📊")
     # st.page_link(game6, label="게임6", icon="📊")
 
     st.markdown("---")
