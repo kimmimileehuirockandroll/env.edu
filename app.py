@@ -50,10 +50,10 @@ with st.sidebar:
 # ─────────────────────────────────────────────
 # PAGE ROUTING
 # ─────────────────────────────────────────────
-page_path = PAGES[menu]
+# page_path = PAGES[menu]
 
-if page_path:
-    st.switch_page(page_path)
+# if page_path:
+#     st.switch_page(page_path)
 # ─────────────────────────────────────────────
 #  PAGE: HOME
 # ─────────────────────────────────────────────
