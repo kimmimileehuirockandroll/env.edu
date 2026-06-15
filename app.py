@@ -25,14 +25,13 @@ pg = st.navigation(pages, position="hidden")
 
 # 직접 만든 사이드바
 with st.sidebar:
-    st.page_link(
-        home,
-        label="Eco Lab. Jeju",
-        icon="🌿"
-    )
-
     st.markdown(
-        "<div class='sidebar-subtitle'>에코랩 제주</div>",
+        """
+        <a href="./" target="_self" class="brand-link">
+            <div class="brand-title">🌿 Eco Lab. Jeju</div>
+            <div class="brand-subtitle">에코랩 제주</div>
+        </a>
+        """,
         unsafe_allow_html=True
     )
     st.markdown("---")
