@@ -6,7 +6,7 @@ apply_css()
 st.markdown("""
 <div class='hero-banner'>
   <div class='hero-title'>🌿 제주 에코 네트워크</div>
-  <div class='hero-sub'>네트워크 사이언스 × 데이터 사이언스 × 환경 교육 — 1시간 체험 프로그램</div>
+  <div class='hero-sub'>데이터 사이언스 × 환경 교육</div>
 </div>
 """, unsafe_allow_html=True)
 
