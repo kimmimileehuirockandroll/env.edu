@@ -21,7 +21,6 @@ def apply_css():
     
     st.markdown("""
     <style>
-    [data-testid="stToolbar"],
     [data-testid="stToolbarActions"],
     [data-testid="stMainMenu"],
     #MainMenu {
