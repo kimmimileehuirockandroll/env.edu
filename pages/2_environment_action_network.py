@@ -1,8 +1,10 @@
 import math
 import random
+import json
 from collections import Counter
 from datetime import datetime
 import streamlit as st
+import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import networkx as nx
@@ -172,6 +174,106 @@ def draw_response_network(responses):
     plt.tight_layout(pad=0.5)
     return fig
 
+def draw_dynamic_response_network(responses, height=650):
+    """Sigma.js + Graphology ForceAtlas2 기반 동적 네트워크."""
+    if not responses:
+        return
+
+    G = build_response_network(responses)
+
+    nodes = []
+    for node, data in G.nodes(data=True):
+        profile = data.get("profile", "")
+        nodes.append({
+            "id": node,
+            "label": node if profile == "나(직접 참여)" else "",
+            "profile": profile,
+            "size": 12 if profile == "나(직접 참여)" else 7,
+            "color": PROFILE_COLORS.get(profile, "#80cbc4"),
+        })
+
+    edges = []
+    for source, target, data in G.edges(data=True):
+        edges.append({
+            "source": source,
+            "target": target,
+            "weight": float(data.get("weight", 1.0)),
+        })
+
+    nodes_json = json.dumps(nodes, ensure_ascii=False)
+    edges_json = json.dumps(edges, ensure_ascii=False)
+
+    html = f"""
+    <div id="sigma-container" style="
+        width: 100%;
+        height: {height}px;
+        background: #0a0f0d;
+        border: 1px solid #1b3a2a;
+        border-radius: 16px;
+        overflow: hidden;
+    "></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/build/graphology-layout-forceatlas2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+
+    <script>
+    const nodes = {nodes_json};
+    const edges = {edges_json};
+
+    const container = document.getElementById("sigma-container");
+    const graph = new graphology.Graph();
+
+    nodes.forEach((node) => {{
+        graph.addNode(node.id, {{
+            label: node.label,
+            x: Math.random() * 2 - 1,
+            y: Math.random() * 2 - 1,
+            size: node.size,
+            color: node.color
+        }});
+    }});
+
+    edges.forEach((edge, i) => {{
+        if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {{
+            graph.addEdgeWithKey("e" + i, edge.source, edge.target, {{
+                size: Math.max(0.5, edge.weight * 2.5),
+                color: "rgba(105, 240, 174, 0.35)"
+            }});
+        }}
+    }});
+
+    const renderer = new sigma.Sigma(graph, container, {{
+        renderEdgeLabels: false,
+        defaultEdgeColor: "rgba(105, 240, 174, 0.25)",
+        labelColor: {{ color: "#e8f5e9" }},
+        labelSize: 12,
+        labelWeight: "bold"
+    }});
+
+    const settings = graphologyLayoutForceatlas2.inferSettings(graph);
+
+    function animate() {{
+        graphologyLayoutForceatlas2.assign(graph, {{
+            iterations: 1,
+            settings: {{
+                ...settings,
+                gravity: 0.06,
+                scalingRatio: 12,
+                slowDown: 3,
+                strongGravityMode: false
+            }}
+        }});
+
+        renderer.refresh();
+        requestAnimationFrame(animate);
+    }}
+
+    animate();
+    </script>
+    """
+
+    components.html(html, height=height + 20)
 
 def init_state():
     """설문 데이터를 담을 session_state 기본값을 설정 (이미 있으면 건너뜀)."""
@@ -292,12 +394,11 @@ with tab2:
         stat_col2.metric("🌿 평균 태도", f"{(avg_scores[0]+avg_scores[1]+avg_scores[2])/3:.2f} / 5")
         stat_col3.metric("💪 평균 행동 의도", f"{avg_scores[9]:.2f} / 5")
 
-        # Network graph
-        with st.spinner("네트워크 그래프를 그리는 중..."):
-            fig = draw_response_network(responses)
-        if fig:
-            st.pyplot(fig, use_container_width=True)
-            plt.close(fig)
+       # Dynamic ForceAtlas2 Network graph
+        st.markdown("#### 🧬 실시간 ForceAtlas2 네트워크")
+        
+        with st.spinner("동적 네트워크를 불러오는 중..."):
+            draw_dynamic_response_network(responses)
 
         # Profile distribution
         st.markdown("---")
