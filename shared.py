@@ -18,18 +18,28 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 def apply_css():
     """전역 CSS 적용 — 각 페이지 맨 위에서 호출"""
+    
+    st.markdown("""
+    <style>
+    [data-testid="stToolbar"],
+    [data-testid="stToolbarActions"],
+    [data-testid="stMainMenu"],
+    #MainMenu {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    [data-testid="stDecoration"] {display: none !important;}
+    footer {display: none !important;}
+    [data-testid="stHeader"],
+    .stAppHeader {
+        background: transparent !important;
+        box-shadow: none !important;}
 
-    # st.markdown("""
-    # <style>
-    # /* 우측 상단 메뉴 */
-    # [data-testid="stToolbar"] {display: none;}
-    # /* 상단 컬러바 */
-    # [data-testid="stDecoration"] {display: none;}
-    # /* 푸터 */
-    # footer {display: none;}
-    # </style>
-    # """, unsafe_allow_html=True)
-
+    [data-testid="stHeader"] > div,
+    .stAppToolbar {display: none !important;}
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
