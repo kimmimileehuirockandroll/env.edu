@@ -25,11 +25,35 @@ pg = st.navigation(pages, position="hidden")
 
 # 직접 만든 사이드바
 with st.sidebar:
-    st.markdown("## 🌿 Eco Lab. Jeju")
-    st.markdown("##### 에코랩 제주")
+    #st.markdown("## 🌿 Eco Lab. Jeju")
+    #st.markdown("##### 에코랩 제주")
+    st.markdown("""
+<a href="/" target="_self" style="
+    text-decoration:none;
+    color:inherit;
+">
+    <div style="cursor:pointer;">
+        <div style="
+            font-size:1.4rem;
+            font-weight:700;
+            margin-bottom:0.2rem;
+        ">
+            🌿 Eco Lab. Jeju
+        </div>
+
+        <div style="
+            font-size:0.9rem;
+            opacity:0.8;
+        ">
+            에코랩 제주
+        </div>
+    </div>
+</a>
+""", unsafe_allow_html=True)
+    
     st.markdown("---")
 
-    st.page_link(home, label="HOME", icon="🏠")
+    # st.page_link(home, label="HOME", icon="🏠")
 
     st.markdown("#### Network")
     st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
