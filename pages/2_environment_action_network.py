@@ -2,7 +2,6 @@ import math
 import random
 from collections import Counter
 from datetime import datetime
-
 import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -10,12 +9,6 @@ import networkx as nx
 import numpy as np
 from shared import apply_css, _korean_font
 
-st.set_page_config(
-    page_title="환경행동 네트워크 | Eco Lab. Jeju",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 apply_css()
 
 # ─────────────────────────────────────────────
