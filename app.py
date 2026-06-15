@@ -9,20 +9,32 @@ st.set_page_config(
 )
 apply_css()
 
+# ─────────────────────────────────────────────
+#  SIDEBAR NAVIGATION#  SIDEBAR NAVIGATION
+# ─────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🌿 Eco Lab. Jeju")
     st.markdown("##### 에코랩 제주")
     st.markdown("---")
+    menu = st.radio(
+        "메뉴 선택",
+        ["🏠 홈 (소개)", "🎮 삼다수 에코 레이스", "📊 우리 반 환경행동 네트워크"],
+        label_visibility="collapsed",
+    )
+    st.markdown("---")
     st.markdown("""
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
-네트워크 사이언스 × 데이터 사이언스 × 환경 교육<br>
-제주 중학생 대상 1시간 체험 프로그램<br><br>
-동시 접속: 최대 100명<br>
-제작: 에코랩 제주 연구팀
+데이터 사이언스 × 환경 교육<br>
+제주 대정중학교 교육 프로그램 <br><br>
+제작: 서울대학교 샤오름
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("""
+# ─────────────────────────────────────────────
+#  PAGE: HOME
+# ─────────────────────────────────────────────
+if menu == "🏠 홈 (소개)":
+    st.markdown("""
 <div class='hero-banner'>
   <div class='hero-title'>🌿 제주 에코 네트워크</div>
   <div class='hero-sub'>네트워크 사이언스 × 데이터 사이언스 × 환경 교육 — 1시간 체험 프로그램</div>
