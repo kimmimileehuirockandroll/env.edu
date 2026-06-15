@@ -227,7 +227,7 @@ def draw_dynamic_response_network(responses, height=650):
 
     <script type="module">
     import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.26.0/+esm";
-    import Sigma from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
+    import { Sigma } from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
     import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/+esm";
 
     const nodes = {nodes_json};
