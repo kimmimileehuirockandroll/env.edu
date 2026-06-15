@@ -202,166 +202,166 @@ def draw_dynamic_response_network(responses, height=650):
     nodes_json = json.dumps(nodes, ensure_ascii=False)
     edges_json = json.dumps(edges, ensure_ascii=False)
 
-html = """
-<div style="
-    background:#ffffff;
-    border:1px solid #d9e8df;
-    border-radius:16px;
-    padding:12px;
-">
+    html = """
     <div style="
-        display:flex;
-        gap:10px;
-        flex-wrap:wrap;
-        align-items:center;
-        margin-bottom:10px;
-        font-family:sans-serif;
-        color:#1b3a2a;
-        font-size:13px;
-    ">
-        <b>색상 필터</b>
-        <label><input type="checkbox" class="profile-filter" value="적극 실천형" checked> 적극 실천형</label>
-        <label><input type="checkbox" class="profile-filter" value="사회 규범형" checked> 사회 규범형</label>
-        <label><input type="checkbox" class="profile-filter" value="자신감형" checked> 자신감형</label>
-        <label><input type="checkbox" class="profile-filter" value="가치 인식형" checked> 가치 인식형</label>
-        <label><input type="checkbox" class="profile-filter" value="무관심형" checked> 무관심형</label>
-        <label><input type="checkbox" class="profile-filter" value="나(직접 참여)" checked> 나</label>
-    </div>
-
-    <div id="sigma-container" style="
-        width:100%;
-        height:__HEIGHT__px;
         background:#ffffff;
         border:1px solid #d9e8df;
-        border-radius:12px;
-        overflow:hidden;
-        position:relative;
-    "></div>
-</div>
-
-<script type="module">
-import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.26.0/+esm";
-import { Sigma } from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
-import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/+esm";
-
-const nodes = __NODES__;
-const edges = __EDGES__;
-
-const container = document.getElementById("sigma-container");
-const graph = new Graph();
-
-nodes.forEach((node) => {
-    graph.addNode(node.id, {
-        label: node.label,
-        profile: node.profile,
-        x: Math.random() * 2 - 1,
-        y: Math.random() * 2 - 1,
-        size: node.size,
-        color: node.color,
-        hidden: false
-    });
-});
-
-edges.forEach((edge, i) => {
-    if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
-        graph.addEdgeWithKey("edge-" + i, edge.source, edge.target, {
-            size: Math.max(0.5, edge.weight * 2.5),
-            color: "#7fdac955",
+        border-radius:16px;
+        padding:12px;
+    ">
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            align-items:center;
+            margin-bottom:10px;
+            font-family:sans-serif;
+            color:#1b3a2a;
+            font-size:13px;
+        ">
+            <b>색상 필터</b>
+            <label><input type="checkbox" class="profile-filter" value="적극 실천형" checked> 적극 실천형</label>
+            <label><input type="checkbox" class="profile-filter" value="사회 규범형" checked> 사회 규범형</label>
+            <label><input type="checkbox" class="profile-filter" value="자신감형" checked> 자신감형</label>
+            <label><input type="checkbox" class="profile-filter" value="가치 인식형" checked> 가치 인식형</label>
+            <label><input type="checkbox" class="profile-filter" value="무관심형" checked> 무관심형</label>
+            <label><input type="checkbox" class="profile-filter" value="나(직접 참여)" checked> 나</label>
+        </div>
+    
+        <div id="sigma-container" style="
+            width:100%;
+            height:__HEIGHT__px;
+            background:#ffffff;
+            border:1px solid #d9e8df;
+            border-radius:12px;
+            overflow:hidden;
+            position:relative;
+        "></div>
+    </div>
+    
+    <script type="module">
+    import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.26.0/+esm";
+    import { Sigma } from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
+    import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/+esm";
+    
+    const nodes = __NODES__;
+    const edges = __EDGES__;
+    
+    const container = document.getElementById("sigma-container");
+    const graph = new Graph();
+    
+    nodes.forEach((node) => {
+        graph.addNode(node.id, {
+            label: node.label,
+            profile: node.profile,
+            x: Math.random() * 2 - 1,
+            y: Math.random() * 2 - 1,
+            size: node.size,
+            color: node.color,
             hidden: false
         });
+    });
+    
+    edges.forEach((edge, i) => {
+        if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
+            graph.addEdgeWithKey("edge-" + i, edge.source, edge.target, {
+                size: Math.max(0.5, edge.weight * 2.5),
+                color: "#7fdac955",
+                hidden: false
+            });
+        }
+    });
+    
+    const renderer = new Sigma(graph, container, {
+        renderEdgeLabels: false,
+        defaultEdgeColor: "#7fdac955",
+        labelColor: { color: "#1b3a2a" },
+        labelSize: 10,
+        labelWeight: "bold"
+    });
+    
+    const settings = forceAtlas2.inferSettings(graph);
+    let layoutRunning = true;
+    
+    function animate() {
+        if (layoutRunning) {
+            forceAtlas2.assign(graph, {
+                iterations: 1,
+                settings: {
+                    ...settings,
+                    gravity: 0.08,
+                    scalingRatio: 15,
+                    slowDown: 5,
+                    strongGravityMode: false
+                }
+            });
+        }
+    
+        renderer.refresh();
+        requestAnimationFrame(animate);
     }
-});
-
-const renderer = new Sigma(graph, container, {
-    renderEdgeLabels: false,
-    defaultEdgeColor: "#7fdac955",
-    labelColor: { color: "#1b3a2a" },
-    labelSize: 10,
-    labelWeight: "bold"
-});
-
-const settings = forceAtlas2.inferSettings(graph);
-let layoutRunning = true;
-
-function animate() {
-    if (layoutRunning) {
-        forceAtlas2.assign(graph, {
-            iterations: 1,
-            settings: {
-                ...settings,
-                gravity: 0.08,
-                scalingRatio: 15,
-                slowDown: 5,
-                strongGravityMode: false
-            }
+    
+    animate();
+    
+    function applyProfileFilter() {
+        const checkedProfiles = new Set(
+            Array.from(document.querySelectorAll(".profile-filter:checked"))
+                .map((el) => el.value)
+        );
+    
+        graph.forEachNode((node, attrs) => {
+            graph.setNodeAttribute(node, "hidden", !checkedProfiles.has(attrs.profile));
         });
+    
+        graph.forEachEdge((edge, attrs, source, target) => {
+            const sourceHidden = graph.getNodeAttribute(source, "hidden");
+            const targetHidden = graph.getNodeAttribute(target, "hidden");
+            graph.setEdgeAttribute(edge, "hidden", sourceHidden || targetHidden);
+        });
+    
+        renderer.refresh();
     }
-
-    renderer.refresh();
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-function applyProfileFilter() {
-    const checkedProfiles = new Set(
-        Array.from(document.querySelectorAll(".profile-filter:checked"))
-            .map((el) => el.value)
-    );
-
-    graph.forEachNode((node, attrs) => {
-        graph.setNodeAttribute(node, "hidden", !checkedProfiles.has(attrs.profile));
+    
+    document.querySelectorAll(".profile-filter").forEach((checkbox) => {
+        checkbox.addEventListener("change", applyProfileFilter);
     });
-
-    graph.forEachEdge((edge, attrs, source, target) => {
-        const sourceHidden = graph.getNodeAttribute(source, "hidden");
-        const targetHidden = graph.getNodeAttribute(target, "hidden");
-        graph.setEdgeAttribute(edge, "hidden", sourceHidden || targetHidden);
+    
+    let draggedNode = null;
+    let isDragging = false;
+    
+    renderer.on("downNode", (e) => {
+        isDragging = true;
+        draggedNode = e.node;
+        layoutRunning = false;
     });
-
-    renderer.refresh();
-}
-
-document.querySelectorAll(".profile-filter").forEach((checkbox) => {
-    checkbox.addEventListener("change", applyProfileFilter);
-});
-
-let draggedNode = null;
-let isDragging = false;
-
-renderer.on("downNode", (e) => {
-    isDragging = true;
-    draggedNode = e.node;
-    layoutRunning = false;
-});
-
-renderer.getMouseCaptor().on("mousemovebody", (e) => {
-    if (!isDragging || !draggedNode) return;
-
-    const pos = renderer.viewportToGraph(e);
-    graph.setNodeAttribute(draggedNode, "x", pos.x);
-    graph.setNodeAttribute(draggedNode, "y", pos.y);
-
-    e.preventSigmaDefault();
-    e.original.preventDefault();
-    e.original.stopPropagation();
-});
-
-renderer.getMouseCaptor().on("mouseup", () => {
-    isDragging = false;
-    draggedNode = null;
-});
-</script>
-"""
-
-html = (
-    html
-    .replace("__HEIGHT__", str(height))
-    .replace("__NODES__", nodes_json)
-    .replace("__EDGES__", edges_json)
-)
-
-components.html(html, height=height + 80)
+    
+    renderer.getMouseCaptor().on("mousemovebody", (e) => {
+        if (!isDragging || !draggedNode) return;
+    
+        const pos = renderer.viewportToGraph(e);
+        graph.setNodeAttribute(draggedNode, "x", pos.x);
+        graph.setNodeAttribute(draggedNode, "y", pos.y);
+    
+        e.preventSigmaDefault();
+        e.original.preventDefault();
+        e.original.stopPropagation();
+    });
+    
+    renderer.getMouseCaptor().on("mouseup", () => {
+        isDragging = false;
+        draggedNode = null;
+    });
+    </script>
+    """
+    
+    html = (
+        html
+        .replace("__HEIGHT__", str(height))
+        .replace("__NODES__", nodes_json)
+        .replace("__EDGES__", edges_json)
+    )
+    
+    components.html(html, height=height + 80)
 
 def init_state():
     """설문 데이터를 담을 session_state 기본값을 설정 (이미 있으면 건너뜀)."""
