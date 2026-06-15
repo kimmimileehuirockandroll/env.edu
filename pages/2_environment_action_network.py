@@ -265,7 +265,7 @@ def draw_dynamic_response_network(responses, height=650):
     edges.forEach((edge, i) => {
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
             graph.addEdgeWithKey("edge-" + i, edge.source, edge.target, {
-                size: edge.weight * 12,
+                size: edge.weight * 5,
                 color: "#00897b"
             });
         }
