@@ -10,17 +10,30 @@ st.set_page_config(
 apply_css()
 
 # ─────────────────────────────────────────────
-#  SIDEBAR NAVIGATION#  SIDEBAR NAVIGATION
+# PAGE CONFIG
+# 나중에 페이지 추가 시 여기에만 추가
+# ─────────────────────────────────────────────
+PAGES = {
+    "🏠 홈 (소개)": None,
+    "🎮 삼다수 에코 레이스": "pages/1_🎮_삼다수_에코_레이스.py",
+    "📊 우리 반 환경행동 네트워크": "pages/2_📊_우리반_환경행동_네트워크.py",
+    # "🧪 새 페이지": "pages/3_🧪_새_페이지.py",
+}
+
+# ─────────────────────────────────────────────
+# SIDEBAR NAVIGATION
 # ─────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🌿 Eco Lab. Jeju")
     st.markdown("##### 에코랩 제주")
     st.markdown("---")
+
     menu = st.radio(
         "메뉴 선택",
-        ["🏠 홈 (소개)", "🎮 삼다수 에코 레이스", "📊 우리 반 환경행동 네트워크"],
+        list(PAGES.keys()),
         label_visibility="collapsed",
     )
+
     st.markdown("---")
     st.markdown("""
 <div style='font-size:.8rem; color:#2e7d5f; line-height:1.6;'>
@@ -31,10 +44,16 @@ with st.sidebar:
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
+# PAGE ROUTING
+# ─────────────────────────────────────────────
+page_path = PAGES[menu]
+
+if page_path is not None:
+    st.switch_page(page_path)
+# ─────────────────────────────────────────────
 #  PAGE: HOME
 # ─────────────────────────────────────────────
-if menu == "🏠 홈 (소개)":
-    st.markdown("""
+st.markdown("""
 <div class='hero-banner'>
   <div class='hero-title'>🌿 제주 에코 네트워크</div>
   <div class='hero-sub'>네트워크 사이언스 × 데이터 사이언스 × 환경 교육 — 1시간 체험 프로그램</div>
