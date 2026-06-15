@@ -24,6 +24,7 @@ def apply_css():
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
     [data-testid="stDecoration"] {visibility: hidden;}
     </style>
