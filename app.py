@@ -27,11 +27,16 @@ with st.sidebar:
     st.markdown("##### 에코랩 제주")
     st.markdown("---")
 
-    menu = st.radio(
-        "메뉴 선택",
-        list(PAGES.keys()),
-        label_visibility="collapsed",
-    )
+    # menu = st.radio(
+    #     "메뉴 선택",
+    #     list(PAGES.keys()),
+    #     label_visibility="collapsed",
+    # )
+
+    st.page_link("app.py", label="홈 (소개)", icon="🏠")
+    st.page_link("pages/1_samdasoo_eco_race.py", label="삼다수 에코 레이스", icon="🎮")
+    st.page_link("pages/2_environment_action_network.py", label="우리 반 환경행동 네트워크", icon="📊")
+
 
     st.markdown("---")
     st.markdown("""
