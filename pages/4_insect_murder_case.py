@@ -11,7 +11,7 @@ st.markdown("곤충 탐정단이 되어 사건의 원인을 추리하고, 환경
 # ─────────────────────────────────────────────
 st.markdown("""
 <div class='hero-banner'>
-  <div class='hero-title'>🚨 곤충 살인사건 발생!</div>
+  <div class='hero-title'>🚨 살충사건 발생!</div>
   <div class='hero-sub'>
   제주 생태계에서 곤충들이 사라지고 있습니다.<br>
   범인은 누구일까요? 지구온난화, 외래종, 농지 개발, 토양오염 중 진짜 원인을 찾아보세요.
