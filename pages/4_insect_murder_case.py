@@ -293,10 +293,10 @@ headers[3].markdown("**단서 3**")
 headers[4].markdown("**단서 4**")
 
 clue_types = [
-    ("🌡️ 단서 A", "A"),
-    ("🦗 단서 B", "B"),
-    ("🚜 단서 C", "C"),
-    ("🧪 단서 D", "D"),
+    ("🚗 Mr.Car", "A"),
+    ("🦗 사마귀", "B"),
+    ("🌾 모내기", "C"),
+    ("⛰️ 산조아", "D"),
 ]
 
 for label, prefix in clue_types:
