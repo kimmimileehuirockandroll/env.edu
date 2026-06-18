@@ -211,13 +211,29 @@ st.markdown("""
 <div class='eco-card'>
 <h3>🔎 운동장 수사 구역</h3>
 <p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
-운동장 곳곳에 숨겨진 단서를 찾아보세요. 각 단서는 특정 용의자와 환경 원인에 연결되어 있습니다.
-</p>
-<p style='color:#4db6ac; font-size:.85rem;'>
-※ 여기에 운동장 그림을 넣고, 위치별 힌트 마커를 추가할 예정
+운동장 곳곳에 숨겨진 단서를 찾아보세요.
+각 단서는 특정 용의자와 환경 문제에 연결되어 있습니다.
 </p>
 </div>
 """, unsafe_allow_html=True)
+
+st.image(
+    "jeju_insect.png",
+    use_container_width=True,
+)
+
+st.info("""
+🕵️ 탐정 미션
+
+운동장에 숨겨진 단서를 모두 찾아 기록하세요.
+
+🌡️ 지구온난화
+🦗 외래종·천적 증가
+🚜 농지 개발
+🧪 토양오염
+
+각 단서가 어떤 환경 문제를 의미하는지 조별로 토의해보세요.
+""")
 
 hint_col1, hint_col2 = st.columns(2)
 
