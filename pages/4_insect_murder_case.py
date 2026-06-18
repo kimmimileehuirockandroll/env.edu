@@ -3,7 +3,7 @@ from shared import apply_css
 
 apply_css()
 
-st.markdown("## 🪲 곤충 살인사건 수사본부")
+st.markdown("## 🪲 살충사건 수사본부")
 st.markdown("곤충 탐정단이 되어 사건의 원인을 추리하고, 환경 문제와 곤충 생태를 연결해봅니다.")
 
 # ─────────────────────────────────────────────
