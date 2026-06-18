@@ -19,10 +19,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("### 🪄 곤충화 프로그램")
+st.markdown("### 🪄 우리는 이제부터 곤충")
 st.markdown("""
 <div class='eco-card'>
-<b style='color:#69f0ae;'>우리는 이제부터 곤충!</b>
+<b style='color:#69f0ae;'>곤충이 되어보는 이유</b>
 <p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
 곤충의 시선으로 세상을 바라보면 인간 활동이 생태계에 어떤 영향을 주는지 더 잘 이해할 수 있습니다.<br>
 오늘 여러분은 곤충 탐정단이 되어 단서를 찾고, 용의자의 알리바이를 분석하고, 사건의 진실을 밝혀야 합니다.
