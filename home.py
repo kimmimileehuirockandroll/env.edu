@@ -5,12 +5,12 @@ apply_css()
 
 st.markdown("""
 <div class='hero-banner'>
-  <div class='hero-title'>🌿 제주 에코 네트워크</div>
+  <div class='hero-title'>🌿 에코랩 제주</div>
   <div class='hero-sub'>데이터 사이언스 × 환경 교육</div>
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown("""
 <div class='eco-card'>
@@ -25,6 +25,20 @@ with col1:
 """, unsafe_allow_html=True)
 
 with col2:
+    st.markdown("""
+<div class='eco-card'>
+  <h3>🪲 곤충 살인사건 수사본부</h3>
+  <p style='color:#80cbc4; font-size:.95rem;'>
+  사라지는 곤충들, 그리고 수상한 용의자들!<br>
+  지구온난화 · 외래종 증가 · 농지 개발 · 토양오염 중<br>
+  곤충 생태계를 위협한 진짜 원인을 추리해보세요.<br><br>
+  <b style='color:#69f0ae;'>용의자 영상 · 단서 수집 · 조별 추리</b>를 통해<br>
+  곤충 탐정단이 되어 사건의 진실을 밝혀봅니다!
+  </p>
+</div>
+""", unsafe_allow_html=True)
+  
+with col3:
     st.markdown("""
 <div class='eco-card'>
   <h3>📊 우리 반 환경행동 네트워크</h3>
