@@ -67,7 +67,6 @@ st.markdown("### 🕵️ 용의자 조사실")
 
 suspects = [
     {
-        "cause": "지구온난화",
         "name": "Mr.Car",
         "role": "관광객",
         "alibi": "어제 성산일출봉을 보고 왔다고 주장함",
@@ -75,7 +74,6 @@ suspects = [
         "color": "#69f0ae",
     },
     {
-        "cause": "외래종·천적 증가",
         "name": "사마귀",
         "role": "곤충",
         "alibi": "AI 목소리로 Bzzzzzz 알리바이를 남김",
@@ -83,7 +81,6 @@ suspects = [
         "color": "#40c4ff",
     },
     {
-        "cause": "농지 개발",
         "name": "모내기",
         "role": "농부",
         "alibi": "제주 사투리로 땅을 사고 왔다고 주장함",
@@ -91,7 +88,6 @@ suspects = [
         "color": "#ffd740",
     },
     {
-        "cause": "토양오염",
         "name": "산조아",
         "role": "등산객",
         "alibi": "산을 타고 왔다고 주장함",
@@ -125,9 +121,8 @@ with right_col:
   <h2 style='color:{selected["color"]} !important;'>{selected["name"]}</h2>
 
   <p style='color:#b2dfdb; font-size:1rem; line-height:1.8;'>
-  <b>정체:</b> {selected["role"]}<br>
-  <b>관련 원인:</b> {selected["cause"]}<br><br>
-  <b>알리바이</b><br>
+  <b>직업:</b> {selected["role"]}<br>
+  <b>알리바이:</b><br>
   {selected["alibi"]}
   </p>
 
