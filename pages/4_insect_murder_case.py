@@ -35,13 +35,10 @@ st.markdown("""
 # ─────────────────────────────────────────────
 st.markdown("### 📚 사전 교육자료")
 
-edu_col1, edu_col2 = st.columns(2)
-
-with edu_col1:
-    st.markdown("""
+st.markdown("""
 <div class='eco-card'>
 <h3>🐞 곤충 이해하기</h3>
-<p style='color:#80cbc4; font-size:.92rem; line-height:1.7;'>
+<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
 곤충은 꽃가루받이, 먹이사슬 유지, 유기물 분해 등 생태계에서 중요한 역할을 합니다.
 </p>
 <p style='color:#4db6ac; font-size:.85rem;'>
@@ -50,11 +47,10 @@ with edu_col1:
 </div>
 """, unsafe_allow_html=True)
 
-with edu_col2:
-    st.markdown("""
+st.markdown("""
 <div class='eco-card'>
 <h3>🌍 곤충이 사라지는 이유</h3>
-<p style='color:#80cbc4; font-size:.92rem; line-height:1.7;'>
+<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
 지구온난화, 외래종 증가, 환경오염, 농약 사용, 산불과 홍수, 벌목, 빛 공해, 농지 개발 등이 곤충의 생존을 위협합니다.
 </p>
 <p style='color:#4db6ac; font-size:.85rem;'>
@@ -72,7 +68,7 @@ st.markdown("### 🕵️ 용의자 조사실")
 suspects = [
     {
         "cause": "지구온난화",
-        "name": "미스터 카",
+        "name": "Mr.Car",
         "role": "관광객",
         "alibi": "어제 성산일출봉을 보고 왔다고 주장함",
         "emoji": "🚗",
@@ -104,23 +100,47 @@ suspects = [
     },
 ]
 
-cols = st.columns(4)
+if "selected_suspect" not in st.session_state:
+    st.session_state.selected_suspect = 0
 
-for col, s in zip(cols, suspects):
-    with col:
-        st.markdown(f"""
-<div class='eco-card' style='min-height:250px;'>
-  <div style='font-size:2.4rem; text-align:center;'>{s["emoji"]}</div>
-  <h3 style='text-align:center; color:{s["color"]} !important;'>{s["name"]}</h3>
-  <p style='color:#b2dfdb; font-size:.9rem; line-height:1.6;'>
-  <b>정체:</b> {s["role"]}<br>
-  <b>관련 원인:</b> {s["cause"]}<br><br>
+left_col, right_col = st.columns([1, 3])
+
+with left_col:
+    st.markdown("#### 용의자")
+
+    for i, s in enumerate(suspects):
+        if st.button(
+            f"{s['emoji']} {s['name']}",
+            key=f"suspect_btn_{i}",
+            use_container_width=True,
+        ):
+            st.session_state.selected_suspect = i
+
+selected = suspects[st.session_state.selected_suspect]
+
+with right_col:
+    st.markdown(f"""
+<div class='eco-card' style='min-height:320px;'>
+  <div style='font-size:3rem;'>{selected["emoji"]}</div>
+  <h2 style='color:{selected["color"]} !important;'>{selected["name"]}</h2>
+
+  <p style='color:#b2dfdb; font-size:1rem; line-height:1.8;'>
+  <b>정체:</b> {selected["role"]}<br>
+  <b>관련 원인:</b> {selected["cause"]}<br><br>
   <b>알리바이</b><br>
-  {s["alibi"]}
+  {selected["alibi"]}
   </p>
-  <p style='color:#4db6ac; font-size:.82rem;'>
-  ※ 여기에 용의자 영상 삽입 예정
-  </p>
+
+  <div style='
+      margin-top:1rem;
+      padding:1rem;
+      border:1px dashed #1b5e3b;
+      border-radius:12px;
+      color:#4db6ac;
+      font-size:.9rem;
+  '>
+  🎥 여기에 선택한 용의자의 영상을 삽입할 예정
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -185,23 +205,59 @@ with tab4:
 # 단서 목록
 # ─────────────────────────────────────────────
 st.markdown("---")
-st.markdown("### 🧩 운동장 수사 단서 목록")
+st.markdown("### 🗺️ 운동장 단서 지도")
 
-clues = [
-    ["지구온난화", "미스터 카", "차 배경 셀카 사진 / 비행기 사진 / CO₂"],
-    ["외래종·천적 증가", "사마귀", "라오스·베트남 국기 / omnivore / 삼각형 세 각의 합 180도"],
-    ["농지 개발", "모내기", "땅 문서 / 쟁기 / 농약 글자 / 밭"],
-    ["토양오염", "산조아", "컵라면 / 수세미·세제 / 담배꽁초 / 등산 스틱"],
-]
+st.markdown("""
+<div class='eco-card'>
+<h3>🔎 운동장 수사 구역</h3>
+<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
+운동장 곳곳에 숨겨진 단서를 찾아보세요. 각 단서는 특정 용의자와 환경 원인에 연결되어 있습니다.
+</p>
+<p style='color:#4db6ac; font-size:.85rem;'>
+※ 여기에 운동장 그림을 넣고, 위치별 힌트 마커를 추가할 예정
+</p>
+</div>
+""", unsafe_allow_html=True)
 
-st.table(
-    {
-        "원인": [c[0] for c in clues],
-        "용의자": [c[1] for c in clues],
-        "찾아야 할 단서": [c[2] for c in clues],
-    }
-)
+hint_col1, hint_col2 = st.columns(2)
 
+with hint_col1:
+    st.markdown("""
+<div class='eco-card'>
+<h3>📍 힌트 구역 A</h3>
+<p style='color:#80cbc4;'>
+교통, 이동, 탄소 배출과 관련된 단서가 숨어 있을 수 있습니다.
+</p>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div class='eco-card'>
+<h3>📍 힌트 구역 B</h3>
+<p style='color:#80cbc4;'>
+외래종, 천적, 먹이사슬과 관련된 단서를 찾아보세요.
+</p>
+</div>
+""", unsafe_allow_html=True)
+
+with hint_col2:
+    st.markdown("""
+<div class='eco-card'>
+<h3>📍 힌트 구역 C</h3>
+<p style='color:#80cbc4;'>
+농지 개발, 농약, 땅의 변화와 관련된 단서가 있을 수 있습니다.
+</p>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("""
+<div class='eco-card'>
+<h3>📍 힌트 구역 D</h3>
+<p style='color:#80cbc4;'>
+토양오염, 쓰레기, 생활 오염과 관련된 단서를 확인해보세요.
+</p>
+</div>
+""", unsafe_allow_html=True)
 # ─────────────────────────────────────────────
 # 탐정 수첩
 # ─────────────────────────────────────────────
