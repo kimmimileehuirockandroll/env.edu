@@ -280,25 +280,42 @@ with hint_col2:
 st.markdown("---")
 st.markdown("### 📝 탐정 수첩")
 
-st.markdown("운동장에서 찾은 단서를 체크하고, 조별 토의 전에 생각을 정리해보세요.")
+st.markdown("""
+운동장에서 발견한 단서를 기록해보세요.
 
-check_col1, check_col2 = st.columns(2)
+어떤 단서가 어떤 원인과 연결되는지는 아직 알 수 없습니다.
+조별 토의를 통해 의미를 추리해보세요.
+""")
 
-with check_col1:
-    st.checkbox("🚗 차 배경 셀카 사진을 찾았다")
-    st.checkbox("✈️ 비행기 사진을 찾았다")
-    st.checkbox("CO₂ 단서를 찾았다")
-    st.checkbox("🌏 라오스/베트남 국기 단서를 찾았다")
-    st.checkbox("🦗 omnivore 단서를 찾았다")
-    st.checkbox("🔺 180도 단서를 찾았다")
+st.markdown("#### 🔍 단서 수집 현황")
 
-with check_col2:
-    st.checkbox("📄 땅 문서를 찾았다")
-    st.checkbox("🚜 쟁기 단서를 찾았다")
-    st.checkbox("🧪 농약 글자를 찾았다")
-    st.checkbox("🍜 컵라면 단서를 찾았다")
-    st.checkbox("🧼 수세미/세제 단서를 찾았다")
-    st.checkbox("🚬 담배꽁초 단서를 찾았다")
+headers = st.columns([2,1,1,1,1])
+
+headers[0].markdown("**단서 종류**")
+headers[1].markdown("**단서 1**")
+headers[2].markdown("**단서 2**")
+headers[3].markdown("**단서 3**")
+headers[4].markdown("**단서 4**")
+
+clue_types = [
+    ("🌡️ 단서 A", "A"),
+    ("🦗 단서 B", "B"),
+    ("🚜 단서 C", "C"),
+    ("🧪 단서 D", "D"),
+]
+
+for label, prefix in clue_types:
+
+    cols = st.columns([2,1,1,1,1])
+
+    cols[0].markdown(f"**{label}**")
+
+    for i in range(1,5):
+        cols[i].checkbox(
+            "",
+            key=f"{prefix}_{i}",
+            label_visibility="collapsed"
+        )
 
 memo = st.text_area(
     "🔎 우리 조가 가장 중요하다고 생각한 단서",
