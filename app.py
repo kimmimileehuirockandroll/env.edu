@@ -13,7 +13,7 @@ apply_css()
 # 페이지 등록
 home = st.Page("home.py", title="HOME", icon="🏠")
 game1 = st.Page("pages/1_samdasoo_eco_race.py", title="삼다수 에코 레이스", icon="🎮")
-game2 = st.Page("pages/4_insect_murder_case.py", title="곤충 살인사건",icon="🪲")
+game2 = st.Page("pages/4_insect_murder_case.py", title="살충사건 수사본부",icon="🪲")
 network1 = st.Page("pages/2_environment_action_network.py", title="1반 환경행동 네트워크", icon="📊")
 network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크", icon="📊")
 
@@ -40,7 +40,7 @@ with st.sidebar:
 
     st.markdown("#### Network")
     st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
-    st.page_link(game2, label="곤충 살인사건", icon="🪲")
+    st.page_link(game2, label="살충사건 수사본부", icon="🪲")
     # st.page_link(game2, label="게임2", icon="🎮")
     # st.page_link(game3, label="게임3", icon="🎮")
 
