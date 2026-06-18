@@ -27,7 +27,7 @@ with col1:
 with col2:
     st.markdown("""
 <div class='eco-card'>
-  <h3>🪲 곤충 살인사건 수사본부</h3>
+  <h3>🪲 살충사건 수사본부</h3>
   <p style='color:#80cbc4; font-size:.95rem;'>
   사라지는 곤충들, 그리고 수상한 용의자들!<br>
   지구온난화 · 외래종 증가 · 농지 개발 · 토양오염 중<br>
