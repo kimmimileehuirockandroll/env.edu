@@ -76,14 +76,14 @@ suspects = [
     {
         "name": "사마귀",
         "role": "곤충",
-        "alibi": "AI 목소리로 Bzzzzzz 알리바이를 남김",
+        "alibi": "Bzzzzzz",
         "emoji": "🦗",
         "color": "#1A1A1A",
     },
     {
         "name": "모내기",
         "role": "농부",
-        "alibi": "제주 사투리로 땅을 사고 왔다고 주장함",
+        "alibi": "농사 지을 땅을 사고 왔다고 주장함",
         "emoji": "🌾",
         "color": "#1A1A1A",
     },
@@ -118,8 +118,7 @@ with right_col:
     st.markdown(f"""
 <div class='eco-card' style='min-height:320px;'>
   <div style='font-size:3rem;'>{selected["emoji"]}</div>
-  <h2 style='color:{selected["color"]} !important;'>{selected["name"]}</h2>
-
+  <div style='font-size:1.5rem; font-weight:700; color:{selected["color"]}; margin-bottom:0.5rem;'>{selected["name"]}</div>
   <p style='color:var(--text-base); font-size:1rem; line-height:1.8;'>
   <b>직업:</b> {selected["role"]}<br>
   <b>알리바이:</b><br>
