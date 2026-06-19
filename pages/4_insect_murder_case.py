@@ -22,8 +22,8 @@ st.markdown("""
 st.markdown("### 🪄 우리는 이제부터 곤충")
 st.markdown("""
 <div class='eco-card'>
-<b style='color:#69f0ae;'>곤충이 되어보는 이유</b>
-<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
+<b style='color:var(--accent-primary);'>곤충이 되어보는 이유</b>
+<p style='color:var(--text-muted); font-size:.95rem; line-height:1.7;'>
 곤충의 시선으로 세상을 바라보면 인간 활동이 생태계에 어떤 영향을 주는지 더 잘 이해할 수 있습니다.<br>
 오늘 여러분은 곤충 탐정단이 되어 단서를 찾고, 용의자의 알리바이를 분석하고, 사건의 진실을 밝혀야 합니다.
 </p>
@@ -38,10 +38,10 @@ st.markdown("### 📚 사전 교육자료")
 st.markdown("""
 <div class='eco-card'>
 <h3>🐞 곤충 이해하기</h3>
-<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
+<p style='color:var(--text-muted); font-size:.95rem; line-height:1.7;'>
 곤충은 꽃가루받이, 먹이사슬 유지, 유기물 분해 등 생태계에서 중요한 역할을 합니다.
 </p>
-<p style='color:#4db6ac; font-size:.85rem;'>
+<p style='color:var(--text-caption); font-size:.85rem;'>
 ※ 여기에 구글 드라이브 PDF 또는 곤충 교육자료를 넣을 예정
 </p>
 </div>
@@ -50,10 +50,10 @@ st.markdown("""
 st.markdown("""
 <div class='eco-card'>
 <h3>🌍 곤충이 사라지는 이유</h3>
-<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
+<p style='color:var(--text-muted); font-size:.95rem; line-height:1.7;'>
 지구온난화, 외래종 증가, 환경오염, 농약 사용, 산불과 홍수, 벌목, 빛 공해, 농지 개발 등이 곤충의 생존을 위협합니다.
 </p>
-<p style='color:#4db6ac; font-size:.85rem;'>
+<p style='color:var(--text-caption); font-size:.85rem;'>
 ※ 여기에 관련 영상 또는 이미지 자료를 넣을 예정
 </p>
 </div>
@@ -120,7 +120,7 @@ with right_col:
   <div style='font-size:3rem;'>{selected["emoji"]}</div>
   <h2 style='color:{selected["color"]} !important;'>{selected["name"]}</h2>
 
-  <p style='color:#b2dfdb; font-size:1rem; line-height:1.8;'>
+  <p style='color:var(--text-base); font-size:1rem; line-height:1.8;'>
   <b>직업:</b> {selected["role"]}<br>
   <b>알리바이:</b><br>
   {selected["alibi"]}
@@ -129,9 +129,9 @@ with right_col:
   <div style='
       margin-top:1rem;
       padding:1rem;
-      border:1px dashed #1b5e3b;
+      border:1px dashed var(--border-main);
       border-radius:12px;
-      color:#4db6ac;
+      color:var(--text-caption);
       font-size:.9rem;
   '>
   🎥 여기에 선택한 용의자의 영상을 삽입할 예정
@@ -156,7 +156,7 @@ with tab1:
     st.markdown("""
 <div class='eco-card'>
 <h3>🌡️ 지구온난화</h3>
-<p style='color:#80cbc4; line-height:1.7;'>
+<p style='color:var(--text-muted); line-height:1.7;'>
 기온이 상승하면 곤충의 서식지가 이동하고, 기존 생태계의 균형이 깨질 수 있습니다.
 따뜻한 지역의 곤충이 새로운 지역으로 이동하면서 기존 곤충과 경쟁하거나 먹이사슬에 영향을 줄 수 있습니다.
 </p>
@@ -167,7 +167,7 @@ with tab2:
     st.markdown("""
 <div class='eco-card'>
 <h3>🦗 외래종과 천적의 증가</h3>
-<p style='color:#80cbc4; line-height:1.7;'>
+<p style='color:var(--text-muted); line-height:1.7;'>
 외래종은 원래 그 지역에 살던 생물이 아닙니다.
 새로운 외래종이나 천적이 들어오면 기존 곤충의 수가 급격히 줄어들 수 있습니다.
 </p>
@@ -178,7 +178,7 @@ with tab3:
     st.markdown("""
 <div class='eco-card'>
 <h3>🚜 농지 개발</h3>
-<p style='color:#80cbc4; line-height:1.7;'>
+<p style='color:var(--text-muted); line-height:1.7;'>
 숲과 초지가 농지나 건물로 바뀌면 곤충이 살 곳을 잃게 됩니다.
 농약과 살충제 사용도 곤충 개체 수 감소의 중요한 원인이 될 수 있습니다.
 </p>
@@ -189,7 +189,7 @@ with tab4:
     st.markdown("""
 <div class='eco-card'>
 <h3>🧪 토양오염</h3>
-<p style='color:#80cbc4; line-height:1.7;'>
+<p style='color:var(--text-muted); line-height:1.7;'>
 쓰레기, 세제, 담배꽁초, 화학물질은 토양과 물을 오염시킵니다.
 토양이 오염되면 땅속에 사는 곤충과 애벌레가 직접적인 피해를 입을 수 있습니다.
 </p>
@@ -205,7 +205,7 @@ st.markdown("### 🗺️ 운동장 단서 지도")
 st.markdown("""
 <div class='eco-card'>
 <h3>🔎 운동장 수사 구역</h3>
-<p style='color:#80cbc4; font-size:.95rem; line-height:1.7;'>
+<p style='color:var(--text-muted); font-size:.95rem; line-height:1.7;'>
 운동장 곳곳에 숨겨진 단서를 찾아보세요.
 각 단서는 특정 용의자와 환경 문제에 연결되어 있습니다.
 </p>
@@ -236,7 +236,7 @@ with hint_col1:
     st.markdown("""
 <div class='eco-card'>
 <h3>📍 힌트 구역 A</h3>
-<p style='color:#80cbc4;'>
+<p style='color:var(--text-muted);'>
 교통, 이동, 탄소 배출과 관련된 단서가 숨어 있을 수 있습니다.
 </p>
 </div>
@@ -245,7 +245,7 @@ with hint_col1:
     st.markdown("""
 <div class='eco-card'>
 <h3>📍 힌트 구역 B</h3>
-<p style='color:#80cbc4;'>
+<p style='color:var(--text-muted);'>
 외래종, 천적, 먹이사슬과 관련된 단서를 찾아보세요.
 </p>
 </div>
@@ -255,7 +255,7 @@ with hint_col2:
     st.markdown("""
 <div class='eco-card'>
 <h3>📍 힌트 구역 C</h3>
-<p style='color:#80cbc4;'>
+<p style='color:var(--text-muted);'>
 농지 개발, 농약, 땅의 변화와 관련된 단서가 있을 수 있습니다.
 </p>
 </div>
@@ -264,7 +264,7 @@ with hint_col2:
     st.markdown("""
 <div class='eco-card'>
 <h3>📍 힌트 구역 D</h3>
-<p style='color:#80cbc4;'>
+<p style='color:var(--text-muted);'>
 토양오염, 쓰레기, 생활 오염과 관련된 단서를 확인해보세요.
 </p>
 </div>
