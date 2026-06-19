@@ -39,9 +39,11 @@ CONSTRUCT_MAP = {
 LIKERT_MAP = {
     "① 매우 그렇지 않다": 1, "매우 그렇지 않다": 1, "1": 1,
     "② 그렇지 않다":      2, "그렇지 않다":      2, "2": 2,
-    "③ 보통이다":         3, "보통이다":         3, "3": 3,
-    "④ 그렇다":           4, "그렇다":           4, "4": 4,
-    "⑤ 매우 그렇다":      5, "매우 그렇다":       5, "5": 5,
+    "③ 약간 그렇지 않다": 3, "약간 그렇지 않다": 3, "3": 3,
+    "④ 보통이다":         4, "보통이다":         4, "4": 4,
+    "⑤ 약간 그렇다":      5, "약간 그렇다":       5, "5": 5,
+    "⑥ 그렇다":           6, "그렇다":           6, "6": 6,
+    "⑦ 매우 그렇다":      7, "매우 그렇다":       7, "7": 7,
 }
 
 PROFILE_COLORS = {
@@ -85,7 +87,7 @@ def load_sheet():
                     valid = False
                     break
             if q in REVERSE_Q:
-                val = 6 - val
+                val = 8 - val
             scores.append(val)
 
         if not valid or len(scores) != 15:
@@ -247,7 +249,7 @@ def draw_construct_bar(responses):
     fig.patch.set_facecolor("#0a0f0d")
     ax.set_facecolor("#0a0f0d")
     bars = ax.barh(labels, values, color=colors_list, height=0.55)
-    ax.set_xlim(0, 5.5)
+    ax.set_xlim(0, 7.5)
     ax.spines[:].set_color("#1b3a2a")
     ax.tick_params(colors="#b2dfdb", labelsize=8.5)
     for bar, val in zip(bars, values):
@@ -309,8 +311,8 @@ avg_all       = all_scores_np.mean(axis=0)
 
 c1, c2, c3 = st.columns(3)
 c1.metric("👥 총 응답자", f"{len(responses)}명")
-c2.metric("🌿 평균 태도", f"{avg_all[0:4].mean():.2f} / 5")
-c3.metric("💪 평균 행동 의도", f"{avg_all[12:].mean():.2f} / 5")
+c2.metric("🌿 평균 태도", f"{avg_all[0:4].mean():.2f} / 7")
+c3.metric("💪 평균 행동 의도", f"{avg_all[12:].mean():.2f} / 7")
 
 st.caption("⏱️ 데이터는 60초마다 자동 갱신됩니다.")
 if st.button("🔄 지금 갱신"):
