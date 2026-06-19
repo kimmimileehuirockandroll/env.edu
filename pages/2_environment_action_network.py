@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import networkx as nx
 import numpy as np
-from shared import apply_css, _korean_font
+from shared import apply_css, _korean_font, get_chart_colors
 
 apply_css()
 
@@ -182,8 +182,8 @@ def draw_response_network(responses):
             legend_items.append(mpatches.Patch(color=col, label=prof))
     if legend_items:
         leg = ax.legend(handles=legend_items, loc="lower left",
-                        facecolor="#0d2418", edgecolor="#1b3a2a",
-                        labelcolor="#e8f5e9", fontsize=8, framealpha=0.9)
+                        facecolor=ch["card"], edgecolor=ch["spine"],
+                        labelcolor=ch["text"], fontsize=8, framealpha=0.9)
         if _korean_font:
             for text in leg.get_texts():
                 text.set_fontproperties(_korean_font)
@@ -191,9 +191,9 @@ def draw_response_network(responses):
 
     title_str = f"우리 반 환경행동 네트워크 — 참여자 {G.number_of_nodes()}명 / 연결 {G.number_of_edges()}개"
     if _korean_font:
-        ax.set_title(title_str, fontproperties=_korean_font, color="#69f0ae", fontsize=11, pad=12)
+        ax.set_title(title_str, fontproperties=_korean_font, color=ch["accent"], fontsize=11, pad=12)
     else:
-        ax.set_title(title_str, color="#69f0ae", fontsize=11, pad=12)
+        ax.set_title(title_str, color=ch["accent"], fontsize=11, pad=12)
 
     plt.tight_layout(pad=0.5)
     return fig
@@ -409,7 +409,7 @@ with tab1:
     st.markdown("### ✏️ 환경행동 설문 (15문항)")
     st.markdown("""
 <div class='eco-card'>
-  <b style='color:#69f0ae;'>📚 이론 배경 간단 소개</b>
+  <b style='ccolor:var(--accent-primary);'>📚 이론 배경 간단 소개</b>
   <ul style='color:var(--text-muted); font-size:.9rem; margin:.5rem 0 0;'>
 <li><b style='color:var(--text-base);'>태도 (Attitude)</b>: 환경 행동을 가치 있게 여길수록 실천 의도가 높아진다</li>
 <li><b style='color:var(--text-base);'>주관적 규범 (Subjective Norm)</b>: 주변 사람들의 기대가 행동에 영향을 준다</li>
@@ -513,58 +513,59 @@ with tab2:
         bar_data_labels = list(profile_counts.keys())
         bar_data_values = list(profile_counts.values())
 
+        ch = get_chart_colors()
         fig2, ax2 = plt.subplots(figsize=(8, 3))
-        fig2.patch.set_facecolor("#0a0f0d")
-        ax2.set_facecolor("#0a0f0d")
-        colors = [PROFILE_COLORS.get(l, "#80cbc4") for l in bar_data_labels]
+        fig2.patch.set_facecolor(ch["bg"])
+        ax2.set_facecolor(ch["bg"])
+        colors = [PROFILE_COLORS.get(l, ch["muted"]) for l in bar_data_labels]
         bars = ax2.barh(bar_data_labels, bar_data_values, color=colors, height=0.5)
         if _korean_font:
-            ax2.set_xlabel("인원 수", color="#80cbc4", fontproperties=_korean_font)
+            ax2.set_xlabel("인원 수", color=ch["axis"], fontproperties=_korean_font)
             ax2.set_yticklabels(bar_data_labels, fontproperties=_korean_font,
-                                color="#b2dfdb", fontsize=9)
-            ax2.tick_params(axis='x', colors="#b2dfdb", labelsize=9)
+                                color=ch["tick"], fontsize=9)
+            ax2.tick_params(axis='x', colors=ch["tick"], labelsize=9)
         else:
-            ax2.set_xlabel("인원 수", color="#80cbc4")
-            ax2.tick_params(colors="#b2dfdb", labelsize=9)
-        ax2.spines[:].set_color("#1b3a2a")
+            ax2.set_xlabel("인원 수", color=ch["axis"])
+            ax2.tick_params(colors=ch["tick"], labelsize=9)
+        ax2.spines[:].set_color(ch["spine"])
         for bar, val in zip(bars, bar_data_values):
             ax2.text(bar.get_width() + 0.3, bar.get_y() + bar.get_height()/2,
-                     str(val), va="center", color="#69f0ae", fontsize=9)
+                     str(val), va="center", color=ch["accent"], fontsize=9)
         plt.tight_layout(pad=0.5)
         st.pyplot(fig2, use_container_width=True)
         plt.close(fig2)
 
         # Q-by-Q avg bar
         st.markdown("### 📈 문항별 평균 점수")
-        q_labels = [f"Q{i+1}" for i in range(len(QUESTIONS))]
+        q_labels = [f"Q{i+1}" for i in range(len(QUESTIONS))]fig3, ax3 = plt.subplots(figsize=(11, 2.5))
         fig3, ax3 = plt.subplots(figsize=(11, 2.5))
-        fig3.patch.set_facecolor("#0a0f0d")
-        ax3.set_facecolor("#0a0f0d")
-        bar_colors = ["#69f0ae","#69f0ae","#69f0ae",
-                      "#40c4ff","#40c4ff","#40c4ff",
-                      "#ffd740","#ffd740","#ffd740",
+        fig3.patch.set_facecolor(ch["bg"])
+        ax3.set_facecolor(ch["bg"])
+        bar_colors = [ch["accent"], ch["accent"], ch["accent"],
+                      ch["accent2"], ch["accent2"], ch["accent2"],
+                      "#ffd740", "#ffd740", "#ffd740",
                       "#ff6e40"]
         bars3 = ax3.bar(q_labels, avg_scores, color=bar_colors, width=0.5)
         ax3.set_ylim(0, 5.5)
-        ax3.spines[:].set_color("#1b3a2a")
-        ax3.tick_params(colors="#b2dfdb", labelsize=9)
+        ax3.spines[:].set_color(ch["spine"])
+        ax3.tick_params(colors=ch["tick"], labelsize=9)
         for bar, val in zip(bars3, avg_scores):
             ax3.text(bar.get_x() + bar.get_width()/2, val + 0.1,
-                     f"{val:.2f}", ha="center", color="#e8f5e9", fontsize=8.5)
+                     f"{val:.2f}", ha="center", color=ch["label"], fontsize=8.5)
         q_short = ["태도\nA1", "태도\nA2", "태도\nA3",
                    "규범\nSN1", "규범\nSN2", "규범\nSN3",
                    "통제\nPBC1", "통제\nPBC2", "통제\nPBC3",
                    "의도\nI1"]
         ax3.set_xticks(range(len(QUESTIONS)))
-        ax3.set_xticklabels(q_short, fontsize=7.5, color="#b2dfdb")
+        ax3.set_xticklabels(q_short, fontsize=7.5, color=ch["tick"])
         if _korean_font:
-            ax3.set_ylabel("평균 점수", color="#80cbc4", fontproperties=_korean_font)
+            ax3.set_ylabel("평균 점수", color=ch["axis"], fontproperties=_korean_font)
             for tick in ax3.get_xticklabels():
                 tick.set_fontproperties(_korean_font)
                 tick.set_fontsize(7.5)
-                tick.set_color("#b2dfdb")
+                tick.set_color(ch["tick"])
         else:
-            ax3.set_ylabel("평균 점수", color="#80cbc4")
+            ax3.set_ylabel("평균 점수", color=ch["axis"])
         plt.tight_layout(pad=0.5)
         st.pyplot(fig3, use_container_width=True)
         plt.close(fig3)
