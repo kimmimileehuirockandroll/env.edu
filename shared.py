@@ -126,23 +126,28 @@ def apply_css():
     [data-testid="stMetricValue"] { color: var(--accent-primary) !important; font-size: 1.6rem !important; }
     [data-testid="stMetricLabel"] { color: var(--text-muted) !important; }
     [data-testid="stMetricDelta"]  { font-size: .85rem !important; }
-
+    
     /* ── buttons ── */
     .stButton > button {
-        background: var(--bg-card) !important;
+        background: linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 100%) !important;
         color: var(--text-base) !important;
         font-weight: 600 !important;
-        border: 1.5px solid #D0D0D0 !important;
+        border: none !important;
         border-radius: 10px !important;
         padding: 0.55rem 1.4rem !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06) !important;
+        box-shadow:
+            0 1px 0 rgba(255,255,255,0.9) inset,
+            0 4px 12px rgba(0,0,0,0.10),
+            0 1px 3px rgba(0,0,0,0.08) !important;
         transition: all .2s;
     }
     .stButton > button:hover {
-        background: var(--bg-card) !important;
+        background: linear-gradient(180deg, #FFFFFF 0%, #E8E8E8 100%) !important;
         color: var(--accent-primary) !important;
-        border: 1.5px solid var(--accent-primary) !important;
-        box-shadow: 0 6px 20px rgba(255,45,107,0.15), 0 2px 6px rgba(0,0,0,0.08) !important;
+        box-shadow:
+            0 1px 0 rgba(255,255,255,0.9) inset,
+            0 6px 20px rgba(255,45,107,0.12),
+            0 2px 6px rgba(0,0,0,0.08) !important;
         transform: translateY(-2px);
     }
         /* ── selectbox / radio ── */
