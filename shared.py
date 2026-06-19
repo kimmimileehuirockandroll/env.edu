@@ -158,14 +158,13 @@ def apply_css():
             color: var(--text-base) !important;
             border-radius: 8px !important;
         }
-
+        
     /* ── progress bar ── */
     .stProgress > div {
-        background: #EEEEEE !important;
+        background: transparent !important;
         border: none !important;
         border-radius: 99px !important;
         height: 8px !important;
-        overflow: hidden !important;
     }
     .stProgress > div > div {
         background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
@@ -173,7 +172,7 @@ def apply_css():
         height: 8px !important;
         transition: width 0.4s ease !important;
     }
-   
+    
     /* ── divider ── */
     hr { border-color: var(--border-main) !important; }
 
