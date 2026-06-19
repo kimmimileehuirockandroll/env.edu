@@ -19,39 +19,63 @@ apply_css()
 
 # 10문항: 태도(A1-3) · 주관적 규범(SN1-3) · 지각된 행동통제감(PBC1-3) · 행동의도(I1)
 QUESTIONS = [
-    # 태도 (Attitude)
-    {"theory": "A1",
+    # ── 태도: 인지적 태도 (Instrumental Attitude) ──
+    {"theory": "IA1 · 인지적 태도",
      "text": "분리수거, 텀블러 사용 같은 환경 행동은 가치 있는 일이라고 생각한다.",
      "reverse": False},
-    {"theory": "A2",
+    {"theory": "IA2 · 인지적 태도",
      "text": "환경을 위해 불편함을 감수하는 것은 의미 있는 일이다.",
      "reverse": False},
-    {"theory": "A3",
-     "text": "내가 환경 행동을 해도 지구 환경에 별 도움이 안 된다.",
+
+    # ── 태도: 감정적 태도 (Affective Attitude) ──
+    {"theory": "AA1 · 감정적 태도",
+     "text": "환경 행동을 실천하고 나면 뿌듯하고 기분이 좋다.",
+     "reverse": False},
+    {"theory": "AA2 · 감정적 태도",
+     "text": "내가 환경 행동을 해도 지구에 별 도움이 안 될 것 같아 허무하다.",
      "reverse": True},
-    # 주관적 규범 (Subjective Norm)
-    {"theory": "SN1",
-     "text": "내 친구들 대부분은 환경을 위한 행동을 중요하게 생각한다.",
+
+    # ── 주관적 규범: 명령적 규범 (Injunctive Norm) ──
+    {"theory": "INJ1 · 명령적 규범",
+     "text": "우리 가족은 내가 환경을 위한 행동을 실천하길 바란다.",
      "reverse": False},
-    {"theory": "SN2",
-     "text": "우리 가족은 나에게 환경을 위한 행동을 실천하길 바란다.",
-     "reverse": False},
-    {"theory": "N3",
+    {"theory": "INJ2 · 명령적 규범",
      "text": "선생님이나 어른들이 환경 행동을 강조할 때 나도 해야겠다는 생각이 든다.",
      "reverse": False},
-    # 지각된 행동통제감 (PBC)
-    {"theory": "PBC1",
+
+    # ── 주관적 규범: 서술적 규범 (Descriptive Norm) ──
+    {"theory": "DESC1 · 서술적 규범",
+     "text": "내 친구들 대부분은 실제로 환경을 위한 행동을 실천하고 있다.",
+     "reverse": False},
+    {"theory": "DESC2 · 서술적 규범",
+     "text": "우리 반 대부분의 학생들은 분리수거나 일회용품 줄이기를 잘 실천한다.",
+     "reverse": False},
+
+    # ── 지각된 행동통제: 자기효능감 (Self-Efficacy) ──
+    {"theory": "SE1 · 자기효능감",
      "text": "나는 분리수거, 텀블러 사용 같은 환경 행동을 실천하는 것이 어렵지 않다.",
      "reverse": False},
-    {"theory": "PBC2",
-     "text": "환경 행동을 하고 싶어도 귀찮거나 불편해서 못 하는 경우가 많다.",
-     "reverse": True},
-    {"theory": "PBC3",
+    {"theory": "SE2 · 자기효능감",
      "text": "나는 환경을 위한 행동을 꾸준히 실천할 자신이 있다.",
      "reverse": False},
-    # 행동 의도 (Intention)
-    {"theory": "1",
+
+    # ── 지각된 행동통제: 통제가능성 (Controllability) ──
+    {"theory": "CTR1 · 통제가능성",
+     "text": "환경 행동을 하고 싶어도 귀찮거나 불편해서 못 하는 경우가 많다.",
+     "reverse": True},
+    {"theory": "CTR2 · 통제가능성",
+     "text": "환경 행동을 하느냐 마느냐는 전적으로 나의 선택과 의지에 달려 있다.",
+     "reverse": False},
+
+    # ── 행동 의도 (Behavioral Intention) ──
+    {"theory": "INT1 · 행동 의도",
      "text": "나는 앞으로 환경을 위한 행동을 더 자주 실천할 것이다.",
+     "reverse": False},
+    {"theory": "INT2 · 행동 의도",
+     "text": "이번 제주 여행 이후에도 환경 행동을 계속 실천할 계획이다.",
+     "reverse": False},
+    {"theory": "INT3 · 행동 의도",
+     "text": "나는 주변 친구들에게도 환경 행동을 함께 하자고 권유할 것이다.",
      "reverse": False},
 ]
 
@@ -394,8 +418,9 @@ with tab1:
 </div>
 """, unsafe_allow_html=True)
 
-    nickname = st.text_input("📛 닉네임 (익명 가능, 예: 초록이23)", max_chars=20,
-                              placeholder="닉네임을 입력하세요")
+    import uuid
+    nickname = "익명_" + str(uuid.uuid4())[:6].upper()
+    
     scores = []
     all_answered = True
 
@@ -423,13 +448,8 @@ with tab1:
 
     col_sub, col_reset = st.columns([2, 1])
     with col_sub:
-        if st.button("✅ 설문 제출하기", disabled=(not all_answered or not nickname.strip())):
-            # Check duplicate
-            existing_names = [r["name"] for r in st.session_state.survey_responses]
-            if nickname in existing_names:
-                st.warning("이미 같은 닉네임으로 제출되었습니다. 닉네임을 바꿔주세요.")
-            else:
-                entry = {
+        if st.button("✅ 설문 제출하기", disabled=(not all_answered)):
+            entry = {
                     "name": nickname.strip(),
                     "scores": scores,
                     "profile": "나(직접 참여)",
@@ -442,8 +462,6 @@ with tab1:
     with col_reset:
         if not all_answered:
             st.caption("⚠️ 모든 문항에 답해주세요")
-        if not nickname.strip():
-            st.caption("⚠️ 닉네임을 입력해주세요")
 
     st.markdown("---")
     st.markdown(f"**현재 누적 참여자:** {len(st.session_state.survey_responses)}명")
