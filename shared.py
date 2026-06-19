@@ -160,19 +160,19 @@ def apply_css():
         }
         
     /* ── progress bar ── */
-    .stProgress > div {
-        background: transparent !important;
-        border: none !important;
-        border-radius: 99px !important;
-        height: 8px !important;
-    }
     .stProgress > div > div {
         background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
         border-radius: 99px !important;
         height: 8px !important;
         transition: width 0.4s ease !important;
     }
-    
+    [data-testid="stProgressBar"] > div {
+        background: transparent !important;
+        border: none !important;
+    }
+    [data-testid="stProgressBar"] > div > div {
+        background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
+    }
     /* ── divider ── */
     hr { border-color: var(--border-main) !important; }
 
