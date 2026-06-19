@@ -418,8 +418,9 @@ with tab1:
 </div>
 """, unsafe_allow_html=True)
 
-    nickname = st.text_input("📛 닉네임 (익명 가능, 예: 초록이23)", max_chars=20,
-                              placeholder="닉네임을 입력하세요")
+    import uuid
+    nickname = "익명_" + str(uuid.uuid4())[:6].upper()
+    
     scores = []
     all_answered = True
 
@@ -447,13 +448,8 @@ with tab1:
 
     col_sub, col_reset = st.columns([2, 1])
     with col_sub:
-        if st.button("✅ 설문 제출하기", disabled=(not all_answered or not nickname.strip())):
-            # Check duplicate
-            existing_names = [r["name"] for r in st.session_state.survey_responses]
-            if nickname in existing_names:
-                st.warning("이미 같은 닉네임으로 제출되었습니다. 닉네임을 바꿔주세요.")
-            else:
-                entry = {
+        if st.button("✅ 설문 제출하기", disabled=(not all_answered)):
+            entry = {
                     "name": nickname.strip(),
                     "scores": scores,
                     "profile": "나(직접 참여)",
@@ -466,8 +462,6 @@ with tab1:
     with col_reset:
         if not all_answered:
             st.caption("⚠️ 모든 문항에 답해주세요")
-        if not nickname.strip():
-            st.caption("⚠️ 닉네임을 입력해주세요")
 
     st.markdown("---")
     st.markdown(f"**현재 누적 참여자:** {len(st.session_state.survey_responses)}명")
