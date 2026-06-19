@@ -171,12 +171,7 @@ def apply_css():
         overflow: hidden;
     }
     .hero-banner::before {
-        content: '';
-        position: absolute;
-        top: -60px; right: -60px;
-        width: 200px; height: 200px;
-        background: radial-gradient(circle, var(--hero-glow) 0%, transparent 70%);
-        border-radius: 50%;
+        display: none;
     }
     .hero-title {
         font-size: 2.4rem;
