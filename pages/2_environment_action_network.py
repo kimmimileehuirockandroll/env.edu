@@ -410,10 +410,10 @@ with tab1:
     st.markdown("""
 <div class='eco-card'>
   <b style='color:#69f0ae;'>📚 이론 배경 간단 소개</b>
-  <ul style='color:#80cbc4; font-size:.9rem; margin:.5rem 0 0;'>
-<li><b style='color:#b2dfdb;'>태도 (Attitude)</b>: 환경 행동을 가치 있게 여길수록 실천 의도가 높아진다</li>
-<li><b style='color:#b2dfdb;'>주관적 규범 (Subjective Norm)</b>: 주변 사람들의 기대가 행동에 영향을 준다</li>
-<li><b style='color:#b2dfdb;'>지각된 행동통제감 (PBC)</b>: 실천이 쉽다고 느낄수록 행동으로 이어진다</li>
+  <ul style='color:var(--text-muted); font-size:.9rem; margin:.5rem 0 0;'>
+<li><b style='color:var(--text-base);'>태도 (Attitude)</b>: 환경 행동을 가치 있게 여길수록 실천 의도가 높아진다</li>
+<li><b style='color:var(--text-base);'>주관적 규범 (Subjective Norm)</b>: 주변 사람들의 기대가 행동에 영향을 준다</li>
+<li><b style='color:var(--text-base);'>지각된 행동통제감 (PBC)</b>: 실천이 쉽다고 느낄수록 행동으로 이어진다</li>
   </ul>
 </div>
 """, unsafe_allow_html=True)
