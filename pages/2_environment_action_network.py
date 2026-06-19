@@ -406,7 +406,7 @@ tab1, tab2 = st.tabs(["✏️ 설문 참여", "🕸️ 네트워크 시각화"])
 
 # ── Tab 1: Survey ──
 with tab1:
-    st.markdown("### ✏️ 환경행동 설문 (10문항)")
+    st.markdown("### ✏️ 환경행동 설문 (15문항)")
     st.markdown("""
 <div class='eco-card'>
   <b style='color:#69f0ae;'>📚 이론 배경 간단 소개</b>
