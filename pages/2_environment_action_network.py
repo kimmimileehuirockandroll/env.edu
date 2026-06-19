@@ -138,6 +138,7 @@ def build_response_network(responses):
 
 def draw_response_network(responses):
     """환경행동 네트워크 그래프를 그린다. 응답이 없으면 None 반환."""
+    ch = get_chart_colors() 
     if not responses:
         return None
     G = build_response_network(responses)
@@ -409,7 +410,7 @@ with tab1:
     st.markdown("### ✏️ 환경행동 설문 (15문항)")
     st.markdown("""
 <div class='eco-card'>
-  <b style='ccolor:var(--accent-primary);'>📚 이론 배경 간단 소개</b>
+  <b style='color:var(--accent-primary);'>📚 이론 배경 간단 소개</b>
   <ul style='color:var(--text-muted); font-size:.9rem; margin:.5rem 0 0;'>
 <li><b style='color:var(--text-base);'>태도 (Attitude)</b>: 환경 행동을 가치 있게 여길수록 실천 의도가 높아진다</li>
 <li><b style='color:var(--text-base);'>주관적 규범 (Subjective Norm)</b>: 주변 사람들의 기대가 행동에 영향을 준다</li>
@@ -537,7 +538,7 @@ with tab2:
 
         # Q-by-Q avg bar
         st.markdown("### 📈 문항별 평균 점수")
-        q_labels = [f"Q{i+1}" for i in range(len(QUESTIONS))]fig3, ax3 = plt.subplots(figsize=(11, 2.5))
+        q_labels = [f"Q{i+1}" for i in range(len(QUESTIONS))]
         fig3, ax3 = plt.subplots(figsize=(11, 2.5))
         fig3.patch.set_facecolor(ch["bg"])
         ax3.set_facecolor(ch["bg"])
