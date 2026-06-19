@@ -25,8 +25,7 @@ st.markdown("""
 <b style='color:var(--accent-primary);'>곤충이 되어보는 이유</b>
 <p style='color:var(--text-muted); font-size:.95rem; line-height:1.7;'>
 곤충의 시선으로 세상을 바라보면 인간 활동이 생태계에 어떤 영향을 주는지 더 잘 이해할 수 있습니다.<br>
-오늘 여러분은 곤충 탐정단이 되어 단서를 찾고, 용의자의 알리바이를 분석하고, 사건의 진실을 밝혀야 합니다.
-</p>
+오늘 여러분은 곤충 탐정단이 되어 단서를 찾고, 용의자의 알리바이를 분석하고, 사건의 진실을 밝혀야 합니다.</p>
 </div>
 """, unsafe_allow_html=True)
 
