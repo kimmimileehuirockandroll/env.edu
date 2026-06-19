@@ -55,7 +55,7 @@ PROFILE_COLORS = {
 # ─────────────────────────────────────────────
 #  데이터 로드 & 전처리
 # ─────────────────────────────────────────────
-@st.cache_data(ttl=60)
+@st.cache_data # (ttl=60)
 def load_sheet():
     try:
         df = pd.read_csv(SHEET_URL)
@@ -318,8 +318,8 @@ if st.button("🔄 지금 갱신"):
     st.rerun()
 
 st.markdown("---")
-
-tab1, tab2, tab3 = st.tabs(["🕸️ 네트워크", "📊 구인별 분석", "📋 원시 데이터"])
+tab1, tab2 = st.tabs(["🕸️ 네트워크", "📊 구인별 분석"])
+# tab1, tab2, tab3 = st.tabs(["🕸️ 네트워크", "📊 구인별 분석", "📋 원시 데이터"])
 
 with tab1:
     st.markdown("### 🕸️ 환경행동 유사도 네트워크")
@@ -337,17 +337,17 @@ with tab2:
     st.pyplot(fig_p, use_container_width=True)
     plt.close(fig_p)
 
-with tab3:
-    st.markdown("### 📋 원시 데이터")
-    rows = []
-    for r in responses:
-        row = {"성향": r["profile"], "시간": r["time"]}
-        for i, s in enumerate(r["scores"], start=1):
-            row[f"Q{i}"] = s
-        rows.append(row)
-    df_view = pd.DataFrame(rows)
-    st.dataframe(df_view, use_container_width=True)
-    st.caption(f"총 {len(df_view)}행")
+# with tab3:
+#     st.markdown("### 📋 원시 데이터")
+#     rows = []
+#     for r in responses:
+#         row = {"성향": r["profile"], "시간": r["time"]}
+#         for i, s in enumerate(r["scores"], start=1):
+#             row[f"Q{i}"] = s
+#         rows.append(row)
+#     df_view = pd.DataFrame(rows)
+#     st.dataframe(df_view, use_container_width=True)
+#     st.caption(f"총 {len(df_view)}행")
 
 st.markdown("""
 <div class='eco-footer'>
