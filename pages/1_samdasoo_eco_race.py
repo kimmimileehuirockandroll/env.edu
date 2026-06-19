@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.image import imread
 from shared import apply_css, _korean_font
-
+from shared import apply_css, _korean_font, get_chart_colors
 apply_css()
 
 # ─────────────────────────────────────────────
