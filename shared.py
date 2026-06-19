@@ -161,14 +161,16 @@ def apply_css():
 
     /* ── progress bar ── */
     .stProgress > div {
-        background: #F0F0F0 !important;
-        border: 1.5px solid #FFBED5 !important;
+        background: #EEEEEE !important;
+        border: none !important;
         border-radius: 99px !important;
+        height: 8px !important;
+        overflow: hidden !important;
     }
-    /* 채워지는 바 */
     .stProgress > div > div {
         background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
         border-radius: 99px !important;
+        height: 8px !important;
         transition: width 0.4s ease !important;
     }
    
