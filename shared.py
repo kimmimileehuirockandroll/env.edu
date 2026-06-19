@@ -160,8 +160,18 @@ def apply_css():
         }
 
     /* ── progress bar ── */
-    .stProgress > div > div {    background: linear-gradient(90deg, #FF2D6B, #00C9A7) !important;}
-
+    .stProgress > div {
+        background: #F0F0F0 !important;
+        border: 1.5px solid #FFBED5 !important;
+        border-radius: 99px !important;
+    }
+    /* 채워지는 바 */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
+        border-radius: 99px !important;
+        transition: width 0.4s ease !important;
+    }
+   
     /* ── divider ── */
     hr { border-color: var(--border-main) !important; }
 
@@ -273,6 +283,12 @@ def apply_css():
         font-size: 0.95rem !important;
         font-weight: 600 !important;
         margin-top: 0.15rem;
+    }
+    /* ── metric delta 색상 ── */
+    [data-testid="stMetricDelta"] svg { display: none !important; }
+    [data-testid="stMetricDelta"] > div {
+        color: #6B6B6B !important;
+        font-size: .85rem !important;
     }
     </style>
     """, unsafe_allow_html=True)
