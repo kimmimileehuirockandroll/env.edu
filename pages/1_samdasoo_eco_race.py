@@ -247,15 +247,26 @@ col_v.metric("📍 방문 거점", f"{len(st.session_state.visited)}개 / 6개")
 # Progress bars
 st.markdown("**자원 현황**")
 bar_col1, bar_col2, bar_col3 = st.columns(3)
+
+def progress_bar(label, pct):
+    pct = max(0, min(100, pct))
+    color = "#FF2D6B" if pct > 30 else "#FF8C00"  # 30% 이하면 주황 경고
+    return f"""
+<div style="margin-bottom:0.5rem;">
+  <div style="font-size:0.8rem; color:var(--text-caption); margin-bottom:4px;">{label}</div>
+  <div style="background:#E8E8E8; border-radius:99px; height:8px; overflow:hidden;">
+    <div style="width:{pct}%; background:{color}; height:8px; border-radius:99px;
+                transition:width 0.4s ease;"></div>
+  </div>
+</div>
+"""
+
 with bar_col1:
-    st.caption("⏱️ 시간")
-    st.progress(max(0, min(1, time_pct/100)))
+    st.markdown(progress_bar("⏱️ 시간", time_pct), unsafe_allow_html=True)
 with bar_col2:
-    st.caption("🌿 탄소")
-    st.progress(max(0, min(1, carbon_pct/100)))
+    st.markdown(progress_bar("🌿 탄소", carbon_pct), unsafe_allow_html=True)
 with bar_col3:
-    st.caption("💰 비용")
-    st.progress(max(0, min(1, budget_pct/100)))
+    st.markdown(progress_bar("💰 비용", budget_pct), unsafe_allow_html=True)
 
 st.markdown("---")
 
