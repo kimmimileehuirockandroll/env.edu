@@ -339,12 +339,12 @@ with ctrl_col:
 
                 st.markdown(f"""
 <div class='eco-card' style='margin-top:.8rem;'>
-  <b style='color:#b2dfdb;'>예상 소모 자원 미리보기</b>
+  <b style='color:var(--text-base);'>예상 소모 자원 미리보기</b>
   <div style='margin-top:.5rem; font-size:.9rem;'>
 ⏱️ 시간: <span style='color:#69f0ae;'><b>{preview_time}분</b></span><br>
 🌿 탄소: <span style='color:#69f0ae;'><b>{base_carbon:,}g</b></span><br>
 💰 비용: <span style='color:#69f0ae;'><b>₩{base_cost:,}</b></span><br>
-<span style='color:#4db6ac; font-size:.83rem;'>{dice_note}</span>
+<span style='color:var(--text-caption); font-size:.83rem;'>{dice_note}</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -396,7 +396,7 @@ with ctrl_col:
                         열심히 이동 중!
                     </div>
                     <div style="
-                        color: #b2dfdb;
+                        color:var(--text-base);
                         font-size: 1rem;
                         line-height: 1.6;
                     ">
@@ -452,7 +452,7 @@ with ctrl_col:
         st.markdown("---")
         st.markdown("### 📋 이동 기록")
         for entry in reversed(st.session_state.game_log[-6:]):
-            st.markdown(f"<div style='font-size:.82rem; color:#80cbc4; padding:3px 0;'>{entry}</div>",
+            st.markdown(f"<div style='font-size:.82rem; color:var(--text-muted); padding:3px 0;'>{entry}</div>",
                         unsafe_allow_html=True)
 
 # ── Game rules ──
