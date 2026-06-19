@@ -130,26 +130,29 @@ def apply_css():
     /* ── buttons ── */
     .stButton > button {
         background: var(--bg-card) !important;
-        color: var(--accent-primary) !important;
+        color: var(--text-base) !important;
         font-weight: 600 !important;
-        border: 1.5px solid var(--accent-primary) !important;
+        border: 1.5px solid #D0D0D0 !important;
         border-radius: 10px !important;
         padding: 0.55rem 1.4rem !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06) !important;
         transition: all .2s;
     }
     .stButton > button:hover {
-        background: var(--accent-primary) !important;
-        color: #FFFFFF !important;
-        transform: translateY(-1px);
+        background: var(--bg-card) !important;
+        color: var(--accent-primary) !important;
+        border: 1.5px solid var(--accent-primary) !important;
+        box-shadow: 0 6px 20px rgba(255,45,107,0.15), 0 2px 6px rgba(0,0,0,0.08) !important;
+        transform: translateY(-2px);
     }
-    /* ── selectbox / radio ── */
-    .stSelectbox label, .stRadio label { color: var(--text-sidebar) !important; font-size: .93rem; }
-    div[data-baseweb="select"] > div {
-        background: var(--bg-select) !important;
-        border: 1px solid var(--border-select) !important;
-        color: var(--text-base) !important;
-        border-radius: 8px !important;
-    }
+        /* ── selectbox / radio ── */
+        .stSelectbox label, .stRadio label { color: var(--text-sidebar) !important; font-size: .93rem; }
+        div[data-baseweb="select"] > div {
+            background: var(--bg-select) !important;
+            border: 1px solid var(--border-select) !important;
+            color: var(--text-base) !important;
+            border-radius: 8px !important;
+        }
 
     /* ── progress bar ── */
     .stProgress > div > div {    background: linear-gradient(90deg, #FF2D6B, #00C9A7) !important;}
