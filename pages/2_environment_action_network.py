@@ -450,14 +450,14 @@ with tab1:
     with col_sub:
         if st.button("✅ 설문 제출하기", disabled=(not all_answered)):
             entry = {
-                    "name": nickname.strip(),
-                    "scores": scores,
-                    "profile": "나(직접 참여)",
-                    "time": datetime.now().isoformat(),
-                }
-                st.session_state.survey_responses.append(entry)
-                st.session_state.survey_submitted = True
-                st.success(f"🎉 {nickname}님의 응답이 제출되었습니다! '네트워크 시각화' 탭을 확인하세요.")
+                "name": nickname.strip(),
+                "scores": scores,
+                "profile": "나(직접 참여)",
+                "time": datetime.now().isoformat(),
+            }
+            st.session_state.survey_responses.append(entry)
+            st.session_state.survey_submitted = True
+            st.success(f"🎉 {nickname}님의 응답이 제출되었습니다! '네트워크 시각화' 탭을 확인하세요.")
 
     with col_reset:
         if not all_answered:
