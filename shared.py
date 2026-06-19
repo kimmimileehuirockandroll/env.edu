@@ -114,7 +114,7 @@ def apply_css():
     /* ── headings ── */
     h1 { color: var(--accent-primary) !important; letter-spacing: -1px; }
     h2 { color: var(--accent-second)  !important; }
-    h3 { color: var(--text-muted)     !important; }
+    h3 { color: var(--text-base)     !important; }
 
     /* ── metric cards ── */
     [data-testid="stMetric"] {
