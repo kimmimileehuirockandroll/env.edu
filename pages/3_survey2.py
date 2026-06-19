@@ -249,6 +249,7 @@ def draw_construct_bar(responses):
     bars = ax.barh(labels, values, color=colors_list, height=0.55)
     ax.set_xlim(0, 7.5)
     ax.spines[:].set_color(ch["spine"])
+    ax.set_yticks(range(len(labels))) 
     ax.tick_params(colors=ch["tick"], labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(val + 0.05, bar.get_y() + bar.get_height()/2,
@@ -274,6 +275,7 @@ def draw_profile_bar(responses):
     ax.set_facecolor(ch["bg"])
     bars = ax.barh(labels, values, color=colors, height=0.5)
     ax.spines[:].set_color(ch["spine"])
+    ax.set_yticks(range(len(labels))) 
     ax.tick_params(colors=ch["tick"], labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(bar.get_width() + 0.2, bar.get_y() + bar.get_height()/2,
