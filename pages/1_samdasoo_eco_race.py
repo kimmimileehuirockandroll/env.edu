@@ -271,9 +271,12 @@ with map_col:
     # Visited nodes badges
     visited_html = ""
     for node in NODES:
-        cls = "node-badge visited" if node in st.session_state.visited else "node-badge"
+        if node in st.session_state.visited:
+            style = "background:#FFF0F5; border:1.5px solid var(--accent-primary); color:var(--accent-primary);"
+        else:
+            style = "background:#FFFFFF; border:1.5px solid #E0E0E0; color:var(--text-muted);"
         icon = NODES[node]["icon"]
-        visited_html += f'<span class="{cls}">{icon} {node}</span>'
+        visited_html += f'<span style="display:inline-block; {style} border-radius:8px; padding:3px 10px; font-size:.82rem; margin:2px;">{icon} {node}</span>'
     st.markdown(f"<div style='margin-top:.5rem;'>{visited_html}</div>", unsafe_allow_html=True)
 
 with ctrl_col:
