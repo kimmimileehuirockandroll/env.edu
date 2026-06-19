@@ -17,7 +17,7 @@ apply_css()
 #  GAME 2 전용 데이터 (이 게임만 사용)
 # ─────────────────────────────────────────────
 
-# 10문항: 태도(A1-3) · 주관적 규범(SN1-3) · 지각된 행동통제감(PBC1-3) · 행동의도(I1)
+# 15문항: 태도(A1-3) · 주관적 규범(SN1-3) · 지각된 행동통제감(PBC1-3) · 행동의도(I1)
 QUESTIONS = [
     # ── 태도: 인지적 태도 (Instrumental Attitude) ──
     {"theory": "IA1 · 인지적 태도",
@@ -406,7 +406,7 @@ tab1, tab2 = st.tabs(["✏️ 설문 참여", "🕸️ 네트워크 시각화"])
 
 # ── Tab 1: Survey ──
 with tab1:
-    st.markdown("### ✏️ 환경행동 설문 (10문항)")
+    st.markdown("### ✏️ 환경행동 설문 (15문항)")
     st.markdown("""
 <div class='eco-card'>
   <b style='color:#69f0ae;'>📚 이론 배경 간단 소개</b>
@@ -450,14 +450,14 @@ with tab1:
     with col_sub:
         if st.button("✅ 설문 제출하기", disabled=(not all_answered)):
             entry = {
-                    "name": nickname.strip(),
-                    "scores": scores,
-                    "profile": "나(직접 참여)",
-                    "time": datetime.now().isoformat(),
-                }
-                st.session_state.survey_responses.append(entry)
-                st.session_state.survey_submitted = True
-                st.success(f"🎉 {nickname}님의 응답이 제출되었습니다! '네트워크 시각화' 탭을 확인하세요.")
+                "name": nickname.strip(),
+                "scores": scores,
+                "profile": "나(직접 참여)",
+                "time": datetime.now().isoformat(),
+            }
+            st.session_state.survey_responses.append(entry)
+            st.session_state.survey_submitted = True
+            st.success(f"🎉 {nickname}님의 응답이 제출되었습니다! '네트워크 시각화' 탭을 확인하세요.")
 
     with col_reset:
         if not all_answered:
