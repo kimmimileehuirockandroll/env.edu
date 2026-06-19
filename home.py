@@ -3,6 +3,15 @@ from shared import apply_css
 
 apply_css()
 
+# 히어로 배너를 최상단에 붙이기
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 1rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <div class='hero-banner'>
   <div class='hero-title'>🌷<br>에코랩 제주</div>
