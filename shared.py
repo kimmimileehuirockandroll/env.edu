@@ -160,6 +160,12 @@ def apply_css():
         }
         
     /* ── progress bar ── */
+    .stProgress > div {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 99px !important;
+        height: 8px !important;
+    }
     .stProgress > div > div {
         background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
         border-radius: 99px !important;
