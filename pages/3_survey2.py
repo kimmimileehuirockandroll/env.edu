@@ -231,6 +231,11 @@ renderer.getMouseCaptor().on("mouseup", () => {{ dragging=false; dragged=null; }
 
 def draw_construct_bar(responses):
     ch = get_chart_colors()
+    import streamlit as st
+    st.caption(f"🔤 폰트 상태: {_korean_font}")  # 임시 디버그
+    
+def draw_construct_bar(responses):
+    ch = get_chart_colors()
     all_s = np.array([r["scores"] for r in responses])
     labels, values, colors_list = [], [], []
     bar_colors = [ch["accent"], ch["accent"],
