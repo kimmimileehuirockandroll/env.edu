@@ -62,7 +62,7 @@ def apply_css():
         --text-caption:   #777777;
         --text-footer:    #444444;
         --accent-primary: #FF5C8A;
-        --accent-second:  #00E8C1;
+        --accent-second:  #FF85A1;
         --accent-third:   #FF85A1;
         --hero-glow:      #FF2D6B22;
     }
@@ -89,7 +89,7 @@ def apply_css():
             --text-caption:   #9B9B9B;
             --text-footer:    #BBBBBB;
             --accent-primary: #FF2D6B;
-            --accent-second:  #00C9A7;
+            --accent-second:  #FF6B9D;
             --accent-third:   #FF6B9D;
             --hero-glow:      #FF2D6B18;
         }
@@ -129,19 +129,19 @@ def apply_css():
 
     /* ── buttons ── */
     .stButton > button {
-        background: linear-gradient(135deg, #FF2D6B, #FF85A1) !important;
-        color: #FFFFFF !important;
-        font-weight: 700 !important;
-        border: none !important;
+        background: var(--bg-card) !important;
+        color: var(--accent-primary) !important;
+        font-weight: 600 !important;
+        border: 1.5px solid var(--accent-primary) !important;
         border-radius: 10px !important;
         padding: 0.55rem 1.4rem !important;
-        transition: transform .15s, box-shadow .15s;
+        transition: all .2s;
     }
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px #FF2D6B44;
+        background: var(--accent-primary) !important;
+        color: #FFFFFF !important;
+        transform: translateY(-1px);
     }
-
     /* ── selectbox / radio ── */
     .stSelectbox label, .stRadio label { color: var(--text-sidebar) !important; font-size: .93rem; }
     div[data-baseweb="select"] > div {
