@@ -251,15 +251,15 @@ def draw_construct_bar(responses):
     bars = ax.barh(labels, values, color=colors_list, height=0.55)
     ax.set_xlim(0, 7.5)
     ax.spines[:].set_color("#1b3a2a")
-    ax.tick_params(colors="#b2dfdb", labelsize=8.5)
+    ax.tick_params(colors="#6B6B6B", labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(val + 0.05, bar.get_y() + bar.get_height()/2,
                 f"{val:.2f}", va="center", color="#69f0ae", fontsize=9)
     if _korean_font:
-        ax.set_xlabel("평균 점수 (1~5)", color="#80cbc4", fontproperties=_korean_font)
+        ax.set_xlabel("평균 점수 (1~5)", color="#6B6B6B", fontproperties=_korean_font)
         ax.set_yticklabels(labels, fontproperties=_korean_font, color="#b2dfdb", fontsize=8.5)
     else:
-        ax.set_xlabel("평균 점수 (1~5)", color="#80cbc4")
+        ax.set_xlabel("평균 점수 (1~5)", color="#6B6B6B")
     plt.tight_layout(pad=0.5)
     return fig
 
@@ -275,15 +275,15 @@ def draw_profile_bar(responses):
     ax.set_facecolor("#0a0f0d")
     bars = ax.barh(labels, values, color=colors, height=0.5)
     ax.spines[:].set_color("#1b3a2a")
-    ax.tick_params(colors="#b2dfdb", labelsize=8.5)
+    ax.tick_params(colors="#6B6B6B", labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(bar.get_width() + 0.2, bar.get_y() + bar.get_height()/2,
                 str(val), va="center", color="#69f0ae", fontsize=9)
     if _korean_font:
-        ax.set_xlabel("인원 수", color="#80cbc4", fontproperties=_korean_font)
+        ax.set_xlabel("인원 수", color="#6B6B6B", fontproperties=_korean_font)
         ax.set_yticklabels(labels, fontproperties=_korean_font, color="#b2dfdb", fontsize=8.5)
     else:
-        ax.set_xlabel("인원 수", color="#80cbc4")
+        ax.set_xlabel("인원 수", color="#6B6B6B")
     plt.tight_layout(pad=0.5)
     return fig
 
