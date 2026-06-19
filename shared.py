@@ -300,3 +300,40 @@ def load_korean_font(size=8.5):
     return None
 
 _korean_font = load_korean_font(8.5)
+
+# ─────────────────────────────────────────────
+#  CHART COLOR PALETTE (matplotlib용)
+#  색상 변경 시 여기만 수정하면 모든 페이지 차트에 반영됨
+# ─────────────────────────────────────────────
+def get_chart_colors():
+    """현재 Streamlit 테마에 맞는 matplotlib 색상 딕셔너리 반환."""
+    is_dark = st.get_option("theme.base") != "light"
+
+    if is_dark:
+        return {
+            "bg":       "#0D0D0D",
+            "card":     "#1A1A1A",
+            "text":     "#F0F0F0",
+            "muted":    "#9B9B9B",
+            "caption":  "#777777",
+            "tick":     "#9B9B9B",
+            "axis":     "#9B9B9B",
+            "spine":    "#2A2A2A",
+            "accent":   "#FF5C8A",
+            "accent2":  "#00E8C1",
+            "label":    "#F0F0F0",
+        }
+    else:
+        return {
+            "bg":       "#FFFFFF",
+            "card":     "#FAFAFA",
+            "text":     "#1A1A1A",
+            "muted":    "#6B6B6B",
+            "caption":  "#9B9B9B",
+            "tick":     "#6B6B6B",
+            "axis":     "#6B6B6B",
+            "spine":    "#E8E8E8",
+            "accent":   "#FF2D6B",
+            "accent2":  "#00C9A7",
+            "label":    "#1A1A1A",
+        }
