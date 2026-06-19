@@ -71,28 +71,28 @@ suspects = [
         "role": "관광객",
         "alibi": "어제 성산일출봉을 보고 왔다고 주장함",
         "emoji": "🚗",
-        "color": "#69f0ae",
+        "color": "#1A1A1A",
     },
     {
         "name": "사마귀",
         "role": "곤충",
         "alibi": "AI 목소리로 Bzzzzzz 알리바이를 남김",
         "emoji": "🦗",
-        "color": "#40c4ff",
+        "color": "#1A1A1A",
     },
     {
         "name": "모내기",
         "role": "농부",
         "alibi": "제주 사투리로 땅을 사고 왔다고 주장함",
         "emoji": "🌾",
-        "color": "#ffd740",
+        "color": "#1A1A1A",
     },
     {
         "name": "산조아",
         "role": "등산객",
         "alibi": "산을 타고 왔다고 주장함",
         "emoji": "⛰️",
-        "color": "#ff8a65",
+        "color": "#1A1A1A",
     },
 ]
 
