@@ -98,3 +98,10 @@ st.markdown("""
 제주특별자치도 환경 교육 프로그램 · 네트워크 사이언스 & 데이터 사이언스 체험 수업
 </div>
 """, unsafe_allow_html=True)
+
+/* ── metric delta 색상 ── */
+[data-testid="stMetricDelta"] svg { display: none !important; }
+[data-testid="stMetricDelta"] > div {
+    color: #6B6B6B !important;
+    font-size: .85rem !important;
+}
