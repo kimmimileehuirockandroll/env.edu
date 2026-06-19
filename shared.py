@@ -126,7 +126,7 @@ def apply_css():
     [data-testid="stMetricValue"] { color: var(--accent-primary) !important; font-size: 1.6rem !important; }
     [data-testid="stMetricLabel"] { color: var(--text-muted) !important; }
     [data-testid="stMetricDelta"]  { font-size: .85rem !important; }
-    
+
     /* ── buttons ── */
     .stButton > button {
         background: linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 100%) !important;
@@ -369,3 +369,10 @@ def get_chart_colors():
             "accent2":  "#00C9A7",
             "label":    "#1A1A1A",
         }
+
+div[data-testid="metric-container"] {
+    background: #FFFFFF !important;
+    border: 1px solid #E8E8E8 !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+}
