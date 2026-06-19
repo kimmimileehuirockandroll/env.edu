@@ -158,18 +158,19 @@ def apply_css():
             color: var(--text-base) !important;
             border-radius: 8px !important;
         }
-        
+            
     /* ── progress bar ── */
-    .stProgress > div {
-        background: transparent !important;
+    div[role="progressbar"] {
+        background: rgba(255, 45, 107, 0.12) !important;
+        border-radius: 99px !important;
+        height: 6px !important;
         border: none !important;
-        border-radius: 99px !important;
-        height: 8px !important;
+        overflow: hidden !important;
     }
-    .stProgress > div > div {
-        background: linear-gradient(90deg, #FF2D6B, #FF85A1) !important;
+    div[role="progressbar"] > div {
+        background: #FF2D6B !important;
         border-radius: 99px !important;
-        height: 8px !important;
+        height: 6px !important;
         transition: width 0.4s ease !important;
     }
     [data-testid="stProgressBar"] > div {
