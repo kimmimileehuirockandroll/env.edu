@@ -369,10 +369,3 @@ def get_chart_colors():
             "accent2":  "#00C9A7",
             "label":    "#1A1A1A",
         }
-
-div[data-testid="metric-container"] {
-    background: #FFFFFF !important;
-    border: 1px solid #E8E8E8 !important;
-    border-radius: 12px !important;
-    padding: 12px 18px !important;
-}
