@@ -41,59 +41,59 @@ def apply_css():
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
 
     /* ══ CSS 변수 — 다크 모드 (기본) ══ */
+    /* ══ 다크 모드 (기본) ══ */
     :root {
-        --bg-base:        #0a0f0d;
-        --bg-sidebar:     #0d1a14;
-        --bg-card:        #0d1f17;
-        --bg-metric:      #0d2418;
-        --bg-select:      #0d2418;
-        --bg-hero:        linear-gradient(135deg,#003d1f 0%,#00251a 50%,#001a12 100%);
-        --bg-node-badge:  #003d1f;
-        --bg-node-visited:#1b5e20;
-        --border-main:    #1b3a2a;
-        --border-sidebar: #1e3a2a;
-        --border-metric:  #1b5e3b;
-        --border-select:  #1b5e3b;
-        --border-badge:   #00897b;
-        --text-base:      #e8f5e9;
-        --text-sidebar:   #b2dfdb;
-        --text-muted:     #80cbc4;
-        --text-caption:   #4db6ac;
-        --text-footer:    #2e5945;
-        --accent-primary: #69f0ae;
-        --accent-second:  #40c4aa;
-        --accent-third:   #1de9b6;
-        --hero-glow:      #1de9b622;
+        --bg-base:        #0D0D0D;
+        --bg-sidebar:     #111111;
+        --bg-card:        #1A1A1A;
+        --bg-metric:      #1F0D14;
+        --bg-select:      #1A1A1A;
+        --bg-hero:        linear-gradient(135deg, #1F0D14 0%, #0D0D0D 60%, #001A14 100%);
+        --bg-node-badge:  #1F0D14;
+        --bg-node-visited:#2E0A1A;
+        --border-main:    #2A2A2A;
+        --border-sidebar: #222222;
+        --border-metric:  #4D1A2E;
+        --border-select:  #4D1A2E;
+        --border-badge:   #FF5C8A;
+        --text-base:      #F0F0F0;
+        --text-sidebar:   #CCCCCC;
+        --text-muted:     #9B9B9B;
+        --text-caption:   #777777;
+        --text-footer:    #444444;
+        --accent-primary: #FF5C8A;
+        --accent-second:  #00E8C1;
+        --accent-third:   #FF85A1;
+        --hero-glow:      #FF2D6B22;
     }
-
-    /* ══ CSS 변수 — 라이트 모드 ══ */
+    
+    /* ══ 라이트 모드 ══ */
     @media (prefers-color-scheme: light) {
         :root {
-            --bg-base:        #f0faf4;
-            --bg-sidebar:     #e6f4ec;
-            --bg-card:        #ffffff;
-            --bg-metric:      #e8f5e9;
-            --bg-select:      #ffffff;
-            --bg-hero:        linear-gradient(135deg,#c8f0d8 0%,#e0f7ec 50%,#f0fdf6 100%);
-            --bg-node-badge:  #e8f5e9;
-            --bg-node-visited:#c8e6c9;
-            --border-main:    #a5d6b0;
-            --border-sidebar: #b2dfbd;
-            --border-metric:  #66bb8a;
-            --border-select:  #66bb8a;
-            --border-badge:   #00897b;
-            --text-base:      #1b3a2a;
-            --text-sidebar:   #2e6b4f;
-            --text-muted:     #2e7d52;
-            --text-caption:   #00796b;
-            --text-footer:    #4caf7d;
-            --accent-primary: #00897b;
-            --accent-second:  #00796b;
-            --accent-third:   #00bfa5;
-            --hero-glow:      #00bfa522;
+            --bg-base:        #FFFFFF;
+            --bg-sidebar:     #F5F5F5;
+            --bg-card:        #FAFAFA;
+            --bg-metric:      #FFF0F5;
+            --bg-select:      #FFFFFF;
+            --bg-hero:        linear-gradient(135deg, #FFE4EE 0%, #F0FBF8 60%, #FFFFFF 100%);
+            --bg-node-badge:  #FFF0F5;
+            --bg-node-visited:#FFD6E7;
+            --border-main:    #E8E8E8;
+            --border-sidebar: #E0E0E0;
+            --border-metric:  #FFBED5;
+            --border-select:  #FFBED5;
+            --border-badge:   #FF2D6B;
+            --text-base:      #1A1A1A;
+            --text-sidebar:   #333333;
+            --text-muted:     #6B6B6B;
+            --text-caption:   #9B9B9B;
+            --text-footer:    #BBBBBB;
+            --accent-primary: #FF2D6B;
+            --accent-second:  #00C9A7;
+            --accent-third:   #FF6B9D;
+            --hero-glow:      #FF2D6B18;
         }
     }
-
     /* ── reset & base ── */
     html, body, [class*="css"] {
         font-family: 'Noto Sans KR', 'Space Grotesk', sans-serif;
@@ -129,8 +129,8 @@ def apply_css():
 
     /* ── buttons ── */
     .stButton > button {
-        background: linear-gradient(135deg, #00897b, var(--accent-third)) !important;
-        color: #001a12 !important;
+        background: linear-gradient(135deg, #FF2D6B, #FF85A1) !important;
+        color: #FFFFFF !important;
         font-weight: 700 !important;
         border: none !important;
         border-radius: 10px !important;
@@ -139,7 +139,7 @@ def apply_css():
     }
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px #00bfa544;
+        box-shadow: 0 6px 20px #FF2D6B44;
     }
 
     /* ── selectbox / radio ── */
@@ -152,7 +152,7 @@ def apply_css():
     }
 
     /* ── progress bar ── */
-    .stProgress > div > div { background: linear-gradient(90deg,#00897b,var(--accent-primary)) !important; }
+    .stProgress > div > div {    background: linear-gradient(90deg, #FF2D6B, #00C9A7) !important;}
 
     /* ── divider ── */
     hr { border-color: var(--border-main) !important; }
