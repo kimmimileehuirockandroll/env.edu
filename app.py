@@ -3,7 +3,7 @@ from shared import apply_css
 
 st.set_page_config(
     page_title="Eco Lab. Jeju",
-    page_icon="🌿",
+    page_icon="🌷",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -30,7 +30,7 @@ with st.sidebar:
     st.markdown(
         """
         <a href="./" target="_self" class="brand-link">
-            <div class="brand-title">🌿 Eco Lab. Jeju</div>
+            <div class="brand-title">🌷 Eco Lab. Jeju</div>
             <div class="brand-subtitle">에코랩 제주</div>
         </a>
         """,
