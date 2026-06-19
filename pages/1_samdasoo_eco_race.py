@@ -6,7 +6,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.image import imread
-from shared import apply_css, _korean_font
 from shared import apply_css, _korean_font, get_chart_colors
 apply_css()
 
@@ -101,8 +100,9 @@ def draw_game_graph():
 
     # 이미지 비율에 맞춰 figsize 설정 (2816:1536 ≈ 11:6)
     fig, ax = plt.subplots(figsize=(11, 6))
-    fig.patch.set_facecolor("#0a0f0d")
-    ax.set_facecolor("#0a0f0d")
+    ch = get_chart_colors()
+    fig.patch.set_facecolor(ch["bg"])
+    ax.set_facecolor(ch["bg"])
     ax.axis("off")
 
     pos = NODE_POS
@@ -116,7 +116,7 @@ def draw_game_graph():
         # 이미지 없을 때 기존 섬 모양 폴백
         ellipse = mpatches.Ellipse((0.4, 0.58), 0.75, 0.60,
                                     angle=8, linewidth=0,
-                                    facecolor="#1a4a2a", alpha=0.6)
+                                    facecolor=ch["card"], alpha=0.6)
         ax.add_patch(ellipse)
 
     # ── 전체 엣지 (반투명 흰 점선) ──
@@ -341,9 +341,9 @@ with ctrl_col:
 <div class='eco-card' style='margin-top:.8rem;'>
   <b style='color:var(--text-base);'>예상 소모 자원 미리보기</b>
   <div style='margin-top:.5rem; font-size:.9rem;'>
-⏱️ 시간: <span style='color:#69f0ae;'><b>{preview_time}분</b></span><br>
-🌿 탄소: <span style='color:#69f0ae;'><b>{base_carbon:,}g</b></span><br>
-💰 비용: <span style='color:#69f0ae;'><b>₩{base_cost:,}</b></span><br>
+⏱️ 시간: <span style='color:var(--accent-primary);'><b>{preview_time}분</b></span>
+🌿 탄소: <span style='color:var(--accent-primary);'><b>{base_carbon:,}g</b></span><br>
+💰 비용: <span style='color:var(--accent-primary);'><b>₩{base_cost:,}</b></span><br>
 <span style='color:var(--text-caption); font-size:.83rem;'>{dice_note}</span>
   </div>
 </div>
