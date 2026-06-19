@@ -228,11 +228,6 @@ renderer.getMouseCaptor().on("mouseup", () => {{ dragging=false; dragged=null; }
 </script>
 """
     components.html(html, height=height + 120)
-
-def draw_construct_bar(responses):
-    ch = get_chart_colors()
-    import streamlit as st
-    st.caption(f"🔤 폰트 상태: {_korean_font}")  # 임시 디버그
     
 def draw_construct_bar(responses):
     ch = get_chart_colors()
