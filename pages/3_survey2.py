@@ -3,7 +3,6 @@ import json
 import random
 from collections import Counter
 from datetime import datetime
-
 import streamlit as st
 import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
@@ -11,11 +10,8 @@ import matplotlib.patches as mpatches
 import networkx as nx
 import numpy as np
 import pandas as pd
-
-from shared import apply_css, _korean_font
-
+from shared import apply_css, _korean_font, get_chart_colors
 apply_css()
-
 # ─────────────────────────────────────────────
 #  구글 시트 설정
 # ─────────────────────────────────────────────
@@ -165,19 +161,18 @@ def draw_dynamic_network(responses, height=620):
     legend_items = "".join(
         f'<span style="display:inline-flex;align-items:center;gap:4px;margin-right:10px;">'
         f'<span style="width:12px;height:12px;border-radius:50%;background:{col};display:inline-block;"></span>'
-        f'<span style="font-size:12px;color:#1b3a2a;">{prof}</span></span>'
+        f'<span style="font-size:12px;color:var(--text-base);">{prof}</span></span>'
         for prof, col in PROFILE_COLORS.items()
     )
 
     html = f"""
-<div style="background:#f7fbf8;border:1px solid #c8e6c9;border-radius:14px;padding:14px;">
+<div style="background:var(--bg-card);border:1px solid var(--border-main);border-radius:14px;padding:14px;">
   <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;">
-    <b style="font-size:13px;color:#1b3a2a;">성향 범례</b>
+    <b style="font-size:13px;color:var(--text-base);">성향 범례</b>
     {legend_items}
   </div>
-  <div id="sigma-container" style="width:100%;height:{height}px;background:#ffffff;
-       border:1px solid #c8e6c9;border-radius:10px;overflow:hidden;position:relative;"></div>
-  <div style="font-size:11px;color:#78909c;margin-top:6px;text-align:right;">
+  <div id="sigma-container" style="width:100%;height:{height}px;background:var(--bg-base);border:1px solid var(--border-main);border-radius:10px;overflow:hidden;position:relative;"></div>
+  <div style="font-size:11px;color:var(--text-caption);margin-top:6px;text-align:right;">
     노드 {G.number_of_nodes()}명 &nbsp;|&nbsp; 연결 {G.number_of_edges()}개 &nbsp;|&nbsp; 코사인 유사도 ≥ 0.92
   </div>
 </div>
@@ -234,11 +229,14 @@ renderer.getMouseCaptor().on("mouseup", () => {{ dragging=false; dragged=null; }
 """
     components.html(html, height=height + 120)
 
-
 def draw_construct_bar(responses):
+    ch = get_chart_colors()
     all_s = np.array([r["scores"] for r in responses])
     labels, values, colors_list = [], [], []
-    bar_colors = ["#69f0ae","#a5d6a7","#40c4ff","#90caf9","#ffd740","#ffe082","#ff6e40"]
+    bar_colors = [ch["accent"], ch["accent"],
+                  ch["accent2"], ch["accent2"],
+                  "#ffd740", "#ffd740",
+                  "#ff6e40"]
     for idx, (name, q_list) in enumerate(CONSTRUCT_MAP.items()):
         idxs = [int(q)-1 for q in q_list]
         labels.append(name)
@@ -246,47 +244,48 @@ def draw_construct_bar(responses):
         colors_list.append(bar_colors[idx % len(bar_colors)])
 
     fig, ax = plt.subplots(figsize=(9, 3.2))
-    fig.patch.set_facecolor("#0a0f0d")
-    ax.set_facecolor("#0a0f0d")
+    fig.patch.set_facecolor(ch["bg"])
+    ax.set_facecolor(ch["bg"])
     bars = ax.barh(labels, values, color=colors_list, height=0.55)
     ax.set_xlim(0, 7.5)
-    ax.spines[:].set_color("#1b3a2a")
-    ax.tick_params(colors="#6B6B6B", labelsize=8.5)
+    ax.spines[:].set_color(ch["spine"])
+    ax.tick_params(colors=ch["tick"], labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(val + 0.05, bar.get_y() + bar.get_height()/2,
-                f"{val:.2f}", va="center", color="#69f0ae", fontsize=9)
+                f"{val:.2f}", va="center", color=ch["accent"], fontsize=9)
     if _korean_font:
-        ax.set_xlabel("평균 점수 (1~5)", color="#6B6B6B", fontproperties=_korean_font)
-        ax.set_yticklabels(labels, fontproperties=_korean_font, color="#b2dfdb", fontsize=8.5)
+        ax.set_xlabel("평균 점수 (1~7)", color=ch["axis"], fontproperties=_korean_font)
+        ax.set_yticklabels(labels, fontproperties=_korean_font,
+                           color=ch["tick"], fontsize=8.5)
     else:
-        ax.set_xlabel("평균 점수 (1~5)", color="#6B6B6B")
+        ax.set_xlabel("평균 점수 (1~7)", color=ch["axis"])
     plt.tight_layout(pad=0.5)
     return fig
 
-
 def draw_profile_bar(responses):
+    ch = get_chart_colors()
     counts = Counter(r["profile"] for r in responses)
     labels = list(counts.keys())
     values = list(counts.values())
-    colors = [PROFILE_COLORS.get(l, "#80cbc4") for l in labels]
+    colors = [PROFILE_COLORS.get(l, ch["muted"]) for l in labels]
 
     fig, ax = plt.subplots(figsize=(7, 2.5))
-    fig.patch.set_facecolor("#0a0f0d")
-    ax.set_facecolor("#0a0f0d")
+    fig.patch.set_facecolor(ch["bg"])
+    ax.set_facecolor(ch["bg"])
     bars = ax.barh(labels, values, color=colors, height=0.5)
-    ax.spines[:].set_color("#1b3a2a")
-    ax.tick_params(colors="#6B6B6B", labelsize=8.5)
+    ax.spines[:].set_color(ch["spine"])
+    ax.tick_params(colors=ch["tick"], labelsize=8.5)
     for bar, val in zip(bars, values):
         ax.text(bar.get_width() + 0.2, bar.get_y() + bar.get_height()/2,
-                str(val), va="center", color="#69f0ae", fontsize=9)
+                str(val), va="center", color=ch["accent"], fontsize=9)
     if _korean_font:
-        ax.set_xlabel("인원 수", color="#6B6B6B", fontproperties=_korean_font)
-        ax.set_yticklabels(labels, fontproperties=_korean_font, color="#b2dfdb", fontsize=8.5)
+        ax.set_xlabel("인원 수", color=ch["axis"], fontproperties=_korean_font)
+        ax.set_yticklabels(labels, fontproperties=_korean_font,
+                           color=ch["tick"], fontsize=8.5)
     else:
-        ax.set_xlabel("인원 수", color="#6B6B6B")
+        ax.set_xlabel("인원 수", color=ch["axis"])
     plt.tight_layout(pad=0.5)
     return fig
-
 
 # ─────────────────────────────────────────────
 #  화면 구성
