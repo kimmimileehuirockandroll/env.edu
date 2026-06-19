@@ -307,7 +307,7 @@ _korean_font = load_korean_font(8.5)
 # ─────────────────────────────────────────────
 def get_chart_colors():
     """현재 Streamlit 테마에 맞는 matplotlib 색상 딕셔너리 반환."""
-    is_dark = st.get_option("theme.base") != "light"
+    is_dark = st.get_option("theme.base") == "dark"
 
     if is_dark:
         return {
