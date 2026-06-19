@@ -62,7 +62,7 @@ def apply_css():
         --text-caption:   #777777;
         --text-footer:    #444444;
         --accent-primary: #FF5C8A;
-        --accent-second:  #FF85A1;
+        --accent-second:  #F0F0F0;
         --accent-third:   #FF85A1;
         --hero-glow:      #FF2D6B22;
     }
@@ -89,7 +89,7 @@ def apply_css():
             --text-caption:   #9B9B9B;
             --text-footer:    #BBBBBB;
             --accent-primary: #FF2D6B;
-            --accent-second:  #FF6B9D;
+            --accent-second:  #1A1A1A;
             --accent-third:   #FF6B9D;
             --hero-glow:      #FF2D6B18;
         }
