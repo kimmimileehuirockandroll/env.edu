@@ -250,7 +250,7 @@ bar_col1, bar_col2, bar_col3 = st.columns(3)
 
 def progress_bar(label, pct):
     pct = max(0, min(100, pct))
-    color = "#FF2D6B" if pct > 30 else "#FF8C00"  # 30% 이하면 주황 경고
+    color = "#1A1A1A" if pct > 30 else "#FF2D6B"  # 30% 이하면 주황 경고
     return f"""
 <div style="margin-bottom:0.5rem;">
   <div style="font-size:0.8rem; color:var(--text-caption); margin-bottom:4px;">{label}</div>
