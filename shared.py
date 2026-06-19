@@ -162,11 +162,11 @@ def apply_css():
 
     /* ── hero banner ── */
     .hero-banner {
-        background: var(--bg-hero);
-        border: 1px solid var(--hero-glow);
-        border-radius: 20px;
-        padding: 2.5rem 2.5rem 2rem;
-        margin-bottom: 1.5rem;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0 0 1.5rem 0;
+        margin-bottom: 1rem;
         position: relative;
         overflow: hidden;
     }
