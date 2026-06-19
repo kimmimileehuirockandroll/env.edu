@@ -5,7 +5,7 @@ apply_css()
 
 st.markdown("""
 <div class='hero-banner'>
-  <div class='hero-title'>🌿 에코랩 제주</div>
+  <div class='hero-title'>🌷 에코랩 제주</div>
   <div class='hero-sub'>데이터 사이언스 × 환경 교육</div>
 </div>
 """, unsafe_allow_html=True)
