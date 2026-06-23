@@ -14,12 +14,13 @@ apply_css()
 home = st.Page("home.py", title="HOME", icon="🏠")
 game1 = st.Page("pages/1_samdasoo_eco_race.py", title="삼다수 에코 레이스", icon="🎮")
 game2 = st.Page("pages/4_insect_murder_case.py", title="살충사건 수사본부",icon="🪲")
+game3 = st.Page("pages/5_jeju_ecosystem_balance.py", title="제주 생태계 밸런스", icon="🌋")
 network1 = st.Page("pages/2_environment_action_network.py", title="1반 환경행동 네트워크", icon="📊")
 network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크", icon="📊")
 
 pages = {
     "Home": [home],
-    "Network": [game1, game2],
+    "Network": [game1, game2, game3],
     "Survey": [network1, network2],
 }
 
@@ -41,6 +42,7 @@ with st.sidebar:
     st.markdown("#### Network")
     st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
     st.page_link(game2, label="살충사건 수사본부", icon="🪲")
+    st.page_link(game3, label="제주 생태계 밸런스", icon="🌋")
     # st.page_link(game2, label="게임2", icon="🎮")
     # st.page_link(game3, label="게임3", icon="🎮")
 
