@@ -1,5 +1,5 @@
 import streamlit as st
-from shared import apply_css
+from shared import apply_css, level_selector
 
 st.set_page_config(
     page_title="Eco Lab. Jeju",
@@ -15,12 +15,15 @@ home = st.Page("home.py", title="HOME", icon="🏠")
 game1 = st.Page("pages/1_samdasoo_eco_race.py", title="삼다수 에코 레이스", icon="🎮")
 game2 = st.Page("pages/4_insect_murder_case.py", title="살충사건 수사본부",icon="🪲")
 game3 = st.Page("pages/5_jeju_ecosystem_balance.py", title="제주 생태계 밸런스", icon="🌋")
+game4 = st.Page("pages/6_pixel_eco_city.py", title="픽셀 에코시티", icon="🏙️")
+game5 = st.Page("pages/7_oreumi_diary.py", title="오름이의 환경 다이어리", icon="🦌")
+game6 = st.Page("pages/8_ecocity_2050.py", title="에코시티 2050", icon="🏙️")
 network1 = st.Page("pages/2_environment_action_network.py", title="1반 환경행동 네트워크", icon="📊")
 network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크", icon="📊")
 
 pages = {
     "Home": [home],
-    "Network": [game1, game2, game3],
+    "Network": [game1, game2, game3, game4, game5, game6],
     "Survey": [network1, network2],
 }
 
@@ -39,10 +42,17 @@ with st.sidebar:
     )
     st.markdown("---")
 
+    # 학습자 레벨 토글 — 초등/중등/고등/대학·성인
+    level_selector()
+    st.markdown("---")
+
     st.markdown("#### Network")
     st.page_link(game1, label="삼다수 에코 레이스", icon="🎮")
     st.page_link(game2, label="살충사건 수사본부", icon="🪲")
     st.page_link(game3, label="제주 생태계 밸런스", icon="🌋")
+    st.page_link(game4, label="픽셀 에코시티", icon="🏙️")
+    st.page_link(game5, label="오름이의 환경 다이어리", icon="🦌")
+    st.page_link(game6, label="에코시티 2050", icon="🏙️")
     # st.page_link(game2, label="게임2", icon="🎮")
     # st.page_link(game3, label="게임3", icon="🎮")
 
