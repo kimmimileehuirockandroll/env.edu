@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import networkx as nx
 import numpy as np
-from shared import apply_css, _korean_font, get_chart_colors
+from shared import apply_css, _korean_font, get_chart_colors, show_theory
 
 apply_css()
 
@@ -408,14 +408,30 @@ tab1, tab2 = st.tabs(["✏️ 설문 참여", "🕸️ 네트워크 시각화"])
 # ── Tab 1: Survey ──
 with tab1:
     st.markdown("### ✏️ 환경행동 설문 (15문항)")
-    st.markdown("""
+    # 학습자 레벨에 따라 안내 콘텐츠를 분기 (설문 문항 자체는 동일)
+    if show_theory():
+        # 전체 · 고등 · 대학/성인 → 학술 이론(TPB) 버전
+        st.markdown("""
 <div class='eco-card'>
-  <b style='color:var(--accent-primary);'>📚 이론 배경 간단 소개</b>
+  <b style='color:var(--accent-primary);'>📚 이론 배경 간단 소개 (계획된 행동이론, TPB)</b>
   <ul style='color:var(--text-muted); font-size:.9rem; margin:.5rem 0 0;'>
 <li><b style='color:var(--text-base);'>태도 (Attitude)</b>: 환경 행동을 가치 있게 여길수록 실천 의도가 높아진다</li>
 <li><b style='color:var(--text-base);'>주관적 규범 (Subjective Norm)</b>: 주변 사람들의 기대가 행동에 영향을 준다</li>
 <li><b style='color:var(--text-base);'>지각된 행동통제감 (PBC)</b>: 실천이 쉽다고 느낄수록 행동으로 이어진다</li>
   </ul>
+</div>
+""", unsafe_allow_html=True)
+    else:
+        # 초등 · 중등만 선택 → 용어를 쉽게 풀어쓴 버전
+        st.markdown("""
+<div class='eco-card'>
+  <b style='color:var(--accent-primary);'>🌱 어떤 설문이에요?</b>
+  <ul style='color:var(--text-muted); font-size:.9rem; margin:.5rem 0 0;'>
+<li><b style='color:var(--text-base);'>내 생각</b>: 환경을 지키는 행동이 얼마나 중요하다고 느끼는지</li>
+<li><b style='color:var(--text-base);'>주변 친구들</b>: 가족·친구가 하면 나도 따라 하게 되는지</li>
+<li><b style='color:var(--text-base);'>할 수 있다는 마음</b>: 실천이 쉽다고 느끼는지</li>
+  </ul>
+  <div style='color:var(--text-caption); font-size:.82rem; margin-top:.5rem;'>편하게 솔직히 답해주면 돼요! 정답은 없어요 😊</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -426,9 +442,11 @@ with tab1:
     all_answered = True
 
     for i, q in enumerate(QUESTIONS):
+        # 고등·성인 레벨에서만 학술 이론 라벨(IA1, TPB 구성요소 등) 노출
+        theory_html = f"<div class='q-theory'>📌 {q['theory']}</div>" if show_theory() else ""
         st.markdown(f"""
 <div class='q-card'>
-  <div class='q-theory'>📌 {q['theory']}</div>
+  {theory_html}
   <div class='q-text'>Q{i+1}. {q['text']}</div>
 </div>
 """, unsafe_allow_html=True)
