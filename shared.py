@@ -312,13 +312,18 @@ def apply_css():
     }
 
     /* ── segmented_control(토글 버튼) ── */
-    [data-testid="stSegmentedControl"] [role="group"] {
+    /* 버튼들을 감싼 컨테이너에 간격을 줘서 각자 독립 알약으로 분리 */
+    [data-testid="stSegmentedControl"] [role="group"],
+    [data-testid="stSegmentedControl"] div:has(> button) {
+        display: flex !important;
         gap: 6px !important;
         flex-wrap: wrap !important;
         background: transparent !important;
         border: none !important;
     }
-    [data-testid="stSegmentedControl"] button {
+    /* 비선택 버튼이 Streamlit 기본 radius를 덮어쓰도록 testid까지 명시(특이도↑) */
+    [data-testid="stSegmentedControl"] button,
+    [data-testid="stSegmentedControl"] button[data-testid^="stBaseButton-segmented_control"] {
         border-radius: 999px !important;
         border: 1.5px solid var(--border-select) !important;
         background: var(--bg-select) !important;
@@ -327,6 +332,7 @@ def apply_css():
         font-weight: 600 !important;
         padding: .35rem .9rem !important;
         min-height: 0 !important;
+        margin: 0 !important;
         box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
         transition: all .15s ease !important;
     }
