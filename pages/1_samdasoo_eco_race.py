@@ -391,8 +391,8 @@ with ctrl_col:
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    background: rgba(20, 10, 15, 0.94);
-                    border: 2px solid #FF5C8A;
+                    background: #FFFFFF;
+                    border: 2px solid #FF2D6B;
                     border-radius: 24px;
                     padding: 2rem 3rem;
                     z-index: 999999;
@@ -402,7 +402,7 @@ with ctrl_col:
                 ">
                     <div style="font-size: 3rem; margin-bottom: .8rem;">🚀</div>
                     <div style="
-                        color: #FF5C8A;
+                        color: #FF2D6B;
                         font-size: 1.5rem;
                         font-weight: 800;
                         margin-bottom: .5rem;
@@ -410,7 +410,7 @@ with ctrl_col:
                         열심히 이동 중!
                     </div>
                     <div style="
-                        color:var(--text-base);
+                        color: #1A1A1A;
                         font-size: 1rem;
                         line-height: 1.6;
                     ">
