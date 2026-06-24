@@ -334,40 +334,73 @@ def load_korean_font(size=8.5):
 _korean_font = load_korean_font(8.5)
 
 # ─────────────────────────────────────────────
-#  LEARNER LEVEL (학습자 레벨 / 난이도 토글)
-#  같은 플랫폼을 대상 레벨별로 깊이·이론 노출만 바꿔 운영하기 위한 공용 설정.
-#  각 페이지는 show_theory() 등 헬퍼로 분기하면 됨.
+#  LEARNER LEVEL (학습자 레벨 / 대상 토글) — 복수 선택(중복 가능)
+#  설문 척도(15문항)는 데이터 일관성을 위해 건드리지 않고,
+#  교육용 콘텐츠·용어·이론 노출만 레벨로 분기한다.
+#
+#  사용법:
+#    - 콘텐츠 항목에 levels 태그를 달고 item_visible(levels)로 표시 여부 판단.
+#      예) item_visible(["초등", "중등"])  →  초등/중등 선택 시(또는 전체) True
+#    - 학술 이론 라벨은 show_theory()로 분기(고등·대학/성인 또는 전체에서만).
 # ─────────────────────────────────────────────
-LEVELS = {
-    "초등":     {"order": 1, "show_theory": False, "label": "초등학생"},
-    "중등":     {"order": 2, "show_theory": False, "label": "중학생"},
-    "고등":     {"order": 3, "show_theory": True,  "label": "고등학생"},
-    "대학·성인": {"order": 4, "show_theory": True,  "label": "대학생·성인"},
+LEVELS = ["전체", "대학·성인", "고등", "중등", "초등"]
+LEVEL_LABELS = {
+    "전체":     "전체",
+    "대학·성인": "대학생·성인",
+    "고등":     "고등학생",
+    "중등":     "중학생",
+    "초등":     "초등학생",
 }
-DEFAULT_LEVEL = "중등"
+# 콘텐츠 태그용(전체 제외) — 항목 levels에 쓰는 실제 대상 키
+CONTENT_LEVELS = ["대학·성인", "고등", "중등", "초등"]
+DEFAULT_LEVELS = ["전체"]
+THEORY_LEVELS = {"전체", "고등", "대학·성인"}  # 학술 이론 라벨을 노출할 레벨
 
 
 def level_selector():
-    """사이드바 등에서 호출 — 학습자 레벨 선택기를 그리고 선택값을 세션에 저장."""
-    keys = list(LEVELS.keys())
-    current = st.session_state.get("learner_level", DEFAULT_LEVEL)
-    index = keys.index(current) if current in keys else keys.index(DEFAULT_LEVEL)
-    return st.selectbox("🎚️ 학습자 레벨", keys, index=index, key="learner_level")
+    """사이드바 등에서 호출 — 복수 선택 가능한 학습자 레벨 선택기."""
+    return st.multiselect(
+        "🎚️ 학습자 레벨 (복수 선택 가능)",
+        options=LEVELS,
+        default=st.session_state.get("learner_levels", DEFAULT_LEVELS),
+        format_func=lambda k: LEVEL_LABELS.get(k, k),
+        key="learner_levels",
+    )
 
 
-def get_level():
-    """현재 선택된 학습자 레벨 키 반환."""
-    return st.session_state.get("learner_level", DEFAULT_LEVEL)
+def selected_levels():
+    """현재 선택된 레벨 리스트. 비어 있으면 '전체'로 간주."""
+    sel = st.session_state.get("learner_levels", DEFAULT_LEVELS)
+    return sel if sel else DEFAULT_LEVELS
 
 
-def level_order():
-    """현재 레벨의 난이도 순서(초등1 → 성인4)."""
-    return LEVELS.get(get_level(), LEVELS[DEFAULT_LEVEL])["order"]
+def is_all_selected():
+    """'전체'가 선택되어 모든 레벨 콘텐츠를 보여줘야 하는 상태인지."""
+    return "전체" in selected_levels()
+
+
+def item_visible(item_levels=None):
+    """콘텐츠 항목을 현재 선택 레벨에서 보여줄지 여부.
+
+    item_levels: 이 항목이 해당하는 레벨 리스트(중복 가능). None/빈 값이면 항상 표시.
+    """
+    if is_all_selected():
+        return True
+    if not item_levels:            # 레벨 태그 없는 공통 항목은 항상 표시
+        return True
+    if "전체" in item_levels:
+        return True
+    return bool(set(selected_levels()) & set(item_levels))
+
+
+def filter_items(items, level_key="levels"):
+    """딕셔너리 리스트를 현재 선택 레벨에 맞게 필터링해서 반환."""
+    return [it for it in items if item_visible(it.get(level_key))]
 
 
 def show_theory():
-    """현재 레벨에서 학술 이론 라벨/개념을 노출할지 여부 (고등 이상만 True)."""
-    return LEVELS.get(get_level(), LEVELS[DEFAULT_LEVEL])["show_theory"]
+    """학술 이론 라벨/개념을 노출할지 여부 (전체·고등·대학/성인 선택 시 True)."""
+    return bool(set(selected_levels()) & THEORY_LEVELS)
 
 # ─────────────────────────────────────────────
 #  CHART COLOR PALETTE (matplotlib용)
