@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에코시티 2050 — 신임 시장의 여정 🏙️</title>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#141d33; --panel2:#1d2b47; --line:#34507f;
+    --ink:#e8eef7; --dim:#93a7cc; --gold:#ffd166; --green:#3ad07f; --blue:#4aa3ff;
+    --red:#ff5d6c; --amber:#ffaa45;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"DungGeunMo","Galmuri","Apple SD Gothic Neo",monospace,system-ui;
+    image-rendering:pixelated;}
+  h1,h2,h3,h4{margin:0;}
+  button{font-family:inherit; cursor:pointer; color:inherit;}
+  .hidden{display:none !important;}
+  .pix{font-family:monospace; letter-spacing:.5px;}
+
+  /* 픽셀 테두리 패널 */
+  .frame{background:var(--panel); border:3px solid var(--line);
+    box-shadow:0 0 0 3px var(--bg), 0 6px 0 0 rgba(0,0,0,.4); border-radius:2px;}
+
+  #app{max-width:980px; margin:0 auto; padding:10px;}
+
+  /* ---------- 인트로 ---------- */
+  #intro{padding:18px;}
+  .logo{font-size:clamp(26px,6vw,44px); font-weight:900; text-align:center; letter-spacing:2px;
+    color:var(--green); text-shadow:3px 3px 0 #0a3, 6px 6px 0 rgba(0,0,0,.4);}
+  .tagline{text-align:center; color:var(--gold); margin:6px 0 18px; font-size:14px;}
+  .story-box{line-height:1.7; font-size:14px; background:var(--panel2); border:2px solid var(--line); padding:14px; border-radius:2px;}
+  .story-box b{color:var(--gold);}
+  .choose-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px;}
+  .pick{background:var(--panel2); border:2px solid var(--line); padding:12px; border-radius:2px; cursor:pointer;}
+  .pick.on{border-color:var(--green); background:#163a2a;}
+  .pick b{display:block; color:var(--green); margin-bottom:3px;}
+  .pick span{font-size:12px; color:var(--dim);}
+  #diffPick{grid-template-columns:1fr 1fr 1fr;}
+  .introart{width:100%; height:auto; image-rendering:pixelated; border:2px solid var(--line); background:#0c1426; border-radius:2px; margin-bottom:8px; display:block;}
+  .pbtn{display:block; width:100%; margin-top:14px; padding:14px; font-size:18px; font-weight:900; letter-spacing:1px;
+    background:var(--gold); color:#3a2a00; border:3px solid #b88a00; border-radius:2px; box-shadow:0 4px 0 #8a6800;}
+  .pbtn:active{transform:translateY(3px); box-shadow:none;}
+
+  /* ---------- HUD ---------- */
+  .hud{display:flex; gap:8px; align-items:stretch; flex-wrap:wrap; margin-bottom:8px;}
+  .hud .blk{padding:7px 10px; font-size:12px; display:flex; flex-direction:column; justify-content:center;}
+  .hud .big{font-size:18px; font-weight:900;}
+  .hud .lbl{font-size:10px; color:var(--dim); letter-spacing:1px;}
+  .grow{flex:1;}
+  .pips{letter-spacing:2px; font-size:15px;}
+
+  .stat-row{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;}
+  .stat{flex:1; min-width:86px; padding:6px 8px; cursor:pointer; position:relative;}
+  .stat .lbl{font-size:10px; color:var(--dim);}
+  .stat .v{font-size:16px; font-weight:900;}
+  .stat .bar{height:6px; margin-top:4px; background:#0c1426; border:1px solid var(--line);}
+  .stat .bar i{display:block; height:100%;}
+  .stat .ic{position:absolute; right:6px; top:5px; font-size:11px; opacity:.6;}
+
+  /* ---------- 도시 캔버스 ---------- */
+  .citywrap{position:relative; margin-bottom:8px;}
+  #city{width:100%; height:auto; aspect-ratio:480/240; display:block; image-rendering:pixelated; border:3px solid var(--line); background:#0a1020;}
+  .ticker{position:absolute; left:0; right:0; bottom:0; background:rgba(8,12,24,.85); border-top:2px solid var(--line);
+    font-size:12px; padding:4px 8px; color:var(--gold); white-space:nowrap; overflow:hidden;}
+
+  /* ---------- 카드(정책) ---------- */
+  .deck-head{display:flex; justify-content:space-between; align-items:center; margin:4px 2px;}
+  .deck-head h3{font-size:14px; color:var(--gold); letter-spacing:1px;}
+  .tabs{display:flex; gap:4px;}
+  .tab{padding:5px 9px; font-size:12px; background:var(--panel2); border:2px solid var(--line); border-radius:2px;}
+  .tab.on{background:var(--green); color:#062; border-color:#062;}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(212px,1fr)); gap:11px;}
+  .card{padding:12px; font-size:13px; border:2px solid var(--line); background:var(--panel2); border-radius:3px; position:relative;}
+  .card-head{display:flex; gap:11px; align-items:flex-start; margin-bottom:7px;}
+  .cardart{width:58px; height:50px; image-rendering:pixelated; flex:none; border:2px solid var(--line); background:#0c1426; border-radius:2px;}
+  .card-txt{flex:1; min-width:0;}
+  .card .nm{font-size:14.5px; font-weight:800; margin-bottom:3px;}
+  .card .fx{color:var(--dim); font-size:12px; line-height:1.4; min-height:32px;}
+  .card .cost{display:flex; gap:10px; margin-top:4px; font-size:12.5px;}
+  .card .cost .m{color:var(--gold);} .card .cost .p{color:var(--blue);}
+  .card button{width:100%; margin-top:7px; padding:6px; font-size:12px; font-weight:800;
+    background:var(--green); color:#052812; border:2px solid #052812; border-radius:2px;}
+  .card.disabled{opacity:.45;}
+  .card.disabled button{background:#444; color:#999; border-color:#222;}
+  .card .warn{color:var(--amber); font-size:10px; margin-top:3px;}
+
+  .endbtn{margin-top:10px; width:100%; padding:14px; font-size:17px; font-weight:900; letter-spacing:1px;
+    background:var(--blue); color:#03203f; border:3px solid #03203f; border-radius:2px; box-shadow:0 4px 0 #021a33;}
+  .endbtn:active{transform:translateY(3px); box-shadow:none;}
+
+  /* ---------- 이벤트/모달 ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(5,8,16,.85); display:flex; align-items:center; justify-content:center; padding:14px; z-index:60;}
+  .dlg{max-width:540px; width:100%; padding:0; overflow:hidden;}
+  .dlg .top{display:flex; gap:12px; padding:14px; border-bottom:2px solid var(--line); background:var(--panel2); align-items:center;}
+  .portrait{width:72px; height:72px; image-rendering:pixelated; border:2px solid var(--line); background:#0a1020; flex:none;}
+  .dlg .who{font-size:15px; font-weight:900;} .dlg .role{font-size:11px; color:var(--dim);}
+  .dlg .body{padding:14px; font-size:14px; line-height:1.6;}
+  .dlg .speech{background:#0c1426; border-left:4px solid var(--gold); padding:10px; margin-bottom:12px; font-style:italic;}
+  .choice{display:block; width:100%; text-align:left; margin:6px 0; padding:11px; font-size:13px;
+    background:var(--panel2); border:2px solid var(--line); border-radius:2px;}
+  .choice:hover{border-color:var(--green);}
+  .choice .res{display:block; font-size:11px; color:var(--dim); margin-top:3px;}
+  .modal-btn{display:block; width:100%; margin-top:10px; padding:12px; font-weight:900; font-size:15px;
+    background:var(--gold); color:#3a2a00; border:3px solid #b88a00; border-radius:2px;}
+
+  .news{font-family:Georgia,serif; background:#efe7d3; color:#1a1a1a; padding:18px; max-width:540px; width:100%; border-radius:2px;}
+  .news .mast{display:flex; justify-content:space-between; font-size:11px; letter-spacing:2px; text-transform:uppercase; border-bottom:3px double #1a1a1a; padding-bottom:5px;}
+  .news h2{font-size:24px; margin:10px 0;}
+  .news ul{font-size:13px; padding-left:18px; margin:8px 0 0;}
+  .verdict{font-size:30px; font-weight:900; text-align:center; margin:10px 0;}
+  .check{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line); font-size:13px;}
+  .lesson{background:var(--panel2); border-left:4px solid var(--green); padding:12px; margin-top:10px; font-size:13px; line-height:1.6;}
+  .lesson b{color:var(--green);}
+  .small{font-size:11px; color:var(--dim); text-align:center; margin-top:8px;}
+
+  /* 예산 막대 */
+  .moneybar{height:6px; margin-top:5px; background:#0c1426; border:1px solid var(--line); border-radius:1px; overflow:hidden;}
+  .moneybar i{display:block; height:100%; transition:width .35s ease, background .35s;}
+  #hMoney.flash{animation:moneyflash .5s;}
+  @keyframes moneyflash{0%{color:var(--red); transform:scale(1.18);}100%{color:var(--ink); transform:scale(1);}}
+  /* 지출 플로팅 이펙트 */
+  .spendfx{position:fixed; z-index:80; font-weight:900; font-size:20px; color:var(--red);
+    text-shadow:2px 2px 0 #000; pointer-events:none; animation:spendup 1s ease-out forwards;}
+  @keyframes spendup{0%{opacity:0; transform:translateY(6px) scale(.8);}15%{opacity:1; transform:translateY(0) scale(1.1);}100%{opacity:0; transform:translateY(-46px) scale(1);}}
+  /* 토스트 배너 */
+  .toast{position:fixed; left:50%; bottom:24px; transform:translate(-50%,40px); z-index:85;
+    background:var(--gold); color:#2a1c00; font-weight:800; font-size:14px; padding:11px 18px;
+    border:3px solid #b88a00; border-radius:3px; box-shadow:0 5px 0 #8a6800; opacity:0; transition:.4s; max-width:90vw; text-align:center;}
+  .toast.show{opacity:1; transform:translate(-50%,0);}
+  /* 도시 변화 플로팅 */
+  .citypop{position:fixed; z-index:78; font-size:13px; font-weight:900; color:#aef5c8;
+    text-shadow:1px 1px 0 #042a16, 0 0 6px #1c8048; pointer-events:none; white-space:nowrap;
+    transform:translate(-50%,0); animation:citypopup 1.5s ease-out forwards;}
+  @keyframes citypopup{0%{opacity:0; transform:translate(-50%,8px) scale(.7);}20%{opacity:1; transform:translate(-50%,0) scale(1.05);}100%{opacity:0; transform:translate(-50%,-34px) scale(1);}}
+  /* 결과(여론/인터뷰) 팝업 */
+  .resultpop{position:fixed; z-index:84; transform:translate(-50%,-50%) scale(.78);
+    display:flex; align-items:center; gap:16px; background:var(--panel); padding:18px 22px;
+    max-width:580px; width:calc(100% - 36px); border-width:3px;
+    box-shadow:0 0 0 3px var(--bg), 0 12px 34px rgba(0,0,0,.55); opacity:0; transition:.32s cubic-bezier(.2,1.35,.4,1);}
+  .resultpop.show{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  .resultpop .rpface{width:76px; height:76px; image-rendering:pixelated; border:3px solid var(--line); background:#0a1020; flex:none;}
+  .resultpop .rptxt{flex:1; min-width:0;}
+  .resultpop .rphead{font-size:14px; color:var(--gold); margin-bottom:6px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .resultpop .rpquote{font-size:17.5px; line-height:1.45; font-style:italic;}
+  .resultpop .rpwho{display:block; font-style:normal; color:var(--dim); font-size:12.5px; margin-top:6px;}
+  .resultpop .rpclose{flex:none; align-self:flex-start; color:var(--dim); cursor:pointer; font-size:20px; padding:0 4px;}
+  .rpbadge{display:inline-block; padding:3px 11px; border-radius:20px; font-size:13px; font-weight:800;}
+  /* ===================================================================
+     반응형 / 모바일 (데스크톱 규칙은 위에서 유지, 여기서 작은 화면만 덮어씀)
+     =================================================================== */
+
+  /* 태블릿·큰 폰 (가로/세로 공용) */
+  @media (max-width:760px){
+    #app{padding:8px;}
+    #intro{padding:14px;}
+    .tagline{font-size:13px; margin:6px 0 14px;}
+    .story-box{font-size:13px; padding:12px; line-height:1.65;}
+
+    /* 인트로 도시/난이도 선택: 1열로 */
+    .choose-row{grid-template-columns:1fr; gap:8px;}
+    .pick{padding:14px;}
+    .pbtn{padding:16px; font-size:17px;}
+
+    /* HUD: 두 줄로 자연스럽게 흐르게 */
+    .hud{gap:6px;}
+    .hud .blk{flex:1 1 calc(50% - 6px); padding:8px 10px;}
+    .hud .blk.grow{flex:1 1 100%;}
+    .hud .big{font-size:17px;}
+
+    /* 스탯미터: 2열 그리드로 가독성 확보 */
+    .stat-row{gap:6px;}
+    .stat{flex:1 1 calc(50% - 6px); min-width:0; padding:8px 10px;}
+    .stat .v{font-size:17px;}
+    .stat .bar{height:7px;}
+
+    /* 정책 카드: 2열 고정 */
+    .cards{grid-template-columns:1fr 1fr; gap:8px;}
+    .card{padding:10px;}
+    .card .fx{min-height:34px;}
+    .card button{padding:11px 6px; min-height:44px;}
+
+    /* 탭: 터치 타깃 키우고 줄바꿈 허용 */
+    .deck-head{flex-wrap:wrap; gap:6px;}
+    .tabs{flex-wrap:wrap;}
+    .tab{padding:9px 12px; font-size:12px; min-height:40px; display:flex; align-items:center;}
+
+    .endbtn{padding:16px; min-height:48px;}
+
+    /* 모달·이벤트 선택지: 터치 타깃 ≥44px */
+    .overlay{padding:10px; align-items:flex-start;}
+    .dlg{max-height:92vh; overflow-y:auto;}
+    .dlg .top{padding:12px;}
+    .portrait{width:60px; height:60px;}
+    .dlg .body{padding:12px; font-size:14px;}
+    .choice{padding:13px; min-height:48px; font-size:13px;}
+    .modal-btn{padding:14px; min-height:48px;}
+    .news{padding:16px; max-height:92vh; overflow-y:auto;}
+    .news h2{font-size:21px;}
+    .verdict{font-size:26px;}
+  }
+
+  /* 작은 폰 (세로) */
+  @media (max-width:480px){
+    #app{padding:6px;}
+    #intro{padding:12px;}
+    .story-box{font-size:12.5px;}
+
+    /* HUD: 연도/임기/정치자본 3등분, 예산은 한 줄 차지 */
+    .hud .blk{flex:1 1 calc(33.333% - 6px); padding:7px 6px; text-align:center; align-items:center;}
+    .hud .blk.grow{flex:1 1 100%;}
+    .hud .big{font-size:15px;}
+    .hud .lbl{font-size:9px; letter-spacing:.5px;}
+    .pips{font-size:13px; letter-spacing:1px;}
+
+    /* 스탯미터: 좁으면 2열 유지하되 여백 축소 */
+    .stat{flex:1 1 calc(50% - 6px); padding:7px 8px;}
+    .stat .lbl{font-size:9.5px;}
+    .stat .v{font-size:16px;}
+
+    /* 정책 카드: 1열 */
+    .cards{grid-template-columns:1fr;}
+    .card{padding:11px;}
+    .card .nm{font-size:13px;}
+    .card .fx{min-height:0; font-size:11.5px;}
+    .card .cost{font-size:11.5px;}
+    .card button{min-height:46px; font-size:13px;}
+
+    .deck-head h3{font-size:13px;}
+    .tab{flex:1 1 calc(33.333% - 6px); justify-content:center; min-height:42px;}
+
+    .ticker{font-size:11px; padding:4px 6px;}
+
+    .dlg .who{font-size:14px;}
+    .choice{padding:14px; min-height:50px;}
+    .news h2{font-size:19px;}
+    .verdict{font-size:23px;}
+    .small{font-size:10px;}
+  }
+
+  /* 가로 모드 (낮은 높이): 모달이 화면을 넘지 않게 스크롤 보장 */
+  @media (max-height:480px) and (orientation:landscape){
+    .overlay{align-items:flex-start; padding:8px;}
+    .dlg, .news{max-height:96vh; overflow-y:auto;}
+  }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== 인트로 ===== -->
+  <section id="intro" class="frame">
+    <div class="logo">▚ 에코시티 2050 ▞</div>
+    <div class="tagline">- 신임 시장의 여정 -</div>
+    <div class="story-box">
+      <b>2025년, 당신은 도시 '에코시티'의 시장으로 막 당선됐습니다.</b><br>
+      선거에서 약속했죠. "2050년까지 탄소배출을 절반으로, 깨끗한 도시를 만들겠다"고.<br><br>
+      하지만 현실은 만만치 않습니다. 도시 전기의 대부분은 매연을 뿜는 <b>석탄발전소</b>에서 나오고,
+      거리는 자동차로 가득합니다. 발전소를 함부로 닫으면 <b>정전</b>이 나고 <b>노동자들이 시위</b>합니다.
+      시민들은 변화를 원하면서도 불편은 싫어하죠.<br><br>
+      당신에게 주어진 건 <b>6번의 임기(2025~2050)</b>, 한정된 <b>예산</b>과 <b>정치 자본</b>.
+      과연 도시도 지키고 지구도 지킬 수 있을까요?
+    </div>
+
+    <div style="margin-top:16px"><b style="color:var(--gold)">▶ 맡을 도시</b>
+      <div class="choose-row" id="archPick"></div></div>
+    <div style="margin-top:14px"><b style="color:var(--gold)">▶ 난이도</b>
+      <div class="choose-row" id="diffPick"></div></div>
+
+    <button class="pbtn" onclick="beginGame()">시장 취임 ▶</button>
+  </section>
+
+  <!-- ===== 게임 ===== -->
+  <section id="game" class="hidden">
+    <div class="hud">
+      <div class="blk frame"><span class="lbl">연도</span><span class="big" id="hYear">2025</span></div>
+      <div class="blk frame"><span class="lbl">임기</span><span class="big" id="hTerm">1/6</span></div>
+      <div class="blk frame grow"><span class="lbl">💰 이번 임기 예산</span><span class="big" id="hMoney">$0M</span><div class="moneybar"><i id="hMoneyBar"></i></div></div>
+      <div class="blk frame"><span class="lbl">⚡ 정치자본</span><span class="big pips" id="hPC">●●●●</span></div>
+    </div>
+
+    <div class="stat-row" id="stats"></div>
+
+    <div class="citywrap frame" style="padding:0;border:none;">
+      <canvas id="city" width="480" height="240"></canvas>
+      <div class="ticker" id="ticker">도시를 클릭해 살펴보세요…</div>
+    </div>
+
+    <div class="deck-head">
+      <h3 id="deckTitle">📋 정책 카드 — 이번 임기에 추진할 일</h3>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div class="cards" id="cards"></div>
+
+    <button class="endbtn" id="endBtn" onclick="endTerm()">이번 임기 마치고 5년 뒤로 ▶▶</button>
+    <p class="small">미터를 탭하면 "왜 이 숫자인지"·데이터 출처를 볼 수 있어요. 데이터: IPCC·EIA·World Bank·IEA·OWID</p>
+  </section>
+
+</div>
+<div id="ov"></div>
+
+<script>
+/* =======================================================================
+   ✏️  강사 편집 영역 (DATA)
+   ======================================================================= */
+const DATA = {
+  scenario:{ startYear:2025, step:5, terms:6 },
+
+  archetypes:{
+    eu:{ name:"유럽형 도시", desc:"조밀·대중교통 발달. 석탄·전기소비 낮아 비교적 수월", pop:500000, elecPerCap:6000, pkmPerCap:9000, wastePerCap:510,
+         caps:{coal:38,gas:30,nuclear:5,hydro:8,geo:0,biomass:2,wind:4,solar:3}, car:80,transit:15,active:5 },
+    us:{ name:"미국형 도시", desc:"넓게 퍼진 차 중심. 석탄·전기소비·배출 커서 도전적", pop:500000, elecPerCap:11000, pkmPerCap:14000, wastePerCap:810,
+         caps:{coal:55,gas:35,nuclear:5,hydro:5,geo:0,biomass:3,wind:3,solar:2}, car:92,transit:5,active:3 },
+  },
+  difficulty:{
+    easy:{ name:"쉬움", desc:"감축 −40% · 넉넉한 예산·정치자본", cutTarget:0.40, budget:760, pc:6, minApproval:35 },
+    normal:{ name:"보통", desc:"감축 −55% · 표준", cutTarget:0.55, budget:640, pc:6, minApproval:40 },
+    hard:{ name:"어려움", desc:"감축 −60% · 빠듯함", cutTarget:0.60, budget:560, pc:6, minApproval:45 },
+  },
+
+  // 발전원: co2 IPCC AR5(gCO₂/kWh) · firm 상시여부 · deaths OWID(사망/TWh)
+  energy:{
+    coal:   {name:"석탄",   co2:820, deaths:24.6, firm:true},
+    gas:    {name:"천연가스",co2:490, deaths:2.8,  firm:true},
+    nuclear:{name:"원자력", co2:12,  deaths:0.03, firm:true},
+    hydro:  {name:"수력",   co2:24,  deaths:1.3,  firm:true},
+    geo:    {name:"지열",   co2:38,  deaths:0.5,  firm:true},
+    biomass:{name:"바이오매스",co2:230,deaths:4.6, firm:true},
+    wind:   {name:"풍력",   co2:11,  deaths:0.04, firm:false},
+    solar:  {name:"태양광", co2:48,  deaths:0.02, firm:false},
+  },
+  transport:{ car:{co2:170}, transit:{co2:30}, active:{co2:0} },
+  evIntensity:0.19,
+  waste:{ landfill:{co2:600}, incinerate:{co2:300}, recycle:{co2:-250}, compost:{co2:-60} },
+  effMaxCut:0.28,
+  demandGrowth:0.012,
+};
+
+/* ---- 정책 카드 ---- */
+// effect(P): 정책상태 변경. money/pc 비용. event: 발동할 사건 id. once: 1회성
+const CARDS = [
+ // 에너지
+ {id:'closeCoal', sec:'energy', nm:'석탄발전소 1기 폐쇄', fx:'석탄 −10. 전력부족시 정전!', m:80, pc:2, ev:'coalJobs',
+   need:P=>P.caps.coal>0, eff:P=>{P.caps.coal=Math.max(0,P.caps.coal-10);}},
+ {id:'scrubber', sec:'energy', nm:'석탄 매연저감장치', fx:'석탄 대기오염 ↓ (배출은 그대로)', m:40, pc:0,
+   eff:P=>{P.scrubber=(P.scrubber||0)+1;}},
+ {id:'buildGas', sec:'energy', nm:'천연가스 발전 건설', fx:'가스 +10 (석탄의 절반 배출)', m:55, pc:0,
+   eff:P=>{P.caps.gas+=10;}},
+ {id:'buildSolar', sec:'energy', nm:'태양광 단지', fx:'태양광 +8 (간헐적!)', m:60, pc:0,
+   eff:P=>{P.caps.solar+=8;}},
+ {id:'buildWind', sec:'energy', nm:'풍력 단지', fx:'풍력 +8 (간헐적!)', m:60, pc:1, ev:'windNimby,P=>P.caps.wind',
+   eff:P=>{P.caps.wind+=8;}},
+ {id:'buildNuke', sec:'energy', nm:'원자력 발전소', fx:'원자력 +14 (초저탄소·상시)', m:160, pc:2, ev:'nukeDebate',
+   eff:P=>{P.caps.nuclear+=14;}},
+ {id:'battery', sec:'energy', nm:'대형 배터리 저장', fx:'저장 +25 (간헐성 보완)', m:70, pc:0,
+   eff:P=>{P.storage=Math.min(100,P.storage+25);}},
+ // 교통
+ {id:'subway', sec:'transport', nm:'지하철 노선 신설', fx:'착공 → 10년(2임기) 뒤 개통! 대중교통 +16', m:90, pc:1,
+   need:P=>S.subway.status==='none',
+   eff:P=>{ S.subway={status:'building', termsLeft:2}; }},
+ {id:'bikelane', sec:'transport', nm:'자전거 도로망', fx:'자전거·도보 +8, 자가용 −8', m:35, pc:1, ev:'bikeBacklash',
+   eff:P=>{shift(P,'active',8,'car');}},
+ {id:'evsub', sec:'transport', nm:'전기차 보조금', fx:'전기차 보급 +20', m:55, pc:0,
+   eff:P=>{P.ev=Math.min(100,P.ev+20);}},
+ {id:'carfee', sec:'transport', nm:'도심 혼잡통행료', fx:'자가용 −10 (대중교통+자전거로)', m:10, pc:1, ev:'congestionFee',
+   eff:P=>{shift(P,'transit',6,'car'); shift(P,'active',4,'car');}},
+ // 폐기물·건물
+ {id:'recycle', sec:'green', nm:'재활용 의무화', fx:'재활용 +18, 매립 −18', m:30, pc:1, ev:'recycleRule',
+   eff:P=>{shiftW(P,'recycle',18,'landfill');}},
+ {id:'compost', sec:'green', nm:'음식물 퇴비 프로그램', fx:'퇴비 +12, 매립 −12', m:25, pc:0,
+   eff:P=>{shiftW(P,'compost',12,'landfill');}},
+ {id:'insul', sec:'green', nm:'건물 단열·히트펌프 지원', fx:'에너지 효율 +15 (수요↓)', m:50, pc:0,
+   eff:P=>{P.eff=Math.min(100,P.eff+15);}},
+ {id:'trees', sec:'green', nm:'도시 숲 조성', fx:'시민 행복 ↑, 약간의 흡수', m:25, pc:0,
+   eff:P=>{P.parks=(P.parks||0)+1;}},
+];
+function shift(P,to,amt,from){ P[to]=(P[to]||0)+amt; P[from]=Math.max(0,(P[from]||0)-amt); }
+function shiftW(P,to,amt,from){ P.waste[to]+=amt; P.waste[from]=Math.max(0,P.waste[from]-amt); }
+// 카드 → 픽셀 아이콘 종류
+const CARD_ART={ closeCoal:'coalX', scrubber:'scrubber', buildGas:'gas', buildSolar:'solar', buildWind:'wind',
+  buildNuke:'nuke', battery:'battery', subway:'subway', bikelane:'bike', evsub:'ev', carfee:'carfee',
+  recycle:'recycle', compost:'compost', insul:'insul', trees:'tree' };
+
+/* ---- 캐릭터 ---- */
+const CHARS = {
+  worker:{ name:"김현수", role:"석탄발전소 노동조합장", face:'worker' },
+  activist:{ name:"이서연", role:"환경운동가", face:'activist' },
+  citizen:{ name:"박정민", role:"시민 대표", face:'citizen' },
+  advisor:{ name:"최비서", role:"시장 비서실장", face:'advisor' },
+  ceo:{ name:"강대표", role:"에너지기업 회장", face:'ceo' },
+  scientist:{ name:"윤박사", role:"기후연구소 소장", face:'scientist' },
+  reporter:{ name:"한기자", role:"에코시티 타임스 기자", face:'reporter' },
+  diplomat:{ name:"제인 카터", role:"UN 기후특사", face:'diplomat' },
+};
+
+/* ---- 이벤트(스토리 사건) ---- */
+const EVENTS = {
+  coalJobs:{ who:'worker', say:"발전소를 닫으면 우리 200명은 어디로 갑니까! 재취업 대책 없인 못 나갑니다.",
+    choices:[
+      {t:"재취업·재교육 지원 ($30M)", res:"노동자 달램. 지지 유지", m:30, eff:s=>{s.approval+=3;}},
+      {t:"강행한다", res:"파업·시위. 지지 −8", eff:s=>{s.approval-=8; s.pc-=1;}},
+      {t:"폐쇄를 연기한다", res:"석탄 +10 되돌림. 정치자본 +1", eff:s=>{s.P.caps.coal+=10; s.pc+=1;}},
+    ]},
+  nukeDebate:{ who:'citizen', say:"원자력? 안전한 건 알지만… 우리 동네에 짓는 건 반댑니다. 폐기물은요?",
+    choices:[
+      {t:"안전·투명성 설명회 개최 ($20M)", res:"우려 완화. 지지 +2", m:20, eff:s=>{s.approval+=2;}},
+      {t:"국가 표준대로 강행", res:"지지 −5, 그러나 초저탄소 전력 확보", eff:s=>{s.approval-=5;}},
+    ]},
+  windNimby:{ who:'citizen', say:"풍력 좋죠. 그런데 소음이랑 경관이… 꼭 여기여야 하나요?",
+    choices:[
+      {t:"주민과 수익 공유 모델 ($15M)", res:"합의 도출. 지지 +2", m:15, eff:s=>{s.approval+=2;}},
+      {t:"그냥 짓는다", res:"지지 −3", eff:s=>{s.approval-=3;}},
+    ]},
+  recycleRule:{ who:'citizen', say:"분리수거를 의무화한다고요? 번거로운데… 잘 좀 알려주세요.",
+    choices:[
+      {t:"홍보·교육 캠페인 ($10M)", res:"참여율↑. 지지 +1", m:10, eff:s=>{s.approval+=1;}},
+      {t:"과태료로 밀어붙인다", res:"지지 −4", eff:s=>{s.approval-=4;}},
+    ]},
+  bikeBacklash:{ who:'citizen', say:"자전거 도로 만든다고 차선을 줄이면 출퇴근은 어쩌라고요!",
+    choices:[
+      {t:"단계적 확대로 조정", res:"불만 완화. 지지 +1", eff:s=>{s.approval+=1;}},
+      {t:"계획대로 추진", res:"지지 −3", eff:s=>{s.approval-=3;}},
+    ]},
+  congestionFee:{ who:'activist', say:"혼잡통행료, 잘하셨어요! 하지만 저소득층 부담은 챙기셔야 합니다.",
+    choices:[
+      {t:"대중교통 할인 병행 ($15M)", res:"형평성 확보. 지지 +3", m:15, eff:s=>{s.approval+=3;}},
+      {t:"그대로 둔다", res:"지지 −2", eff:s=>{s.approval-=2;}},
+    ]},
+  // ===== 상황/랜덤 사건 (maybeRandomEvent가 도시 상태에 맞게 발동) =====
+  heatwave:{ who:'scientist', say:"기록적인 폭염입니다. 냉방 수요가 치솟고, 석탄 매연까지 겹쳐 노약자 건강이 위태롭습니다. 결단이 필요합니다.",
+    choices:[
+      {t:"비상 냉방쉼터·취약층 보호 ($25M)", res:"피해 최소화. 지지 +4", m:25, eff:s=>{s.approval+=4;}},
+      {t:"건물 단열·효율을 서두른다 ($20M)", res:"효율 +6, 장기 수요↓", m:20, eff:s=>{s.P.eff=Math.min(100,s.P.eff+6);}},
+      {t:"특별 대책 없이 버틴다", res:"석탄 많을수록 피해 큼. 지지 −6", eff:s=>{const coal=(s.P.caps.coal||0)/Math.max(1,s.m?s.m.totCap:1); s.approval-=Math.round(4+coal*8);}},
+    ]},
+  drought:{ who:'scientist', say:"극심한 가뭄으로 강 수위가 낮아졌습니다. 수력 발전이 흔들리고 농촌 민심도 사납습니다.",
+    choices:[
+      {t:"물 재이용·절수 인프라 투자 ($20M)", res:"위기 관리. 지지 +3", m:20, eff:s=>{s.approval+=3;}},
+      {t:"수력 의존을 줄이고 저장을 늘린다 ($30M)", res:"저장 +15, 안정성↑", m:30, eff:s=>{s.P.storage=Math.min(100,(s.P.storage||0)+15);}},
+      {t:"자연히 지나가길 기다린다", res:"수력 비중 클수록 타격. 지지 −5", eff:s=>{const hy=(s.P.caps.hydro||0)/Math.max(1,s.m?s.m.totCap:1); s.approval-=Math.round(3+hy*10);}},
+    ]},
+  councilVote:{ who:'reporter', say:"시의회 중간선거가 코앞입니다. 시장님의 환경 정책에 대한 평가가 표심을 가를 텐데, 한 말씀 부탁드립니다.",
+    choices:[
+      {t:"성과를 적극 홍보한다 ($10M)", res:"진척 있으면 정치자본 +2, 없으면 역풍", m:10, eff:s=>{const cut=1-(s.m?s.m.total/s.base:1); if(cut>0.15){s.pc+=2; s.approval+=2;} else {s.approval-=4;}}},
+      {t:"논쟁을 피하고 실무에 집중", res:"무난. 변화 없음", eff:s=>{}},
+      {t:"더 과감한 공약을 내건다", res:"지지층 결집(+5)이나 반대층 자극(자본 −1)", eff:s=>{s.approval+=5; s.pc=Math.max(0,s.pc-1);}},
+    ]},
+  corpLobby:{ who:'ceo', say:"시장님, 무리한 탈탄소는 일자리와 세수를 해칩니다. 우리 발전소에 규제를 풀어주시면 도시에 크게 기여하겠습니다.",
+    choices:[
+      {t:"제안을 거절하고 원칙을 지킨다", res:"환경단체 환호. 지지 +3, 자본 +1", eff:s=>{s.approval+=3; s.pc+=1;}},
+      {t:"투자 유치를 수용한다 (+$40M)", res:"예산 +40, 그러나 신뢰 −5", eff:s=>{s.money+=40; s.approval-=5;}},
+      {t:"청정전환 기금으로 협상 ($0M)", res:"기업이 청정투자 약속. 저장 +10", eff:s=>{s.P.storage=Math.min(100,(s.P.storage||0)+10); s.approval+=1;}},
+    ]},
+  petition:{ who:'citizen', say:"시민 5천 명이 '더 깨끗한 공기'를 요구하는 청원에 서명했습니다. 시장님, 응답해 주세요.",
+    choices:[
+      {t:"매연저감·도시숲 확대 ($20M)", res:"대기·행복↑. 지지 +4", m:20, eff:s=>{s.P.scrubber=(s.P.scrubber||0)+1; s.P.parks=(s.P.parks||0)+1; s.approval+=4;}},
+      {t:"공청회로 의견을 수렴한다 ($5M)", res:"신뢰 형성. 지지 +2, 자본 +1", m:5, eff:s=>{s.approval+=2; s.pc+=1;}},
+      {t:"예산 부족을 이유로 보류", res:"실망 확산. 지지 −5", eff:s=>{s.approval-=5;}},
+    ]},
+  techBreakthrough:{ who:'scientist', say:"희소식입니다! 차세대 그리드 저장 기술이 상용화 단계에 왔습니다. 지금 도입하면 간헐발전을 안정적으로 쓸 수 있어요.",
+    choices:[
+      {t:"즉시 도입한다 ($45M)", res:"저장 +25, 효율 +5", m:45, eff:s=>{s.P.storage=Math.min(100,(s.P.storage||0)+25); s.P.eff=Math.min(100,s.P.eff+5);}},
+      {t:"시범사업으로 검증 ($15M)", res:"저장 +10", m:15, eff:s=>{s.P.storage=Math.min(100,(s.P.storage||0)+10);}},
+      {t:"예산을 아끼고 보류한다", res:"기회 상실. 변화 없음", eff:s=>{}},
+    ]},
+  rivalCity:{ who:'reporter', say:"이웃 '스모그시티'가 우리보다 탄소를 더 줄였다는 보도가 났습니다. 시민들의 자존심이 상했네요.",
+    choices:[
+      {t:"경쟁심을 동력으로 효율 캠페인 ($15M)", res:"효율 +8, 결집", m:15, eff:s=>{s.P.eff=Math.min(100,s.P.eff+8); s.approval+=2;}},
+      {t:"우리만의 페이스를 강조한다", res:"감축 충분하면 지지 +3, 아니면 −2", eff:s=>{const cut=1-(s.m?s.m.total/s.base:1); s.approval+= cut>=s.diff.cutTarget*0.6?3:-2;}},
+      {t:"비교에 흔들리지 않는다", res:"변화 없음", eff:s=>{}},
+    ]},
+  climateAccord:{ who:'diplomat', say:"에코시티를 국제 기후협약 도시 동맹에 초대합니다. 가입하면 지원금과 명성을 얻지만, 더 엄격한 감축 의무가 따릅니다.",
+    choices:[
+      {t:"가입하고 지원금 확보 (+$50M)", res:"예산 +50, 명성↑(지지 +3)", eff:s=>{s.money+=50; s.approval+=3;}},
+      {t:"가입하되 효율에 집중 ($10M)", res:"효율 +10, 자본 +1", m:10, eff:s=>{s.P.eff=Math.min(100,s.P.eff+10); s.pc+=1;}},
+      {t:"독자 노선을 유지한다", res:"부담 없음. 명성 기회 상실", eff:s=>{s.approval-=1;}},
+    ]},
+};
+
+/* =======================================================================
+   시뮬레이션
+   ======================================================================= */
+let S=null;
+function clone(o){return JSON.parse(JSON.stringify(o));}
+
+function newPolicy(a){
+  return { caps:clone(a.caps), storage:0, eff:0, ev:2,
+           car:a.car, transit:a.transit, active:a.active,
+           waste:{landfill:70,incinerate:8,recycle:20,compost:2},
+           scrubber:0, parks:0 };
+}
+function shares(obj){ const s=Object.values(obj).reduce((a,b)=>a+b,0)||1; const o={}; for(const k in obj)o[k]=obj[k]/s; return o; }
+
+function sim(P, term){
+  const E=DATA.energy, mult=Math.pow(1+DATA.demandGrowth, term*DATA.scenario.step);
+  const a=S.arch;
+  // 전력
+  const eff=(P.eff/100)*DATA.effMaxCut;
+  const elecKWh=a.pop*a.elecPerCap*(1-eff)*mult;
+  const eSh=shares(P.caps);
+  let gridG=0,deaths=0,firmCap=0,varCap=0,totCap=0;
+  for(const k in P.caps){ gridG+=eSh[k]*E[k].co2; let d=E[k].deaths; if(k==='coal'&&P.scrubber)d*=Math.max(0.3,1-P.scrubber*0.25); deaths+=eSh[k]*d;
+    totCap+=P.caps[k]; if(E[k].firm)firmCap+=P.caps[k]; else varCap+=P.caps[k]; }
+  const demandUnits=Object.values(a.caps).reduce((x,y)=>x+y,0)*mult*(1-eff);
+  const usableVar=Math.min(varCap,(0.4+P.storage/100*0.5)*totCap);
+  const reliability=Math.max(0,Math.min(100,(firmCap+usableVar)/demandUnits*100));
+  const energyCO2=elecKWh*gridG/1e6;
+  const energyDeaths=(elecKWh/1e9)*deaths;
+  // 교통
+  const tSh=shares({car:P.car,transit:P.transit,active:P.active});
+  const carG=(1-P.ev/100)*170 + (P.ev/100)*(gridG*DATA.evIntensity);
+  const pkm=a.pop*a.pkmPerCap*mult;
+  const transportCO2=pkm*(tSh.car*carG+tSh.transit*30)/1e6;
+  // 폐기물
+  const wSh=shares(P.waste); let wf=0; for(const k in wSh)wf+=wSh[k]*DATA.waste[k].co2;
+  const wasteT=a.pop*a.wastePerCap/1000*mult;
+  const wasteCO2=wasteT*wf/1000;
+
+  const total=energyCO2+transportCO2+wasteCO2;
+  const airQuality=Math.max(0,100-energyDeaths*1.1);
+  return {total,energyCO2,transportCO2,wasteCO2,gridG,reliability,airQuality,energyDeaths,
+          firmCap,varCap,totCap,demandUnits, tSh, eSh};
+}
+
+/* ---------- 인트로 선택 ---------- */
+let sel={arch:'eu',diff:'normal'};
+function buildIntro(){
+  const ap=document.getElementById('archPick'); ap.innerHTML='';
+  for(const k in DATA.archetypes){const a=DATA.archetypes[k];
+    ap.innerHTML+=`<div class="pick ${k===sel.arch?'on':''}" onclick="sel.arch='${k}';buildIntro()"><canvas class="introart" data-city="${k}" width="160" height="66"></canvas><b>${a.name}</b><span>${a.desc}</span></div>`;}
+  const dp=document.getElementById('diffPick'); dp.innerHTML='';
+  for(const k in DATA.difficulty){const d=DATA.difficulty[k];
+    dp.innerHTML+=`<div class="pick ${k===sel.diff?'on':''}" onclick="sel.diff='${k}';buildIntro()"><b>${d.name}</b><span>${d.desc}</span></div>`;}
+  document.querySelectorAll('.introart').forEach(cv=>{ const cx=cv.getContext('2d'); cx.imageSmoothingEnabled=false; drawIntroCity(cx,cv.dataset.city); });
+}
+buildIntro();
+
+function beginGame(){
+  const arch=clone(DATA.archetypes[sel.arch]), diff=DATA.difficulty[sel.diff];
+  S={ arch, diff, term:0, P:newPolicy(arch), approval:60, pc:diff.pc, money:diff.budget,
+      blackouts:0, history:[], playedThisTerm:[], tab:'energy', lastNews:[],
+      subway:{status:'none', termsLeft:0}, spentThisTerm:0, cityType:sel.arch };
+  S.base=sim(S.P,0).total;
+  S.target=S.base*(1-diff.cutTarget);
+  S.bau=(()=>{const p=newPolicy(arch),arr=[];for(let t=0;t<6;t++)arr.push(sim(p,t).total);return arr;})();
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  buildTabs();
+  refresh();
+  startAnim();
+  // 인트로 비서 브리핑
+  setTimeout(()=>advisorBrief(),300);
+}
+
+function advisorBrief(){
+  showDialog('advisor', `시장님, 취임 축하드립니다. 현재 도시 전력의 상당 부분이 석탄입니다. 한 번에 다 바꾸려 하지 마세요 — 예산도 정치자본도 한정돼 있습니다. 이번 임기에 할 일을 신중히 고르시죠.`,
+    [{t:"알겠네. 시작하지.", res:"", eff:s=>{}}]);
+}
+
+/* ---------- HUD/스탯 ---------- */
+function refresh(){
+  const m=sim(S.P,S.term); S.m=m;
+  const year=DATA.scenario.startYear+S.term*DATA.scenario.step;
+  document.getElementById('hYear').textContent=year+'~'+(year+5);
+  document.getElementById('hTerm').textContent=(S.term+1)+'/6';
+  document.getElementById('hMoney').textContent='$'+Math.round(S.money)+'M';
+  const mfrac=Math.max(0,Math.min(1,S.money/S.diff.budget));
+  const mbar=document.getElementById('hMoneyBar');
+  if(mbar){ mbar.style.width=(mfrac*100)+'%'; mbar.style.background=mfrac>0.5?'var(--gold)':mfrac>0.2?'var(--amber)':'var(--red)'; }
+  document.getElementById('hPC').textContent='●'.repeat(Math.max(0,S.pc))+'○'.repeat(Math.max(0,S.diff.pc+3-S.pc));
+  const cut=(1-m.total/S.base)*100;
+  const stats=[
+    {id:'co2',l:'탄소배출',v:(m.total/1e6).toFixed(2)+'Mt',p:Math.max(0,Math.min(100,cut)),c:'var(--green)',e:cut>=S.diff.cutTarget*100?'🟢':cut>10?'🟡':'🔴'},
+    {id:'air',l:'대기질',v:Math.round(m.airQuality),p:m.airQuality,c:cc(m.airQuality)},
+    {id:'rel',l:'전력',v:Math.round(m.reliability)+'%',p:m.reliability,c:cc(m.reliability)},
+    {id:'hap',l:'시민지지',v:Math.round(S.approval)+'%',p:S.approval,c:cc(S.approval)},
+  ];
+  document.getElementById('stats').innerHTML=stats.map(s=>`<div class="stat frame" onclick="explain('${s.id}')">
+    <span class="ic">ⓘ</span><div class="lbl">${s.l} ${s.e||''}</div><div class="v">${s.v}</div>
+    <div class="bar"><i style="width:${Math.max(3,s.p)}%;background:${s.c}"></i></div></div>`).join('');
+  // 임기별 미션 내레이션
+  const MISSIONS=[
+    '📜 임기 1 — 발판 다지기: 석탄 의존을 파악하고 첫 청정 투자를 시작하세요.',
+    '📜 임기 2 — 전환의 닻: 청정 발전을 먼저 키우고 효율로 수요를 낮추세요.',
+    '📜 임기 3 — 변곡점: 교통과 폐기물까지 손대 배출 곡선을 꺾으세요.',
+    '📜 임기 4 — 가속: 정전 없이 석탄을 줄일 안정장치(저장·상시전원)를 확보하세요.',
+    '📜 임기 5 — 결승선 앞: 목표 감축률과 시민 지지를 동시에 끌어올리세요.',
+    '📜 임기 6 — 마지막 5년: 약속했던 2050 도시를 완성하세요.',
+  ];
+  // 목표 진행 티커 (미션 문구를 앞에 덧붙임)
+  document.getElementById('ticker').textContent=
+    `${MISSIONS[Math.min(5,S.term)]}  │  🎯 목표 −${Math.round(S.diff.cutTarget*100)}%  현재 ${cut>=0?'−':'+'}${Math.abs(cut).toFixed(0)}%  신뢰도 ${Math.round(m.reliability)}%${m.reliability<98?' ⚠ 정전위험!':''}`;
+  buildCards();
+}
+function cc(v){return v>=66?'var(--green)':v>=40?'var(--amber)':'var(--red)';}
+
+/* ---------- 카드 ---------- */
+function buildTabs(){
+  const t=[['energy','⚡에너지'],['transport','🚦교통'],['green','♻️생활']];
+  document.getElementById('tabs').innerHTML=t.map(x=>`<div class="tab ${S.tab===x[0]?'on':''}" onclick="S.tab='${x[0]}';buildCards();document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));event.target.classList.add('on')">${x[1]}</div>`).join('');
+}
+function buildCards(){
+  const list=CARDS.filter(c=>c.sec===S.tab);
+  document.getElementById('cards').innerHTML=list.map(c=>{
+    const needOk=!c.need||c.need(S.P);
+    const moneyOk=S.money>=c.m, pcOk=S.pc>=(c.pc||0);
+    const can=needOk&&moneyOk&&pcOk;
+    // 비활성 이유(우선순위)
+    let label='추진';
+    if(!needOk){
+      if(c.id==='subway'&&S.subway.status==='building') label=`🚧 공사 중 (D-${S.subway.termsLeft*5}년)`;
+      else if(c.id==='subway'&&S.subway.status==='done') label='🚇 개통 완료';
+      else label='더 이상 불가';
+    } else if(!moneyOk) label='💰 예산 부족';
+    else if(!pcOk) label='⚡ 정치자본 부족';
+    return `<div class="card frame ${can?'':'disabled'}">
+      <div class="card-head">
+        <canvas class="cardart" data-art="${CARD_ART[c.id]||'gen'}" width="58" height="50"></canvas>
+        <div class="card-txt"><div class="nm">${c.nm}</div><div class="fx">${c.fx}</div></div>
+      </div>
+      <div class="cost"><span class="m">💰$${c.m}M</span>${c.pc?`<span class="p">⚡${c.pc}</span>`:''}</div>
+      ${c.ev?'<div class="warn">⚠ 반발 가능</div>':''}
+      <button onclick="playCard('${c.id}')" ${can?'':'disabled'}>${label}</button></div>`;
+  }).join('');
+  document.querySelectorAll('.cardart').forEach(cv=>{ const cx=cv.getContext('2d'); cx.imageSmoothingEnabled=false; drawCardArt(cx, cv.dataset.art); });
+}
+function playCard(id){
+  const c=CARDS.find(x=>x.id===id); if(!c)return;
+  if(S.money<c.m||S.pc<(c.pc||0)||(c.need&&!c.need(S.P)))return;
+  S.money-=c.m; S.pc-=(c.pc||0); S.spentThisTerm+=c.m;
+  c.eff(S.P);
+  S.playedThisTerm.push(c.nm);
+  spendFx(c.m);                       // "−$M" 플로팅 + 예산 깜빡임
+  cityPop(c);                         // 도시에 '여기가 바뀜' 표시
+  // 사건 발동(이해관계자 모달)
+  if(c.ev){ const evId=c.ev.split(',')[0]; if(EVENTS[evId]){ fireEvent(evId); return; } }
+  // 사건 없는 카드 → 간단 결과(여론/인터뷰)
+  const r=RESULTS[c.id];
+  if(r){ if(r.mood) S.approval=Math.max(0,Math.min(100,S.approval+r.mood*2)); resultPopup(c,r); }
+  refresh();
+}
+function spendFx(amount){
+  const hm=document.getElementById('hMoney'); if(hm){ hm.classList.remove('flash'); void hm.offsetWidth; hm.classList.add('flash'); }
+  const r=hm?hm.getBoundingClientRect():{left:innerWidth/2,top:80,width:60};
+  const fx=document.createElement('div'); fx.className='spendfx'; fx.textContent='−$'+amount+'M';
+  fx.style.left=(r.left+r.width/2-18)+'px'; fx.style.top=(r.top-6)+'px';
+  document.body.appendChild(fx);
+  setTimeout(()=>fx.remove(),1000);
+}
+
+/* ---------- 카드 결과: 도시 변화 표시 + 여론/인터뷰 ---------- */
+// 사건(ev) 없는 카드의 시민 반응. mood: +호평 / 0 무덤덤 / -반발
+const RESULTS={
+  scrubber:{face:'citizen', mood:1, q:"공장 굴뚝 연기가 한결 옅어졌어요. 숨쉬기 편해졌네요."},
+  buildGas:{face:'reporter', mood:0, q:"가스 발전소 가동. 석탄보다 깨끗하지만 여전히 화석연료라는 지적도 나옵니다."},
+  buildSolar:{face:'citizen', mood:1, q:"동네에 태양광 단지가 들어섰어요. 깨끗한 전기라니 반갑네요!"},
+  battery:{face:'scientist', mood:0, q:"대형 배터리 덕에 태양광·풍력 전기를 모았다 쓸 수 있게 됐습니다."},
+  subway:{face:'citizen', mood:1, q:"드디어 지하철 착공! 10년 뒤 개통이 벌써 기다려집니다."},
+  evsub:{face:'citizen', mood:1, q:"보조금 받아 전기차로 바꿨어요. 매연 없이 조용해서 만족스러워요."},
+  compost:{face:'citizen', mood:0, q:"음식물 퇴비통이 생겼네요. 분리가 좀 번거롭지만 보람은 있어요."},
+  insul:{face:'citizen', mood:1, q:"단열·히트펌프 지원으로 난방비가 확 줄었어요. 정말 도움 됐습니다!"},
+  trees:{face:'activist', mood:1, q:"도시 곳곳에 숲이 생겼어요. 아이들이 뛰놀 곳이 늘었습니다."},
+};
+// 카드 추진 시 도시의 해당 구역에 '✦ 정책명' 플로팅 (변화가 눈에 보이게)
+function cityPop(c){
+  const cv=document.getElementById('city'); if(!cv) return; const r=cv.getBoundingClientRect();
+  let zx=240, zy=150;
+  if(c.sec==='energy'){ zx=70; zy=150; }
+  else if(c.sec==='transport'){ zx=240; zy=200; }
+  else { zx=(c.id==='trees')?360:405; zy=150; }
+  const el=document.createElement('div'); el.className='citypop'; el.textContent='✦ '+c.nm;
+  el.style.left=(r.left + zx/480*r.width)+'px';
+  el.style.top =(r.top  + zy/240*r.height)+'px';
+  document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+}
+// 사건 없는 카드의 간단 결과 팝업(시민 인터뷰 + 여론)
+function resultPopup(c,r){
+  const ch=CHARS[r.face]||CHARS.citizen;
+  const badge=r.mood>0?'<span class="rpbadge" style="background:#143a26;color:#5ad17e">👍 시민 호평</span>'
+            :r.mood<0?'<span class="rpbadge" style="background:#3a1620;color:#ff7d8a">👎 시민 반발</span>'
+            :'<span class="rpbadge" style="background:#3a2a14;color:#ffbb55">😐 반응 무덤덤</span>';
+  document.querySelectorAll('.resultpop').forEach(e=>e.remove());
+  const el=document.createElement('div'); el.className='resultpop frame';
+  el.innerHTML=`<canvas class="rpface" data-face="${ch.face}" width="24" height="24"></canvas>
+    <div class="rptxt"><div class="rphead">📰 ${c.nm} ${badge}</div>
+    <div class="rpquote">"${r.q}"<span class="rpwho">— ${ch.name} · ${ch.role}</span></div></div>
+    <div class="rpclose">✕</div>`;
+  document.getElementById('app').appendChild(el);
+  // 도시 캔버스 위(하단-중앙)에 크게 띄움
+  const cv=document.getElementById('city');
+  if(cv){ const cr=cv.getBoundingClientRect(); el.style.left=(cr.left+cr.width/2)+'px'; el.style.top=(cr.top+cr.height*0.62)+'px'; }
+  else { el.style.left='50%'; el.style.top='58%'; }
+  el.querySelectorAll('canvas.rpface').forEach(c2=>{ const cx=c2.getContext('2d'); cx.imageSmoothingEnabled=false; drawFace(cx,c2.dataset.face); });
+  const close=()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); };
+  el.querySelector('.rpclose').onclick=close;
+  setTimeout(()=>el.classList.add('show'),20);
+  setTimeout(close,4800);
+}
+
+/* ---------- 이벤트 처리 ---------- */
+function fireEvent(id){
+  const ev=EVENTS[id], ch=CHARS[ev.who];
+  const body=`<div class="speech">"${ev.say}"</div>` + ev.choices.map((o,i)=>
+    `<button class="choice" onclick="chooseEvent('${id}',${i})">${o.t}<span class="res">→ ${o.res}</span></button>`).join('');
+  showCustom(`<div class="top"><canvas class="portrait" data-face="${ch.face}" width="24" height="24"></canvas>
+    <div><div class="who">${ch.name}</div><div class="role">${ch.role}</div></div></div><div class="body">${body}</div>`);
+}
+function chooseEvent(id,i){
+  const o=EVENTS[id].choices[i];
+  if(o.m) S.money-=o.m;
+  o.eff(S);
+  S.approval=Math.max(0,Math.min(100,S.approval));
+  closeOv(); refresh();
+}
+
+/* ---------- 상황 사건 큐 + 조건부 트리거 ---------- */
+// 모달이 연달아 뜨지 않도록 큐로 직렬화. fireEvent로 하나씩 소비.
+let _evQueue=[];
+function enqueueEvent(id){ if(EVENTS[id]) _evQueue.push(id); }
+function runEventQueue(){
+  if(_evQueue.length===0){ refresh(); return; }
+  const id=_evQueue.shift();
+  fireEvent(id);   // chooseEvent가 끝나면 다시 runEventQueue를 호출(아래 래핑)
+}
+// chooseEvent를 래핑: 사건 처리 후 큐에 남은 사건을 이어서 처리
+chooseEvent=function(id,i){
+  const o=EVENTS[id].choices[i];
+  if(o.m) S.money-=o.m;
+  if(o.eff) o.eff(S);
+  S.approval=Math.max(0,Math.min(100,S.approval));
+  S.pc=Math.max(0,S.pc);
+  S.money=Math.max(0,S.money);
+  closeOv();
+  if(_evQueue.length){ setTimeout(runEventQueue,150); } else { refresh(); }
+};
+
+// 임기 시작 시 도시 상태에 맞는 상황 사건을 가중치로 골라 큐에 넣는다.
+function maybeRandomEvent(){
+  if(!S || S.term>=6) return;
+  const m=S.m||sim(S.P,S.term);
+  const totCap=Math.max(1,m.totCap);
+  const coalSh=(S.P.caps.coal||0)/totCap;
+  const hydroSh=(S.P.caps.hydro||0)/totCap;
+  const varSh=m.varCap/totCap;
+  const cut=1-(m.total/S.base);
+  const lowStorage=(S.P.storage||0)<25;
+  // 후보별 가중치(상황 적합도). 0 이하면 후보 제외.
+  const cand=[
+    ['heatwave', 1 + coalSh*4],                         // 석탄 많을수록 폭염 부각
+    ['drought', hydroSh>0.05 ? 1+hydroSh*5 : 0.4],       // 수력 의존 시 가뭄
+    ['councilVote', (S.term===2||S.term===4) ? 4 : 0.6], // 중간 임기에 선거
+    ['corpLobby', 0.7 + coalSh*3],                       // 석탄 기업의 로비
+    ['petition', m.airQuality<70 ? 3 : 1],               // 공기 나쁠수록 청원
+    ['techBreakthrough', (varSh>0.1 && lowStorage) ? 3.5 : 1], // 간헐 많고 저장 적을 때
+    ['rivalCity', cut<0.35 ? 2 : 0.6],                   // 감축 더딜수록 비교 압박
+    ['climateAccord', (S.term>=2 && cut>0.1) ? 2 : 0.5], // 어느 정도 성과 후 초대
+  ].filter(c=>c[1]>0);
+  const sum=cand.reduce((a,c)=>a+c[1],0);
+  let r=Math.random()*sum;
+  for(const [id,w] of cand){ r-=w; if(r<=0){ enqueueEvent(id); break; } }
+}
+
+/* ---------- 임기 종료 ---------- */
+function endTerm(){
+  const m=sim(S.P,S.term); S.history[S.term]=m.total;
+  if(m.reliability<92) S.blackouts++;
+  // 지지율: 도시 상태에 수렴
+  const cut=(1-m.total/S.base);
+  const target=46 + (m.airQuality-55)*0.4 + (m.reliability-95)*0.7 + cut*16 + (S.P.parks||0)*1.5;
+  S.approval=Math.max(0,Math.min(100, S.approval+(target-S.approval)*0.5));
+  // 정치자본 회복 (지지 높을수록)
+  S.pc=Math.min(S.diff.pc+3, S.pc + (S.approval>=60?3:2));
+  // 신문
+  showNews(m,cut);
+}
+function showNews(m,cut){
+  const year=DATA.scenario.startYear+S.term*DATA.scenario.step;
+  let head,icon;
+  if(m.reliability<92){ head="정전 대란! 시민들 분노"; icon='🏭'; }
+  else if(cut>=S.diff.cutTarget){ head="배출 목표 달성, '청정도시' 등극"; icon='🏆'; }
+  else if(m.airQuality<55){ head="미세먼지 비상, 시민 건강 적신호"; icon='😷'; }
+  else if(S.playedThisTerm.length===0){ head="무대책 5년… 시민 실망"; icon='😴'; }
+  else if(cut>0.15){ head="친환경 전환 순항, 시장 호평"; icon='🌳'; }
+  else{ head="조용한 전환의 5년"; icon='🏙️'; }
+  const acts=S.playedThisTerm.length?S.playedThisTerm.join(', '):'추진한 정책 없음';
+  const chip=(l,v,c)=>`<span style="display:inline-block;background:#1a1a1a;color:${c};font-weight:800;font-size:12px;padding:4px 9px;border-radius:2px;margin:3px 3px 0 0;font-family:monospace">${l} ${v}</span>`;
+  const gc='#5ad17e',ac='#ffbb55',rc='#ff7d8a';
+  showCustom(`<div class="news">
+    <div class="mast"><span>📰 에코시티 타임스</span><span>${year}–${year+5}</span></div>
+    <div style="display:flex;gap:12px;align-items:center;margin:10px 0 6px">
+      <div style="font-size:42px;width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:#ddd2b6;border:2px solid #1a1a1a">${icon}</div>
+      <h2 style="flex:1;margin:0;font-size:22px">${head}</h2>
+    </div>
+    <canvas id="newsChart" width="480" height="116" style="width:100%;image-rendering:pixelated;border:2px solid #1a1a1a;background:#e3d9bf;display:block"></canvas>
+    <div style="text-align:center;font-size:10px;color:#5a4a2a;margin:2px 0 6px">▲ 임기별 탄소배출 (회색=현상유지 · 빨강 점선=목표)</div>
+    <div>${chip('감축',`${cut>=0?'−':'+'}${Math.abs(cut*100).toFixed(0)}%`, cut>=S.diff.cutTarget?gc:cut>0?ac:rc)}
+      ${chip('⚡신뢰도',`${Math.round(m.reliability)}%`, m.reliability>=92?gc:rc)}
+      ${chip('😷대기질',`${Math.round(m.airQuality)}`, cc2(m.airQuality))}
+      ${chip('🙂지지',`${Math.round(S.approval)}%`, cc2(S.approval))}
+      ${chip('⚡정치자본',`${S.pc}`, gc)}</div>
+    <div style="font-size:12px;margin-top:8px;color:#2a2a2a">📋 이번 임기 추진: ${acts}</div>
+    <button class="modal-btn" onclick="nextTerm()">${S.term>=5?'임기 결산 ▶':'다음 임기로 ▶'}</button>
+  </div>`);
+  drawNewsChart();
+}
+function cc2(v){return v>=66?'#5ad17e':v>=40?'#ffbb55':'#ff7d8a';}
+function drawNewsChart(){
+  const cv=document.getElementById('newsChart'); if(!cv)return; const x=cv.getContext('2d'); x.imageSmoothingEnabled=false;
+  const W=480,H=116,padB=16,padT=8,pad=6;
+  const maxV=Math.max(...S.bau,S.base)*1.05||1;
+  const Y=v=>padT+(H-padT-padB)*(1-v/maxV);
+  const n=6, bw=(W-pad*2)/n;
+  // 목표선
+  x.strokeStyle='#c0392b'; x.setLineDash([7,5]); x.lineWidth=2;
+  x.beginPath(); x.moveTo(pad,Y(S.target)); x.lineTo(W-pad,Y(S.target)); x.stroke(); x.setLineDash([]);
+  for(let t=0;t<6;t++){
+    const bx=pad+t*bw+5, w=bw-12;
+    const byb=Y(S.bau[t]); x.fillStyle='#c2b594'; x.fillRect(bx,byb,w,H-padB-byb);   // BAU 유령
+    const v=S.history[t];
+    if(v!=null){ const yy=Y(v); x.fillStyle=v<=S.target?'#2e7d32':(v<S.base?'#c9821f':'#b23a3a'); x.fillRect(bx,yy,w,H-padB-yy); }
+    x.fillStyle='#5a4a2a'; x.font='8px monospace'; x.fillText(''+(2025+t*5), bx-1, H-5);
+  }
+}
+function nextTerm(){
+  closeOv();
+  if(S.term>=5){ debrief(); return; }
+  S.term++; S.money=S.diff.budget; S.playedThisTerm=[]; S.spentThisTerm=0;
+  advanceSubway();
+  // 낙선 체크
+  if(S.approval<S.diff.minApproval-15){ recall(); return; }
+  S.m=sim(S.P,S.term);          // 새 임기 기준으로 상태 갱신(가중치 계산용)
+  maybeRandomEvent();           // 상황 사건을 큐에 넣고
+  if(_evQueue.length){ runEventQueue(); }  // 있으면 모달, 없으면 아래 refresh
+  else refresh();
+}
+function recall(){
+  showCustom(`<div class="news"><div class="mast"><span>속보</span><span>${DATA.scenario.startYear+S.term*5}</span></div>
+    <h2>시장 불신임… 임기 중도 하차</h2>
+    <p style="font-size:13px">지지율이 바닥나 시의회가 불신임안을 통과시켰습니다. 너무 급격한 변화는 시민의 동의를 잃습니다.</p>
+    <button class="modal-btn" onclick="location.reload()">다시 도전 ▶</button></div>`);
+}
+
+/* ---------- 지하철 공사(다임기 사업) ---------- */
+function advanceSubway(){
+  if(S.subway.status!=='building') return;
+  S.subway.termsLeft--;
+  if(S.subway.termsLeft<=0){
+    S.subway.status='done';
+    shift(S.P,'transit',16,'car');     // 개통: 대중교통 대폭 증가
+    toast('🚇 지하철 개통! 대중교통이 크게 늘고 도심 차량이 줄었습니다');
+  } else {
+    toast(`🚧 지하철 공사 중… 개통까지 ${S.subway.termsLeft*5}년`);
+  }
+}
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.getElementById('app').appendChild(t);
+  setTimeout(()=>{ t.classList.add('show'); },20);
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),400); },2600);
+}
+
+/* ---------- 결산 ---------- */
+function debrief(){
+  const fin=S.history[5], cut=1-fin/S.base;
+  const c1=cut>=S.diff.cutTarget, c2=S.approval>=S.diff.minApproval, c3=S.blackouts===0;
+  const win=c1&&c2&&c3;
+  const m=sim(S.P,5);
+  let lesson;
+  if(win) lesson="여러 시스템을 <b>단계적으로 골고루</b> 바꿨기에 가능했어요. 석탄만 줄여선 절대 닿지 못하는 목표였죠 — '은탄환은 없다'는 핵심 교훈입니다.";
+  else if(!c3) lesson="청정 발전을 충분히 짓기 전에 석탄을 닫아 <b>정전</b>이 났어요. 현실의 에너지 전환은 '먼저 짓고, 나중에 닫는' 순서가 중요합니다.";
+  else if(!c1) lesson="감축이 부족했어요. 전력만이 아니라 <b>교통·폐기물·건물 효율</b>까지 함께 움직여야 곡선이 꺾입니다.";
+  else lesson="시민 지지를 잃었어요. 변화의 <b>속도</b>와 형평성, 일자리까지 챙겨야 정책이 지속됩니다.";
+  showCustom(`<div class="news" style="background:var(--panel);color:var(--ink);border:3px solid var(--line)">
+    <h2 style="color:var(--gold)">2050년 임기 결산</h2>
+    <div class="verdict" style="color:${win?'var(--green)':'var(--amber)'}">${win?'🏆 지속가능한 도시!':'📉 다음 기회에…'}</div>
+    <div class="check"><span>${c1?'✅':'❌'} 배출 −${Math.round(S.diff.cutTarget*100)}% 달성</span><b>−${Math.round(cut*100)}%</b></div>
+    <div class="check"><span>${c2?'✅':'❌'} 시민 지지 ${S.diff.minApproval}%+</span><b>${Math.round(S.approval)}%</b></div>
+    <div class="check"><span>${c3?'✅':'❌'} 정전 0회</span><b>${S.blackouts}회</b></div>
+    <div class="lesson"><b>디브리핑</b> — ${lesson}</div>
+    <button class="modal-btn" onclick="location.reload()">다시 도전 🔁</button></div>`);
+}
+
+/* ---------- "왜?" ---------- */
+function explain(id){
+  const m=S.m; let title,rows;
+  if(id==='co2'){title="🌍 탄소배출 출처";rows=[['⚡ 전력',(m.energyCO2/1e6).toFixed(2)+'Mt',`망 ${Math.round(m.gridG)}gCO₂/kWh`],['🚦 교통',(m.transportCO2/1e6).toFixed(2)+'Mt',''],['🗑️ 폐기물',(m.wasteCO2/1e6).toFixed(2)+'Mt','매립 메탄'],['합계',(m.total/1e6).toFixed(2)+'Mt','출처 IPCC AR5']];}
+  else if(id==='air'){title="😷 대기질";rows=[['오염 사망(연)',m.energyDeaths.toFixed(1)+'명','석탄이 대부분'],['점수',Math.round(m.airQuality)+'/100','출처 OWID']];}
+  else if(id==='rel'){title="⚡ 전력 신뢰도";rows=[['상시발전 용량',Math.round(m.firmCap),'석탄·가스·원자력·수력'],['간헐 용량',Math.round(m.varCap),'태양·바람'],['필요 수요',Math.round(m.demandUnits),'해마다 증가'],['신뢰도',Math.round(m.reliability)+'%','100% 미만이면 정전']];}
+  else{title="🙂 시민 지지";rows=[['현재',Math.round(S.approval)+'%',`${S.diff.minApproval}% 미만 위험`],['','','대기질·안정성·진척은 ↑'],['','','급격한 변화·정전은 ↓']];}
+  showCustom(`<div class="body"><h2 style="margin-bottom:10px">${title}</h2>${rows.map(r=>`<div class="check"><span>${r[0]}</span><b>${r[1]}</b></div><div style="font-size:11px;color:var(--dim);margin:-2px 0 6px">${r[2]}</div>`).join('')}<button class="modal-btn" onclick="closeOv()">닫기</button></div>`);
+}
+
+/* ---------- 모달 유틸 ---------- */
+function showCustom(html){ document.getElementById('ov').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeOv()"><div class="dlg frame">${html}</div></div>`; drawPortraits(); }
+function showDialog(who,say,choices){ const ch=CHARS[who];
+  const body=`<div class="speech">"${say}"</div>`+choices.map((o,i)=>`<button class="choice" onclick="(${assign(o)})">${o.t}${o.res?`<span class="res">→ ${o.res}</span>`:''}</button>`).join('');
+  showCustom(`<div class="top"><canvas class="portrait" data-face="${ch.face}" width="24" height="24"></canvas><div><div class="who">${ch.name}</div><div class="role">${ch.role}</div></div></div><div class="body">${body}</div>`);
+}
+// 간단 dialog choice 실행 (advisorBrief 전용)
+let _dlgChoices=[];
+function assign(o){ _dlgChoices.push(o); return `runDlg(${_dlgChoices.length-1})`; }
+function runDlg(i){ const o=_dlgChoices[i]; if(o.eff)o.eff(S); closeOv(); refresh(); }
+function showDialog2(){}
+function closeOv(){ document.getElementById('ov').innerHTML=''; }
+
+/* ====== 픽셀 아트 렌더링 ====== */
+let anim=0, rafId=null;
+function startAnim(){ if(rafId)cancelAnimationFrame(rafId); const loop=()=>{ anim++; drawCity(); rafId=requestAnimationFrame(loop); }; loop(); }
+
+function drawCity(){
+  const cv=document.getElementById('city'); if(!cv)return; const x=cv.getContext('2d'); x.imageSmoothingEnabled=false;
+  const W=480,H=240, m=S.m||sim(S.P,S.term);
+  const air=m.airQuality/100;                  // 1 좋음 0 나쁨
+  const cut=Math.max(0,Math.min(1,1-m.total/S.base));
+  // 하늘 (대기질에 따라 파랑→갈회색)
+  const sky1=lerpC([90,160,235],[120,110,95],1-air), sky2=lerpC([170,210,250],[180,165,140],1-air);
+  const g=x.createLinearGradient(0,0,0,170); g.addColorStop(0,rgb(sky1)); g.addColorStop(1,rgb(sky2));
+  x.fillStyle=g; x.fillRect(0,0,W,170);
+  // 해 (매연에 흐려짐)
+  x.globalAlpha=0.4+air*0.6; x.fillStyle='#fff3b0'; px(x,408,26,18,18); x.globalAlpha=1;
+  // 먼 언덕
+  x.fillStyle=rgb(lerpC([110,150,90],[120,110,80],1-air)); x.beginPath(); x.moveTo(0,150);
+  for(let i=0;i<=W;i+=40)x.lineTo(i,150-Math.sin(i*0.02)*12-8); x.lineTo(W,170);x.lineTo(0,170);x.fill();
+  // 지면
+  x.fillStyle='#2a3b25'; x.fillRect(0,168,W,72);
+  x.fillStyle='#33492c'; x.fillRect(0,168,W,6);
+
+  drawClouds(x,air);
+  drawPowerZone(x,m);
+  if((S.P.storage||0)>0) drawBattery(x,150,168,S.P.storage);
+  drawDowntown(x,m,cut);
+  drawResidential(x,cut);
+  drawRoad(x,m);
+  drawMetro(x);
+  drawSmog(x,m,air);
+  drawBirds(x,air,cut);
+  drawCitizens(x);
+}
+// 대형 배터리 저장(설치 시)
+function drawBattery(x,gx,gy,st){
+  const n=Math.min(4,Math.ceil(st/25));
+  for(let i=0;i<n;i++){ const bx=gx+i*8;
+    x.fillStyle='#2a3550'; px(x,bx,gy-10,6,10);
+    x.fillStyle='#1b2236'; px(x,bx,gy-10,6,2);
+    x.fillStyle='#3ad07f'; px(x,bx+1,gy-6,4,2);
+    const blink=(anim+i*7)%30<15; x.fillStyle=blink?'#9cffcf':'#1c8048'; px(x,bx+2,gy-3,2,1);
+  }
+}
+// 지하철: 공사 중 → 공사장 / 개통 → 고가 전용선로+전동차
+function drawMetro(x){
+  if(S.subway.status==='none') return;
+  if(S.subway.status==='building'){ drawConstruction(x); return; }
+  const y=184;
+  x.fillStyle='#46506a'; for(let p=24;p<480;p+=58){ px(x,p,y,4,206-y); }   // 교각
+  x.fillStyle='#5a6478'; px(x,0,y-5,480,5);                                // 상판
+  x.fillStyle='#39425a'; px(x,0,y,480,2);
+  const t=(anim*1.5)%600-90;                                               // 전동차 3칸
+  for(let c=0;c<3;c++){ const cx=t+c*22;
+    x.fillStyle='#4aa3ff'; px(x,cx,y-13,20,11);
+    x.fillStyle='#0d2f55'; px(x,cx,y-13,20,2);
+    x.fillStyle='#cdeaff'; px(x,cx+2,y-9,16,4);
+    x.fillStyle='#ffd166'; px(x,cx+18,y-9,2,3); }                          // 전조등
+}
+function drawConstruction(x){
+  for(let p=140;p<334;p+=14){ x.fillStyle=((p/14|0)%2)?'#ffaa45':'#1a1a1a'; px(x,p,204,12,5); } // 바리케이드
+  x.fillStyle='#46506a'; for(let p=150;p<330;p+=58){ px(x,p,192,4,14); }   // 절반 교각
+  const cx=248; x.fillStyle='#f5b301'; px(x,cx,148,3,58); px(x,cx-20,148,42,3); // 크레인
+  const sway=Math.sin(anim*0.06)*4; x.fillStyle='#cc8a00'; px(x,cx-16+sway,151,2,12);
+  x.fillStyle='#8a93a0'; px(x,cx-19+sway,163,8,6);                          // 매단 자재
+  x.fillStyle='#ffaa45'; px(x,198,172,34,11); x.fillStyle='#1a1a1a'; px(x,201,175,28,5); // 공사 표지판
+}
+// 떠다니는 픽셀 구름 (대기질 나쁘면 누렇게 틴트)
+function drawClouds(x,air){
+  const tint=lerpC([245,248,255],[200,188,150],1-air);
+  const base=rgb(tint), edge=rgb(lerpC(tint,[150,150,150],0.25));
+  const clouds=[[0,28,0.10,1.2],[150,52,0.07,0.9],[300,20,0.13,1.0],[230,70,0.05,1.4]];
+  for(const [ox,cy,sp,sc] of clouds){
+    let cx=((ox + anim*sp) % 560) - 60;
+    const w=Math.round(10*sc);
+    x.globalAlpha=0.55+air*0.25;
+    x.fillStyle=base;
+    px(x,cx,cy, w*3,7);
+    px(x,cx+w,cy-4, w*2,7);
+    px(x,cx-w*0.6,cy+2, w*2,5);
+    px(x,cx+w*2.2,cy+1, w*1.6,5);
+    x.fillStyle=edge;
+    px(x,cx,cy+5, w*3,2);
+    x.globalAlpha=1;
+  }
+}
+// 새 떼 (도시가 깨끗할수록 등장)
+function drawBirds(x,air,cut){
+  const clean=Math.min(1,air*0.6+cut*0.7);
+  if(clean<0.45) return;
+  const n=Math.round((clean-0.4)*8);
+  x.fillStyle='#26303f';
+  for(let i=0;i<n;i++){
+    const bx=((anim*0.6 + i*70) % 540) - 30;
+    const by=44 + (i*17%40) + Math.sin(anim*0.08+i)*3;
+    const flap=Math.sin(anim*0.25+i*1.3)>0?2:1;
+    px(x,bx,by,2,2);
+    px(x,bx-3,by-flap,3,1);
+    px(x,bx+2,by-flap,3,1);
+  }
+}
+// 픽셀 사각형
+function px(x,a,b,w,h){ x.fillRect(a|0,b|0,w|0,h|0); }
+function rgb(c){return `rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;}
+function lerpC(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+
+function drawPowerZone(x,m){
+  // 발전원을 큰 것부터, 용량에 비례해 '설비 개수'를 늘려 그린다(많이 지을수록 눈에 보이게)
+  const X0=4, XMAX=176;
+  const list=Object.entries(S.P.caps).filter(([k,v])=>v>2).sort((a,b)=>b[1]-a[1]);
+  let bx=X0;
+  for(const [k,v] of list){ bx=drawSource(x,k,bx,168,v); if(bx>=XMAX) break; }
+}
+// 발전원 종류 k를 용량 v에 비례한 개수로 그리고, 다음 x좌표를 반환
+function drawSource(x,k,gx,gy,v){
+  if(k==='solar'){
+    const cols=Math.min(9,Math.max(2,Math.round(v/4)));        // 용량↑ → 패널밭 넓어짐
+    const gl=Math.floor(anim*0.12)%Math.max(1,cols);
+    for(let r=0;r<2;r++)for(let c=0;c<cols;c++){ const a=gx+c*9, b=gy-16+r*8;
+      x.fillStyle='#0f2a4f'; px(x,a,b,8,7); x.fillStyle='#163d72'; px(x,a,b,8,1);
+      x.fillStyle='#2e6fd6'; px(x,a+1,b+1,6,2); x.fillStyle='#1d4f97'; px(x,a+1,b+4,6,2);
+      if(c===gl){ x.fillStyle='#bfe3ff'; px(x,a+1,b+1,3,1); }
+      x.fillStyle='#5a6470'; px(x,a+3,gy-2,2,2); }
+    return gx+cols*9+4;
+  }
+  if(k==='wind'){ const n=Math.min(6,Math.max(1,Math.round(v/4)));     // 용량↑ → 터빈 늘어남
+    for(let i=0;i<n;i++) drawWind(x,gx+i*15,gy); return gx+n*15+3; }
+  if(k==='coal'){ const n=Math.min(3,Math.max(1,Math.round(v/22)));    // 용량↑ → 발전소 동수↑(매연도↑)
+    for(let i=0;i<n;i++) drawCoal(x,gx+i*44,gy); return gx+n*44+3; }
+  if(k==='gas'){ const n=Math.min(3,Math.max(1,Math.round(v/18)));
+    for(let i=0;i<n;i++) drawGas(x,gx+i*38,gy); return gx+n*38+3; }
+  if(k==='nuclear'){ const n=Math.min(2,Math.max(1,Math.round(v/16)));
+    for(let i=0;i<n;i++) drawNuke(x,gx+i*48,gy); return gx+n*48+3; }
+  if(k==='hydro'){ drawHydro(x,gx,gy); return gx+42; }
+  if(k==='geo'){ drawNuke(x,gx,gy); return gx+46; }
+  if(k==='biomass'){ drawGas(x,gx,gy,'#6b8e3a'); return gx+38; }
+  drawGas(x,gx,gy,'#888'); return gx+38;
+}
+function drawCoal(x,gx,gy){
+  x.fillStyle='#4a4a55'; px(x,gx,gy-34,46,34);        // 본체
+  x.fillStyle='#54545f'; px(x,gx,gy-34,46,3);          // 윗면 하이라이트
+  x.fillStyle='#3a3a44'; px(x,gx+4,gy-30,38,6);        // 본체 띠
+  x.fillStyle='#2f2f38'; for(let c=0;c<4;c++)px(x,gx+5+c*10,gy-22,5,7); // 창문(어둑)
+  x.fillStyle='#5a5a66'; px(x,gx+6,gy-48,8,18); px(x,gx+24,gy-52,8,22); // 굴뚝
+  x.fillStyle='#6a6a78'; px(x,gx+6,gy-48,8,2); px(x,gx+24,gy-52,8,2);   // 굴뚝 림
+  const blink=(anim%40)<20; x.fillStyle=blink?'#ff5d6c':'#7a2630';      // 깜빡이는 경고등
+  px(x,gx+8,gy-50,4,3); px(x,gx+26,gy-54,4,3);
+  // 매연 파티클 (위로 갈수록 커지고 옅어짐, 석탄비중 클수록 검고 많이)
+  const sh=(S.P.caps.coal||0)/Math.max(1,S.m?S.m.totCap:1);
+  const scrub=Math.min(0.75,(S.P.scrubber||0)*0.28);     // 매연저감장치: 연기 옅게·밝게
+  const n=Math.round(3+sh*6);
+  if(scrub>0){ x.fillStyle='#7ea0c0'; px(x,gx+16,gy-30,8,7); x.fillStyle='#a8c6e0'; px(x,gx+17,gy-29,3,2); } // 저감장치 유닛
+  for(let i=0;i<n;i++){
+    const t=(anim*0.5+i*19)%88;
+    const top=(i%2)?gx+28:gx+10, base=(i%2)?gy-54:gy-50;
+    const sx=top+Math.sin(t*0.09+i)*4;
+    const life=t/88;
+    x.globalAlpha=Math.max(0,0.55*(1-life))*(1-scrub*0.8);
+    x.fillStyle=rgb(lerpC(lerpC([120,114,104],[78,72,66],sh),[200,210,220],scrub));
+    const s=3+t*0.10;
+    px(x,sx-s/2,base-t,s,s);
+  }
+  x.globalAlpha=1;
+}
+function drawGas(x,gx,gy,col){
+  const body=col||'#566';
+  x.fillStyle=body; px(x,gx,gy-26,38,26);
+  x.fillStyle=rgb(lerpC([90,100,110],[150,160,170],0.3)); px(x,gx,gy-26,38,3); // 윗면 하이라이트
+  x.fillStyle='#3a4350'; for(let c=0;c<3;c++)px(x,gx+4+c*11,gy-18,7,9);          // 탱크 분할선
+  x.fillStyle='#445'; px(x,gx+22,gy-40,8,16);                                    // 굴뚝
+  x.fillStyle='#55606e'; px(x,gx+22,gy-40,8,2);
+  const fl=(anim%24)<12; x.fillStyle=fl?'#ffaa45':'#ff8a3d'; px(x,gx+24,gy-43,4,3); // 점멸 불꽃
+  const sh=(S.P.caps.gas||0)/Math.max(1,S.m?S.m.totCap:1);
+  for(let i=0;i<3;i++){ const t=(anim*0.6+i*22)%66; x.globalAlpha=Math.max(0,0.28*(1-t/66)); x.fillStyle='#c4ccd6'; const s=3+t*0.06; px(x,gx+24+Math.sin(t*0.1)*2,gy-46-t,s,s); }
+  x.globalAlpha=1;
+}
+function drawNuke(x,gx,gy){
+  // 냉각탑 (사다리꼴 근사, 좌우 음영으로 곡면감)
+  for(let i=0;i<24;i++){
+    const w=20-Math.sin(i/24*Math.PI)*6, lx=gx+(20-w/2), yy=gy-44+i*1.84;
+    x.fillStyle='#8a93a0'; px(x,lx,yy,w,2);
+    x.fillStyle='#9ea7b4'; px(x,lx,yy,Math.max(1,w*0.3),2);        // 왼쪽 하이라이트
+    x.fillStyle='#727b88'; px(x,lx+w*0.7,yy,Math.max(1,w*0.3),2);  // 오른쪽 음영
+  }
+  x.fillStyle='#6e7682'; px(x,gx+2,gy-46,16,2);   // 탑 상단 림
+  // 격납 돔
+  x.fillStyle='#aeb6c2'; px(x,gx+30,gy-22,18,22);
+  x.fillStyle='#c0c8d4'; px(x,gx+33,gy-30,12,9);
+  x.fillStyle='#9aa3b0'; px(x,gx+33,gy-21,12,2);
+  const on=(anim%50)<25; x.fillStyle=on?'#3ad07f':'#1c6e44'; px(x,gx+36,gy-16,6,6); // 점멸 안전등
+  // 뭉게뭉게 수증기
+  for(let i=0;i<3;i++){ const t=(anim*0.4+i*16)%48; x.globalAlpha=Math.max(0,0.34*(1-t/48)); x.fillStyle='#ffffff'; const s=8+t*0.16; px(x,gx+10-s/2+Math.sin(t*0.08)*2,gy-48-t,s,s*0.8); }
+  x.globalAlpha=1;
+}
+function drawWind(x,gx,gy){
+  // 기둥
+  x.fillStyle='#cfd8e2'; px(x,gx+6,gy-40,4,40);
+  x.fillStyle='#e6ecf3'; px(x,gx+6,gy-40,2,40);        // 왼쪽 하이라이트
+  const cxh=gx+8, cyh=gy-40, a=anim*0.10;
+  // 두꺼운 폴리곤 날개 3개(회전)
+  x.fillStyle='#f2f6fb';
+  for(let i=0;i<3;i++){
+    const ang=a+i*2.094;
+    const ex=cxh+Math.cos(ang)*13, ey=cyh+Math.sin(ang)*13;
+    const px1=Math.cos(ang+1.5)*2.2, py1=Math.sin(ang+1.5)*2.2;
+    x.beginPath();
+    x.moveTo(cxh+px1,cyh+py1);
+    x.lineTo(cxh-px1,cyh-py1);
+    x.lineTo(ex,ey);
+    x.closePath(); x.fill();
+  }
+  // 나셀(허브)
+  x.fillStyle='#aeb6c2'; px(x,cxh-2,cyh-2,4,4);
+  x.fillStyle='#fff'; px(x,cxh-1,cyh-1,2,2);
+}
+function drawSolar(x,gx,gy){
+  const glint=Math.floor(anim*0.12)%8;   // 흐르는 반짝임 위치
+  for(let r=0;r<2;r++)for(let c=0;c<4;c++){
+    const pxx=gx+c*10, pyy=gy-16+r*8, idx=r*4+c;
+    x.fillStyle='#0f2a4f'; px(x,pxx,pyy,9,7);          // 패널 본체
+    x.fillStyle='#163d72'; px(x,pxx,pyy,9,1);          // 윗 테두리
+    x.fillStyle='#2e6fd6'; px(x,pxx+1,pyy+1,7,2);      // 셀 줄
+    x.fillStyle='#1d4f97'; px(x,pxx+1,pyy+4,7,2);
+    if(idx===glint){ x.fillStyle='#bfe3ff'; px(x,pxx+1,pyy+1,3,1); } // 반짝임
+    x.fillStyle='#5a6470'; px(x,pxx+3,pyy+7,2,3);      // 받침대
+  }
+}
+function drawHydro(x,gx,gy){
+  x.fillStyle='#7a8a99'; px(x,gx,gy-30,40,30); x.fillStyle='#2e6fd6'; px(x,gx+4,gy-20,32,8);
+  x.fillStyle='#bcd'; px(x,gx+16,gy-30,8,30);
+}
+function drawDowntown(x,m,cut){
+  const cols=['#2d3a55','#34425f','#283650'];
+  const us=S.cityType==='us';
+  const N=us?4:6, sp=us?34:26, hk=us?0.6:1;     // 미국형: 적고 낮은 빌딩(스프롤) / 유럽형: 많고 높은 빌딩(고밀도)
+  for(let i=0;i<N;i++){ const bx=180+i*sp, h=Math.round((40+((i*37)%50))*hk); x.fillStyle=cols[i%3]; px(x,bx,168-h,24,h);
+    for(let r=0;r<Math.floor(h/10);r++)for(let c=0;c<3;c++){ x.fillStyle=((i+r+c)%3&&S.approval>40)?'#ffd87a':'#1a2236'; px(x,bx+3+c*7,168-h+5+r*10,4,5);} }
+}
+function drawResidential(x,cut){
+  const eff=S.P.eff||0, ws=shares(S.P.waste), rec=ws.recycle, comp=ws.compost;
+  const us=S.cityType==='us'; const NH=us?6:4, sp=us?23:35;   // 미국형: 단독주택 많고 넓게 / 유럽형: 적게
+  for(let i=0;i<NH;i++){ const bx=336+i*sp, gy=168;
+    x.fillStyle='#7a5b46'; px(x,bx,gy-18,22,18);                 // 벽
+    // 지붕: 단열·히트펌프(효율) 투자하면 초록 녹화지붕으로
+    x.fillStyle= eff>=45?'#3c8f3a' : eff>=15?'#8a8f3a' : '#a3553c';
+    x.beginPath(); x.moveTo(bx-2,gy-18); x.lineTo(bx+11,gy-28); x.lineTo(bx+24,gy-18); x.fill();
+    x.fillStyle=S.approval>40?'#ffd87a':'#33405a'; px(x,bx+7,gy-12,8,8); // 창문
+    if(eff>=25){ x.fillStyle='#13315c'; px(x,bx+3,gy-23,7,3); x.fillStyle='#3a7fe0'; px(x,bx+3,gy-23,7,1); } // 옥상 태양광
+    if(rec>0.3){ x.fillStyle='#3ad07f'; px(x,bx+18,gy-5,3,5); x.fillStyle='#4aa3ff'; px(x,bx+22,gy-5,3,5); } // 분리수거함
+    if(comp>0.1){ x.fillStyle='#6b4f2a'; px(x,bx+13,gy-5,3,5); x.fillStyle='#3c8f3a'; px(x,bx+13,gy-6,3,1); } // 퇴비통
+  }
+  // 나무 (감축 클수록·공원 조성할수록 많이)
+  const trees=Math.round(cut*14)+(S.P.parks||0)*2;
+  for(let i=0;i<trees;i++){ const tx=330+ (i*31%150), ty=168;
+    x.fillStyle='#5a3d28'; px(x,tx,ty-8,3,8); x.fillStyle='#3c8f3a'; px(x,tx-4,ty-16,11,9); px(x,tx-2,ty-20,7,6); }
+}
+function drawRoad(x,m){
+  x.fillStyle='#1c2030'; x.fillRect(0,210,480,30);
+  x.fillStyle='#3a4257'; for(let i=0;i<24;i++)px(x,i*22+(anim%22),223,12,3);
+  // 차량: 자가용 비중·EV 반영
+  const carShare=m.tSh.car, n=Math.round((S.cityType==='us'?5:2)+carShare*9);
+  for(let i=0;i<n;i++){ const t=(anim*1.6+i*60)%520, cx=t-20;
+    const ev=(i/n)<S.P.ev/100; x.fillStyle=ev?'#2fae6a':['#c44','#46c','#cc6','#999'][i%4];
+    px(x,cx,214,16,8); x.fillStyle='#9cd2ff'; px(x,cx+11,216,3,3);
+    if(!ev){ x.globalAlpha=0.25; x.fillStyle='#765'; px(x,cx-4,215,4,4); x.globalAlpha=1; } }
+  // 버스 (대중교통 비중)
+  if(m.tSh.transit>0.25){ const t=(anim*1.2)%520; x.fillStyle='#3ad0c0'; px(x,t-30,210,30,12); x.fillStyle='#9cd2ff'; for(let w=0;w<4;w++)px(x,t-26+w*7,213,5,4); }
+  // 자전거 (자전거·도보 비중)
+  if(m.tSh.active>0.08){ const nb=Math.round(2+m.tSh.active*6);
+    for(let i=0;i<nb;i++){ const t=(anim*1.05+i*70)%516, cx=t-14;
+      x.strokeStyle='#3ad07f'; x.lineWidth=1.5; x.beginPath(); x.arc(cx,228,3,0,7); x.moveTo(cx+11,228); x.arc(cx+8,228,3,0,7); x.stroke();
+      x.beginPath(); x.moveTo(cx,228); x.lineTo(cx+4,222); x.lineTo(cx+8,228); x.moveTo(cx+4,222); x.lineTo(cx+6,220); x.stroke();
+      x.fillStyle='#ffe0b0'; px(x,cx+4,217,3,3); } }
+}
+function drawSmog(x,m,air){
+  const op=Math.max(0,Math.min(0.55,(1-air)*0.6));
+  x.globalAlpha=op; x.fillStyle='#7a6f5e'; x.fillRect(0,40,480,130); x.globalAlpha=1;
+}
+function drawCitizens(x){
+  const mood = S.approval>=60?'#3ad07f':S.approval>=40?'#ffaa45':'#ff5d6c';
+  for(let i=0;i<5;i++){ const cx=350+i*22, cy=200; x.fillStyle=mood; px(x,cx,cy,4,6); x.fillStyle='#ffe0b0'; px(x,cx,cy-4,4,4); }
+  // 시위 (지지 낮으면 피켓)
+  if(S.approval<42){ const t=Math.sin(anim*0.2)*2; x.fillStyle='#fff'; px(x,300+t,188,14,10); x.fillStyle='#c33'; x.font='6px monospace'; }
+}
+
+/* ---------- 픽셀 초상화 ---------- */
+function drawPortraits(){ document.querySelectorAll('canvas.portrait').forEach(cv=>{ const x=cv.getContext('2d'); x.imageSmoothingEnabled=false; drawFace(x,cv.dataset.face); }); }
+function drawFace(x,type){
+  x.clearRect(0,0,24,24); x.fillStyle='#0a1020'; x.fillRect(0,0,24,24);
+  x.fillStyle='#f0c8a0'; px(x,7,6,10,11);            // 얼굴
+  x.fillStyle='#2a1c12'; px(x,6,4,12,4);             // 머리
+  x.fillStyle='#1a1a1a'; px(x,9,10,2,2); px(x,14,10,2,2); // 눈
+  if(type==='worker'){ x.fillStyle='#f5b301'; px(x,5,3,14,4); px(x,4,6,16,2); } // 안전모
+  else if(type==='activist'){ x.fillStyle='#2fae6a'; px(x,6,3,12,3); x.fillStyle='#1c8048'; px(x,5,16,14,8); } // 초록 머리띠+옷
+  else if(type==='citizen'){ x.fillStyle='#4a6fae'; px(x,5,16,14,8); }
+  else if(type==='ceo'){ x.fillStyle='#1a1a1a'; px(x,5,16,14,8); x.fillStyle='#ffd166'; px(x,11,16,2,8); x.fillStyle='#888'; px(x,5,4,14,3); } // 회장(검은 정장+금넥타이+희끗 머리)
+  else if(type==='scientist'){ x.fillStyle='#e8eef7'; px(x,5,16,14,8); x.fillStyle='#cfe3ff'; px(x,8,9,3,3); px(x,13,9,3,3); px(x,11,10,2,1); } // 과학자(흰 가운+안경)
+  else if(type==='reporter'){ x.fillStyle='#5a3d28'; px(x,5,16,14,8); x.fillStyle='#1a1a1a'; px(x,15,12,5,4); x.fillStyle='#9cd2ff'; px(x,16,13,2,2); } // 기자(갈색 옷+카메라)
+  else if(type==='diplomat'){ x.fillStyle='#26407a'; px(x,5,16,14,8); x.fillStyle='#3ad07f'; px(x,5,16,2,8); x.fillStyle='#4aa3ff'; px(x,9,17,6,2); } // 외교관(남색 정장+UN 배지/스카프)
+  else { x.fillStyle='#333'; px(x,5,16,14,8); x.fillStyle='#c33'; px(x,11,16,2,6); } // 비서(정장+넥타이)
+}
+
+/* ---------- 인트로 도시 미리보기 (160x66) ---------- */
+function drawIntroCity(x,type){
+  const W=160,H=66;
+  if(type==='eu'){
+    const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#7db0ea'); g.addColorStop(1,'#bcd8f5'); x.fillStyle=g; x.fillRect(0,0,W,H);
+    x.fillStyle='#fff3b0'; px(x,134,7,10,10);
+    x.fillStyle='#6f9e58'; x.fillRect(0,50,W,16);
+    const cols=['#33425f','#2d3a55','#3a4a6a'];                 // 조밀한 고층 아파트
+    for(let i=0;i<5;i++){ const bx=8+i*20, h=22+((i*13)%18); x.fillStyle=cols[i%3]; px(x,bx,50-h,16,h);
+      for(let r=0;r<Math.floor(h/7);r++)for(let c=0;c<2;c++){ x.fillStyle='#ffd87a'; px(x,bx+3+c*7,50-h+4+r*7,3,3);} }
+    x.fillStyle='#46506a'; px(x,0,52,W,2);                      // 트램 선로
+    x.fillStyle='#3ad0c0'; px(x,106,43,38,9); x.fillStyle='#0d3b38'; px(x,106,43,38,2);
+    x.fillStyle='#cdeaff'; for(let w=0;w<4;w++)px(x,109+w*9,46,6,4);
+    x.fillStyle='#5a3d28'; px(x,98,44,2,6); x.fillStyle='#3c8f3a'; px(x,93,36,11,9); // 가로수
+  } else {
+    const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#9aa6b0'); g.addColorStop(1,'#c8c2b0'); x.fillStyle=g; x.fillRect(0,0,W,H);
+    x.globalAlpha=.5; x.fillStyle='#fff0c0'; px(x,128,7,10,10); x.globalAlpha=1;   // 흐릿한 해
+    x.fillStyle='#7f9456'; x.fillRect(0,50,W,16);
+    x.fillStyle='#4a4a55'; px(x,8,34,24,16); x.fillStyle='#5a5a66'; px(x,11,24,5,12); px(x,20,22,5,14); // 석탄발전소
+    x.fillStyle='#c33'; px(x,12,24,4,2); px(x,21,22,4,2);
+    x.globalAlpha=.5; x.fillStyle='#6b6358'; px(x,11,14,7,6); px(x,20,11,8,6); px(x,15,4,9,6); x.globalAlpha=1; // 매연
+    for(let i=0;i<4;i++){ const bx=58+i*25, gy=50; x.fillStyle='#7a5b46'; px(x,bx,gy-12,16,12); // 넓게 퍼진 단독주택
+      x.fillStyle='#a3553c'; x.beginPath(); x.moveTo(bx-2,gy-12); x.lineTo(bx+8,gy-20); x.lineTo(bx+18,gy-12); x.fill();
+      x.fillStyle='#ffd87a'; px(x,bx+5,gy-8,6,6); }
+    x.fillStyle='#1c2030'; x.fillRect(0,56,W,10);               // 넓은 도로 + 자동차 가득
+    const cc=['#c44','#46c','#cc6','#999','#c44'];
+    for(let i=0;i<5;i++){ x.fillStyle=cc[i]; px(x,6+i*30,58,14,6); x.fillStyle='#9cd2ff'; px(x,6+i*30+9,59,3,3);
+      x.globalAlpha=.25; x.fillStyle='#765'; px(x,2+i*30,59,4,4); x.globalAlpha=1; }
+  }
+}
+
+/* ---------- 카드 픽셀 아이콘 (58x50) ---------- */
+function drawCardArt(x,art){
+  x.clearRect(0,0,58,50);
+  x.fillStyle='#16213a'; x.fillRect(0,44,58,6); x.fillStyle='#1d2c49'; x.fillRect(0,44,58,2); // 지면
+  switch(art){
+    case 'coalX': case 'scrubber':{
+      x.fillStyle='#4a4a55'; px(x,16,24,26,20); x.fillStyle='#3a3a44'; px(x,18,28,22,4);
+      x.fillStyle='#2f2f38'; for(let c=0;c<3;c++)px(x,19+c*7,34,4,6);
+      x.fillStyle='#5a5a66'; px(x,19,12,6,14); px(x,30,9,6,17);
+      x.fillStyle='#c33'; px(x,20,12,4,2); px(x,31,9,4,2);
+      if(art==='scrubber'){ x.fillStyle='#7ea0c0'; px(x,24,16,8,7); x.fillStyle='#a8c6e0'; px(x,25,17,3,2);
+        x.globalAlpha=.35; x.fillStyle='#cdd6e0'; px(x,31,4,5,4); x.globalAlpha=1;
+      } else {
+        x.globalAlpha=.5; x.fillStyle='#6b6358'; px(x,30,3,6,5); px(x,19,7,5,4); x.globalAlpha=1;
+        x.strokeStyle='#ff5d6c'; x.lineWidth=3; x.beginPath(); x.moveTo(12,42); x.lineTo(46,8); x.stroke(); // 폐쇄 슬래시
+      }
+      break; }
+    case 'gas':{
+      x.fillStyle='#5b6470'; px(x,16,26,26,18); x.fillStyle='#6f7a88'; px(x,16,26,26,3);
+      x.fillStyle='#3a4350'; for(let c=0;c<3;c++)px(x,19+c*8,32,5,8);
+      x.fillStyle='#445'; px(x,33,14,6,14); x.fillStyle='#ffaa45'; px(x,34,10,4,4); x.fillStyle='#ffd166'; px(x,35,11,2,2);
+      break; }
+    case 'solar':{
+      for(let r=0;r<2;r++)for(let c=0;c<3;c++){ const a=12+c*12,b=22+r*10;
+        x.fillStyle='#13315c'; px(x,a,b,10,8); x.fillStyle='#2e6fd6'; px(x,a+1,b+1,8,2);
+        x.fillStyle='#1d4f97'; px(x,a+1,b+4,8,2); x.fillStyle='#5a6470'; px(x,a+4,b+8,2,3); }
+      x.fillStyle='#fff3b0'; px(x,45,7,8,8);
+      break; }
+    case 'wind':{
+      x.fillStyle='#cfd8e2'; px(x,27,17,3,27);
+      x.strokeStyle='#f2f6fb'; x.lineWidth=3;
+      for(const [dx,dy] of [[0,-1],[0.87,0.5],[-0.87,0.5]]){ x.beginPath(); x.moveTo(28.5,18); x.lineTo(28.5+dx*13,18+dy*13); x.stroke(); }
+      x.fillStyle='#aeb6c2'; px(x,27,16,4,4); x.fillStyle='#fff3b0'; px(x,47,7,7,7);
+      break; }
+    case 'nuke':{
+      for(let i=0;i<16;i++){ const w=18-Math.sin(i/16*Math.PI)*6, lx=20+(9-w/2), yy=16+i*1.75;
+        x.fillStyle='#8a93a0'; px(x,lx,yy,w,2); x.fillStyle='#9ea7b4'; px(x,lx,yy,Math.max(1,w*0.3),2); }
+      x.globalAlpha=.4; x.fillStyle='#fff'; px(x,24,5,11,7); x.globalAlpha=1;
+      x.fillStyle='#3ad07f'; px(x,26,31,6,6);
+      break; }
+    case 'battery':{
+      for(let i=0;i<2;i++){ const a=18+i*12; x.fillStyle='#2a3550'; px(x,a,20,9,22); x.fillStyle='#1b2236'; px(x,a,20,9,3);
+        x.fillStyle='#3ad07f'; px(x,a+2,24,5,3); px(x,a+2,30,5,3); px(x,a+2,36,5,3); }
+      x.fillStyle='#9cffcf'; px(x,40,26,3,10);
+      break; }
+    case 'subway':{
+      x.fillStyle='#46506a'; px(x,4,40,50,3); x.fillStyle='#39425a'; for(let p=8;p<54;p+=10)px(x,p,43,3,5);
+      x.fillStyle='#4aa3ff'; px(x,12,22,34,16); x.fillStyle='#0d2f55'; px(x,12,22,34,3);
+      x.fillStyle='#cdeaff'; for(let w=0;w<4;w++)px(x,15+w*8,27,6,5); x.fillStyle='#ffd166'; px(x,44,30,2,4);
+      break; }
+    case 'bike':{
+      x.strokeStyle='#3ad07f'; x.lineWidth=2;
+      x.beginPath(); x.arc(18,34,8,0,7); x.stroke(); x.beginPath(); x.arc(40,34,8,0,7); x.stroke();
+      x.beginPath(); x.moveTo(18,34); x.lineTo(28,22); x.lineTo(40,34); x.moveTo(28,22); x.lineTo(24,34); x.stroke();
+      x.fillStyle='#3ad07f'; px(x,26,20,8,2);
+      break; }
+    case 'ev':{
+      x.fillStyle='#2fae6a'; px(x,12,28,32,12); x.fillStyle='#27935a'; px(x,18,22,20,8);
+      x.fillStyle='#9cd2ff'; px(x,20,23,15,6);
+      x.fillStyle='#16213a'; x.beginPath(); x.arc(20,40,4,0,7); x.fill(); x.beginPath(); x.arc(37,40,4,0,7); x.fill();
+      x.fillStyle='#ffd166'; px(x,47,26,2,9); px(x,46,25,4,2); // 충전 플러그
+      break; }
+    case 'carfee':{
+      x.fillStyle='#c44'; px(x,8,28,28,11); x.fillStyle='#a33'; px(x,13,22,18,7); x.fillStyle='#9cd2ff'; px(x,15,23,13,5);
+      x.fillStyle='#16213a'; x.beginPath(); x.arc(15,39,3,0,7); x.fill(); x.beginPath(); x.arc(29,39,3,0,7); x.fill();
+      x.fillStyle='#ffd166'; x.beginPath(); x.arc(46,19,7,0,7); x.fill(); x.fillStyle='#8a6800'; x.font='bold 10px monospace'; x.fillText('$',43,23);
+      x.fillStyle='#888'; px(x,45,25,2,17);
+      break; }
+    case 'recycle':{
+      x.fillStyle='#2e8b57'; px(x,18,22,22,22); x.fillStyle='#256f46'; px(x,18,22,22,3); x.fillStyle='#cfeede'; px(x,21,26,16,2);
+      x.strokeStyle='#fff'; x.lineWidth=2; x.beginPath(); x.moveTo(29,29); x.lineTo(24,38); x.lineTo(34,38); x.closePath(); x.stroke(); // 재활용 삼각
+      break; }
+    case 'compost':{
+      x.fillStyle='#6b4f2a'; px(x,18,24,22,20); x.fillStyle='#5a4122'; px(x,18,24,22,3);
+      x.fillStyle='#3c8f3a'; px(x,24,15,5,10); x.fillStyle='#2f7a30'; px(x,28,17,6,4); x.fillStyle='#caa56a'; px(x,21,31,16,2);
+      break; }
+    case 'insul':{
+      x.fillStyle='#7a5b46'; px(x,16,26,26,18);
+      x.fillStyle='#3c8f3a'; x.beginPath(); x.moveTo(13,26); x.lineTo(29,14); x.lineTo(45,26); x.fill();
+      x.fillStyle='#13315c'; px(x,21,18,8,3); x.fillStyle='#3a7fe0'; px(x,21,18,8,1);
+      x.fillStyle='#ffd87a'; px(x,25,32,8,8);
+      break; }
+    case 'tree':{
+      x.fillStyle='#5a3d28'; px(x,26,32,5,12); x.fillStyle='#3c8f3a'; px(x,18,16,20,18); px(x,22,10,12,8);
+      x.fillStyle='#48a548'; px(x,21,18,6,5); px(x,31,23,5,5);
+      break; }
+    default: x.fillStyle='#4aa3ff'; px(x,22,22,14,14);
+  }
+}
+</script>
+</body>
+</html>
