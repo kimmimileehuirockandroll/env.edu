@@ -300,10 +300,10 @@ def apply_css():
     }
 
     /* ─────────────────────────────────────────────
-       학습자 레벨 토글 (segmented_control / radio 공통)
+       학습자 레벨 선택 (pills / radio 공통)
        ───────────────────────────────────────────── */
     /* 라벨 */
-    [data-testid="stSegmentedControl"] label,
+    [data-testid="stPills"] label,
     div[role="radiogroup"] > label:first-child {
         font-size: .82rem !important;
         font-weight: 700 !important;
@@ -311,47 +311,41 @@ def apply_css():
         margin-bottom: .4rem !important;
     }
 
-    /* ── segmented_control(토글 버튼) ── */
-    /* 버튼들을 감싼 컨테이너에 간격을 줘서 각자 독립 알약으로 분리 */
-    [data-testid="stSegmentedControl"] [role="group"],
-    [data-testid="stSegmentedControl"] div:has(> button) {
-        display: flex !important;
+    /* ── pills(알약 버튼) — 간격 + 비선택 스타일 ── */
+    [data-testid="stPills"] [data-testid="stPillsContainer"],
+    [data-testid="stPills"] div:has(> button) {
         gap: 6px !important;
         flex-wrap: wrap !important;
-        background: transparent !important;
-        border: none !important;
     }
-    /* 비선택 버튼이 Streamlit 기본 radius를 덮어쓰도록 testid까지 명시(특이도↑) */
-    [data-testid="stSegmentedControl"] button,
-    [data-testid="stSegmentedControl"] button[data-testid^="stBaseButton-segmented_control"] {
-        border-radius: 999px !important;
+    [data-testid="stPills"] button {
         border: 1.5px solid var(--border-select) !important;
         background: var(--bg-select) !important;
         color: var(--text-sidebar) !important;
         font-size: .85rem !important;
         font-weight: 600 !important;
-        padding: .35rem .9rem !important;
-        min-height: 0 !important;
-        margin: 0 !important;
         box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
         transition: all .15s ease !important;
     }
-    [data-testid="stSegmentedControl"] button:hover {
+    [data-testid="stPills"] button:hover {
         border-color: var(--accent-primary) !important;
         color: var(--accent-primary) !important;
         transform: translateY(-1px);
     }
-    /* 선택된 토글 */
-    [data-testid="stSegmentedControl"] button[aria-checked="true"],
-    [data-testid="stSegmentedControl"] button[kind="segmented_controlActive"],
-    button[data-testid="stBaseButton-segmented_controlActive"] {
+    /* 선택된 알약 */
+    [data-testid="stPills"] button[aria-checked="true"],
+    [data-testid="stPills"] button[kind="pillsActive"],
+    button[data-testid="stBaseButton-pillsActive"] {
         background: linear-gradient(180deg, var(--accent-primary), var(--accent-third)) !important;
         border-color: var(--accent-primary) !important;
         color: #FFFFFF !important;
         box-shadow: 0 3px 10px rgba(255,45,107,.30) !important;
     }
-    [data-testid="stSegmentedControl"] button[aria-checked="true"]:hover,
-    button[data-testid="stBaseButton-segmented_controlActive"]:hover {
+    [data-testid="stPills"] button[aria-checked="true"] *,
+    button[data-testid="stBaseButton-pillsActive"] * {
+        color: #FFFFFF !important;
+    }
+    [data-testid="stPills"] button[aria-checked="true"]:hover,
+    button[data-testid="stBaseButton-pillsActive"]:hover {
         color: #FFFFFF !important;
         transform: translateY(-1px);
     }
@@ -446,18 +440,22 @@ THEORY_LEVELS = {"전체", "고등", "대학·성인"}  # 학술 이론 라벨�
 
 
 def level_selector():
-    """사이드바 등에서 호출 — 단일 선택 토글형 학습자 레벨 선택기."""
+    """사이드바 등에서 호출 — 단일 선택 알약형 학습자 레벨 선택기."""
     # 세션값을 먼저 시드(이후 위젯은 key로만 연결 → default/key 충돌 방지)
     if "learner_level" not in st.session_state:
         st.session_state["learner_level"] = DEFAULT_LEVEL
-    # segmented_control(토글 버튼)이 있으면 사용, 없으면 가로 라디오로 폴백
-    if hasattr(st, "segmented_control"):
-        return st.segmented_control(
+    # pills: 각 항목이 독립된 알약으로 렌더링됨(가장 깔끔)
+    if hasattr(st, "pills"):
+        sel = st.pills(
             "🎚️ 학습자 레벨",
             options=LEVELS,
+            selection_mode="single",
             format_func=lambda k: LEVEL_LABELS.get(k, k),
             key="learner_level",
         )
+        # 선택 해제(None) 방지 — 비면 직전/기본값 유지
+        return sel or DEFAULT_LEVEL
+    # 폴백: 가로 라디오
     return st.radio(
         "🎚️ 학습자 레벨",
         options=LEVELS,
