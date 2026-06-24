@@ -391,18 +391,18 @@ with ctrl_col:
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    background: rgba(10, 15, 13, 0.94);
-                    border: 2px solid #69f0ae;
+                    background: rgba(20, 10, 15, 0.94);
+                    border: 2px solid #FF5C8A;
                     border-radius: 24px;
                     padding: 2rem 3rem;
                     z-index: 999999;
-                    box-shadow: 0 0 40px rgba(105, 240, 174, 0.35);
+                    box-shadow: 0 0 40px rgba(255, 45, 107, 0.35);
                     text-align: center;
                     min-width: 360px;
                 ">
                     <div style="font-size: 3rem; margin-bottom: .8rem;">🚀</div>
                     <div style="
-                        color: #69f0ae;
+                        color: #FF5C8A;
                         font-size: 1.5rem;
                         font-weight: 800;
                         margin-bottom: .5rem;
@@ -418,16 +418,10 @@ with ctrl_col:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-                        time.sleep(0.55)
+                        time.sleep(0.28)
                 
                     moving_box.empty()
-                
-                                    
-                    # Apply costs
-                    st.session_state.time_left -= preview_time
-                    st.session_state.carbon_left -= base_carbon
-                    st.session_state.budget_left -= base_cost
-    
+
                     # Apply costs
                     st.session_state.time_left   -= preview_time
                     st.session_state.carbon_left -= base_carbon
