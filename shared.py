@@ -298,6 +298,88 @@ def apply_css():
         color: #6B6B6B !important;
         font-size: .85rem !important;
     }
+
+    /* ─────────────────────────────────────────────
+       학습자 레벨 토글 (segmented_control / radio 공통)
+       ───────────────────────────────────────────── */
+    /* 라벨 */
+    [data-testid="stSegmentedControl"] label,
+    div[role="radiogroup"] > label:first-child {
+        font-size: .82rem !important;
+        font-weight: 700 !important;
+        color: var(--text-sidebar) !important;
+        margin-bottom: .4rem !important;
+    }
+
+    /* ── segmented_control(토글 버튼) ── */
+    [data-testid="stSegmentedControl"] [role="group"] {
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+        background: transparent !important;
+        border: none !important;
+    }
+    [data-testid="stSegmentedControl"] button {
+        border-radius: 999px !important;
+        border: 1.5px solid var(--border-select) !important;
+        background: var(--bg-select) !important;
+        color: var(--text-sidebar) !important;
+        font-size: .85rem !important;
+        font-weight: 600 !important;
+        padding: .35rem .9rem !important;
+        min-height: 0 !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
+        transition: all .15s ease !important;
+    }
+    [data-testid="stSegmentedControl"] button:hover {
+        border-color: var(--accent-primary) !important;
+        color: var(--accent-primary) !important;
+        transform: translateY(-1px);
+    }
+    /* 선택된 토글 */
+    [data-testid="stSegmentedControl"] button[aria-checked="true"],
+    [data-testid="stSegmentedControl"] button[kind="segmented_controlActive"],
+    button[data-testid="stBaseButton-segmented_controlActive"] {
+        background: linear-gradient(180deg, var(--accent-primary), var(--accent-third)) !important;
+        border-color: var(--accent-primary) !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 3px 10px rgba(255,45,107,.30) !important;
+    }
+    [data-testid="stSegmentedControl"] button[aria-checked="true"]:hover,
+    button[data-testid="stBaseButton-segmented_controlActive"]:hover {
+        color: #FFFFFF !important;
+        transform: translateY(-1px);
+    }
+
+    /* ── radio 폴백도 동일한 알약 스타일로 ── */
+    div[role="radiogroup"] {
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+    }
+    div[role="radiogroup"] > label {
+        border-radius: 999px !important;
+        border: 1.5px solid var(--border-select) !important;
+        background: var(--bg-select) !important;
+        padding: .35rem .9rem !important;
+        margin: 0 !important;
+        font-size: .85rem !important;
+        cursor: pointer;
+        transition: all .15s ease !important;
+    }
+    div[role="radiogroup"] > label:hover {
+        border-color: var(--accent-primary) !important;
+    }
+    div[role="radiogroup"] > label:has(input:checked) {
+        background: linear-gradient(180deg, var(--accent-primary), var(--accent-third)) !important;
+        border-color: var(--accent-primary) !important;
+        box-shadow: 0 3px 10px rgba(255,45,107,.30) !important;
+    }
+    div[role="radiogroup"] > label:has(input:checked) * {
+        color: #FFFFFF !important;
+    }
+    /* 라디오 동그라미 숨기기(알약만 보이게) */
+    div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
