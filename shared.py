@@ -48,7 +48,7 @@ def apply_css():
         --bg-card:        #1A1A1A;
         --bg-metric:      #1A1A1A;
         --bg-select:      #1A1A1A;
-        --bg-hero:        linear-gradient(135deg, #1F0D14 0%, #0D0D0D 60%, #001A14 100%);
+        --bg-hero:        linear-gradient(135deg, #1F0D14 0%, #0D0D0D 60%, #1F0D14 100%);
         --bg-node-badge:  #1F0D14;
         --bg-node-visited:#2E0A1A;
         --border-main:    #2A2A2A;
@@ -75,7 +75,7 @@ def apply_css():
             --bg-card:        #FAFAFA;
             --bg-metric:      #F5F5F5;
             --bg-select:      #FFFFFF;
-            --bg-hero:        linear-gradient(135deg, #FFE4EE 0%, #F0FBF8 60%, #FFFFFF 100%);
+            --bg-hero:        linear-gradient(135deg, #FFE4EE 0%, #FFF0F5 60%, #FFFFFF 100%);
             --bg-node-badge:  #FFF0F5;
             --bg-node-visited:#FFD6E7;
             --border-main:    #E8E8E8;
@@ -255,7 +255,7 @@ def apply_css():
     /* ── survey question card ── */
     .q-card {
         background: var(--bg-card);
-        border-left: 4px solid #00897b;
+        border-left: 4px solid var(--accent-primary);
         border-radius: 0 12px 12px 0;
         padding: 1rem 1.2rem;
         margin-bottom: 1rem;
@@ -334,6 +334,42 @@ def load_korean_font(size=8.5):
 _korean_font = load_korean_font(8.5)
 
 # ─────────────────────────────────────────────
+#  LEARNER LEVEL (학습자 레벨 / 난이도 토글)
+#  같은 플랫폼을 대상 레벨별로 깊이·이론 노출만 바꿔 운영하기 위한 공용 설정.
+#  각 페이지는 show_theory() 등 헬퍼로 분기하면 됨.
+# ─────────────────────────────────────────────
+LEVELS = {
+    "초등":     {"order": 1, "show_theory": False, "label": "초등학생"},
+    "중등":     {"order": 2, "show_theory": False, "label": "중학생"},
+    "고등":     {"order": 3, "show_theory": True,  "label": "고등학생"},
+    "대학·성인": {"order": 4, "show_theory": True,  "label": "대학생·성인"},
+}
+DEFAULT_LEVEL = "중등"
+
+
+def level_selector():
+    """사이드바 등에서 호출 — 학습자 레벨 선택기를 그리고 선택값을 세션에 저장."""
+    keys = list(LEVELS.keys())
+    current = st.session_state.get("learner_level", DEFAULT_LEVEL)
+    index = keys.index(current) if current in keys else keys.index(DEFAULT_LEVEL)
+    return st.selectbox("🎚️ 학습자 레벨", keys, index=index, key="learner_level")
+
+
+def get_level():
+    """현재 선택된 학습자 레벨 키 반환."""
+    return st.session_state.get("learner_level", DEFAULT_LEVEL)
+
+
+def level_order():
+    """현재 레벨의 난이도 순서(초등1 → 성인4)."""
+    return LEVELS.get(get_level(), LEVELS[DEFAULT_LEVEL])["order"]
+
+
+def show_theory():
+    """현재 레벨에서 학술 이론 라벨/개념을 노출할지 여부 (고등 이상만 True)."""
+    return LEVELS.get(get_level(), LEVELS[DEFAULT_LEVEL])["show_theory"]
+
+# ─────────────────────────────────────────────
 #  CHART COLOR PALETTE (matplotlib용)
 #  색상 변경 시 여기만 수정하면 모든 페이지 차트에 반영됨
 # ─────────────────────────────────────────────
@@ -352,7 +388,7 @@ def get_chart_colors():
             "axis":     "#9B9B9B",
             "spine":    "#2A2A2A",
             "accent":   "#FF5C8A",
-            "accent2":  "#00E8C1",
+            "accent2":  "#FF85A1",
             "label":    "#F0F0F0",
         }
     else:
@@ -366,6 +402,6 @@ def get_chart_colors():
             "axis":     "#6B6B6B",
             "spine":    "#E8E8E8",
             "accent":   "#FF2D6B",
-            "accent2":  "#00C9A7",
+            "accent2":  "#FF6B9D",
             "label":    "#1A1A1A",
         }
