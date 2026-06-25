@@ -102,8 +102,8 @@ GAME_HTML = r"""
   const MAX_HOLD = 3;
 
   const BINS_DEF = [
-    { type:"general", label:"일반",   color:"#9aa0a6" },
-    { type:"plastic", label:"플라",   color:"#4aa3ff" },
+    { type:"general", label:"일반쓰레기",   color:"#9aa0a6" },
+    { type:"plastic", label:"플라스틱",   color:"#4aa3ff" },
     { type:"can",     label:"캔",     color:"#ff7043" },
     { type:"paper",   label:"종이",   color:"#ffd166" },
     { type:"food",    label:"음식물", color:"#46c46a" },
