@@ -69,7 +69,7 @@ else:
     #bq-root { font-family:'Galmuri11','Noto Sans KR',monospace; }
     .bq-wrap { display:flex; gap:18px; align-items:stretch; flex-wrap:wrap; }
     .bq-quiz { flex:10 1 460px; position:relative; border:5px solid #1A1A1A; border-radius:18px;
-               overflow:hidden; min-height:580px; box-shadow:0 10px 0 rgba(0,0,0,.18); }
+               overflow:hidden; min-height:720px; box-shadow:0 10px 0 rgba(0,0,0,.18); }
     canvas#bqBg { position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; }
     .bq-q-overlay { position:absolute; inset:0; display:flex; flex-direction:column; padding:22px; }
     .bq-badge { align-self:flex-start; background:#1A1A1A; color:#ffe; border:2px solid #fff;
@@ -77,7 +77,7 @@ else:
     .bq-qbox { flex:1; display:flex; align-items:center; justify-content:center; margin:16px 0; }
     .bq-qtext { background:rgba(255,255,255,.88); border:4px solid #1A1A1A; border-radius:12px;
             padding:24px 26px; font-size:26px; line-height:1.7; color:#1A1A1A; text-align:center;
-            white-space:pre-line; max-height:360px; overflow:auto; box-shadow:5px 5px 0 rgba(0,0,0,.25); width:100%; }
+            white-space:pre-line; max-height:520px; overflow:auto; box-shadow:5px 5px 0 rgba(0,0,0,.25); width:100%; }
     .bq-nav { display:flex; gap:12px; justify-content:center; }
     .bq-btn { font-family:inherit; font-size:19px; padding:13px 22px; border:4px solid #1A1A1A; border-radius:10px;
               background:#fff; color:#1A1A1A; cursor:pointer; box-shadow:4px 4px 0 #1A1A1A; }
@@ -96,8 +96,8 @@ else:
     .bq-ans .ans-exp { font-size:21px; line-height:1.8; color:#e8e8e8; white-space:pre-line; }
 
     /* 타로 효과 카드 */
-    .bq-card { flex:1 1 320px; perspective:1400px; min-height:580px; }
-    .bq-card-inner { position:relative; width:100%; height:100%; min-height:580px;
+    .bq-card { flex:1 1 320px; perspective:1400px; min-height:720px; }
+    .bq-card-inner { position:relative; width:100%; height:100%; min-height:720px;
                      transition:transform .7s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
     .bq-card.flipped .bq-card-inner { transform:rotateY(180deg); }
     .bq-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:16px;
@@ -253,6 +253,6 @@ else:
 </script>
 """
     HTML = HTML.replace("__DATA__", DATA)
-    components.html(HTML, height=650, scrolling=True)
+    components.html(HTML, height=780, scrolling=True)
 
     st.caption(f"📚 문제 {len(quizzes)}개 · 효과 카드 긍정 {len(pos_effects)} · 부정 {len(neg_effects)} (구글 시트 자동 연동, 5분 캐시)")
