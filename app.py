@@ -21,6 +21,7 @@ game4 = st.Page("pages/6_pixel_eco_city.py", title="픽셀 에코시티", icon="
 game5 = st.Page("pages/7_oreumi_diary.py", title="오름이의 환경 다이어리", icon="🦌")
 game6 = st.Page("pages/8_ecocity_2050.py", title="에코시티 2050", icon="🏙️")
 game7 = st.Page("pages/9_eco_hero.py", title="플로깅 러쉬", icon="🏃")
+game8 = st.Page("pages/10_board_quiz.py", title="아이스브레이킹", icon="🧊")
 network1 = st.Page("pages/2_environment_action_network.py", title="1반 환경행동 네트워크", icon="📊")
 network2 = st.Page("pages/3_survey2.py", title="2반 환경행동 네트워크", icon="📊")
 
@@ -42,6 +43,7 @@ SECTIONS = [
         (game5, "오름이의 환경 다이어리", "🦌", ["초등", "중등"]),
         (game6, "에코시티 2050", "🏙️", ["고등", "대학·성인"]),
         (game7, "플로깅 러쉬", "🏃", ["초등", "중등", "고등"]),
+        (game8, "아이스브레이킹", "🧊", ["초등", "중등", "고등", "대학·성인"]),
     ]),
     ("Survey", [
         (network1, "1반 환경행동 네트워크", "📊", ["중등", "고등", "대학·성인"]),
