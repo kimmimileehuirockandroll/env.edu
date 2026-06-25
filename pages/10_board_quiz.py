@@ -68,7 +68,7 @@ else:
     #bq-root * { box-sizing:border-box; }
     #bq-root { font-family:'Galmuri11','Noto Sans KR',monospace; }
     .bq-wrap { display:flex; gap:18px; align-items:stretch; flex-wrap:wrap; }
-    .bq-quiz { flex:2 1 460px; position:relative; border:5px solid #1A1A1A; border-radius:18px;
+    .bq-quiz { flex:3 1 460px; position:relative; border:5px solid #1A1A1A; border-radius:18px;
                overflow:hidden; min-height:580px; box-shadow:0 10px 0 rgba(0,0,0,.18); }
     canvas#bqBg { position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; }
     .bq-q-overlay { position:absolute; inset:0; display:flex; flex-direction:column; padding:22px; }
@@ -76,7 +76,7 @@ else:
                 padding:7px 16px; border-radius:5px; font-size:18px; box-shadow:3px 3px 0 rgba(0,0,0,.35); }
     .bq-qbox { flex:1; display:flex; align-items:center; justify-content:center; margin:16px 0; }
     .bq-qtext { background:rgba(255,255,255,.88); border:4px solid #1A1A1A; border-radius:12px;
-                padding:24px 26px; font-size:26px; line-height:1.7; color:#1A1A1A; text-align:center;
+                padding:24px 26px; font-size:23px; line-height:1.7; color:#1A1A1A; text-align:center;
                 max-height:360px; overflow:auto; box-shadow:5px 5px 0 rgba(0,0,0,.25); width:100%; }
     .bq-nav { display:flex; gap:12px; justify-content:center; }
     .bq-btn { font-family:inherit; font-size:19px; padding:13px 22px; border:4px solid #1A1A1A; border-radius:10px;
