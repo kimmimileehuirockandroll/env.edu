@@ -76,8 +76,8 @@ else:
                 padding:7px 16px; border-radius:5px; font-size:18px; box-shadow:3px 3px 0 rgba(0,0,0,.35); }
     .bq-qbox { flex:1; display:flex; align-items:center; justify-content:center; margin:16px 0; }
     .bq-qtext { background:rgba(255,255,255,.88); border:4px solid #1A1A1A; border-radius:12px;
-                padding:24px 26px; font-size:23px; line-height:1.7; color:#1A1A1A; text-align:center;
-                max-height:360px; overflow:auto; box-shadow:5px 5px 0 rgba(0,0,0,.25); width:100%; }
+            padding:24px 26px; font-size:26px; line-height:1.7; color:#1A1A1A; text-align:center;
+            white-space:pre-line; max-height:360px; overflow:auto; box-shadow:5px 5px 0 rgba(0,0,0,.25); width:100%; }
     .bq-nav { display:flex; gap:12px; justify-content:center; }
     .bq-btn { font-family:inherit; font-size:19px; padding:13px 22px; border:4px solid #1A1A1A; border-radius:10px;
               background:#fff; color:#1A1A1A; cursor:pointer; box-shadow:4px 4px 0 #1A1A1A; }
@@ -93,7 +93,7 @@ else:
     .bq-ans .ans-x { align-self:flex-end; background:none; border:2px solid #fff; color:#fff;
                      width:38px; height:38px; border-radius:8px; cursor:pointer; font-size:19px; }
     .bq-ans .ans-big { font-size:40px; color:#FF8FB1; margin:10px 0 18px; }
-    .bq-ans .ans-exp { font-size:21px; line-height:1.8; color:#e8e8e8; }
+    .bq-ans .ans-exp { font-size:21px; line-height:1.8; color:#e8e8e8; white-space:pre-line; }
 
     /* 타로 효과 카드 */
     .bq-card { flex:1 1 320px; perspective:1400px; min-height:580px; }
