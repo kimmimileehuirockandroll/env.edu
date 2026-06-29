@@ -2,10 +2,9 @@ import random
 
 import streamlit as st
 
-from shared import get_chart_colors, inject_css, progress_bar
+from shared import apply_css, get_chart_colors
 
-st.set_page_config(page_title="제주 생태계 밸런스", page_icon="🌋", layout="centered")
-inject_css()
+apply_css()
 
 TOTAL_TURNS = 6
 START_BUDGET_BASE = 60
@@ -50,15 +49,15 @@ EVENTS = [
 
 
 def init_state():
-    if "turn" not in st.session_state:
-        st.session_state.turn = 1
-        st.session_state.stats = {"tourism": 50, "satisfaction": 50, "ecology": 50}
-        st.session_state.log = []
-        st.session_state.game_over = False
-        st.session_state.pool = POLICY_POOL.copy()
-        random.shuffle(st.session_state.pool)
-        st.session_state.options = st.session_state.pool[:4]
-        st.session_state.pool = st.session_state.pool[4:]
+    if "jeju_turn" not in st.session_state:
+        st.session_state.jeju_turn = 1
+        st.session_state.jeju_stats = {"tourism": 50, "satisfaction": 50, "ecology": 50}
+        st.session_state.jeju_log = []
+        st.session_state.jeju_game_over = False
+        pool = POLICY_POOL.copy()
+        random.shuffle(pool)
+        st.session_state.jeju_options = pool[:4]
+        st.session_state.jeju_pool = pool[4:]
 
 
 def clamp(v):
@@ -66,12 +65,12 @@ def clamp(v):
 
 
 def apply_choices(selected):
-    stats = st.session_state.stats
+    stats = st.session_state.jeju_stats
     for card in selected:
         stats["tourism"] = clamp(stats["tourism"] + card["tourism"])
         stats["satisfaction"] = clamp(stats["satisfaction"] + card["satisfaction"])
         stats["ecology"] = clamp(stats["ecology"] + card["ecology"])
-        st.session_state.log.append(f"턴 {st.session_state.turn}: '{card['name']}' 시행")
+        st.session_state.jeju_log.append(f"턴 {st.session_state.jeju_turn}: '{card['name']}' 시행")
 
     triggered = [e for e in EVENTS if e["condition"](stats) and random.random() < 0.5]
     if triggered:
@@ -79,23 +78,23 @@ def apply_choices(selected):
         stats["tourism"] = clamp(stats["tourism"] + event["tourism"])
         stats["satisfaction"] = clamp(stats["satisfaction"] + event["satisfaction"])
         stats["ecology"] = clamp(stats["ecology"] + event["ecology"])
-        st.session_state.log.append(event["msg"])
+        st.session_state.jeju_log.append(event["msg"])
 
     if stats["ecology"] <= 0 or stats["satisfaction"] <= 0:
-        st.session_state.game_over = True
+        st.session_state.jeju_game_over = True
         return
 
-    st.session_state.turn += 1
-    if st.session_state.turn > TOTAL_TURNS:
-        st.session_state.game_over = True
+    st.session_state.jeju_turn += 1
+    if st.session_state.jeju_turn > TOTAL_TURNS:
+        st.session_state.jeju_game_over = True
         return
 
-    if len(st.session_state.pool) < 4:
+    if len(st.session_state.jeju_pool) < 4:
         refill = POLICY_POOL.copy()
         random.shuffle(refill)
-        st.session_state.pool = refill
-    st.session_state.options = st.session_state.pool[:4]
-    st.session_state.pool = st.session_state.pool[4:]
+        st.session_state.jeju_pool = refill
+    st.session_state.jeju_options = st.session_state.jeju_pool[:4]
+    st.session_state.jeju_pool = st.session_state.jeju_pool[4:]
 
 
 def ending(stats):
@@ -114,53 +113,66 @@ def ending(stats):
 
 
 def restart():
-    for key in ["turn", "stats", "log", "game_over", "pool", "options"]:
+    for key in ["jeju_turn", "jeju_stats", "jeju_log", "jeju_game_over", "jeju_pool", "jeju_options"]:
         st.session_state.pop(key, None)
 
 
-colors = get_chart_colors()
-
-st.markdown(
-    f"<h1 style='color:{colors['primary']};'>🌋 제주 생태계 밸런스 시뮬레이터</h1>",
-    unsafe_allow_html=True,
-)
+st.markdown("## 🌋 제주 생태계 밸런스 시뮬레이터")
 st.markdown("당신은 제주의 촌장입니다. 6번의 턴에 걸쳐 정책을 선택해 **관광수입 · 주민만족도 · 생태지표**의 균형을 잡아보세요.")
 
-init_state()
-stats = st.session_state.stats
+st.markdown("""
+<div class='hero-banner'>
+  <div class='hero-title'>🏝️ 촌장이 되어보세요</div>
+  <div class='hero-sub'>
+  정답은 없습니다. 한쪽을 챙기면 다른 쪽이 흔들리는 트레이드오프 속에서 당신만의 균형을 찾아보세요.
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
-if not st.session_state.game_over:
-    st.subheader(f"턴 {st.session_state.turn} / {TOTAL_TURNS}")
+init_state()
+stats = st.session_state.jeju_stats
+
+if not st.session_state.jeju_game_over:
+    st.markdown(f"### 턴 {st.session_state.jeju_turn} / {TOTAL_TURNS}")
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        progress_bar("🏖️ 관광수입", stats["tourism"])
+        st.markdown("🏖️ **관광수입**")
+        st.progress(stats["tourism"] / 100)
+        st.caption(f"{stats['tourism']} / 100")
     with col2:
-        progress_bar("😊 주민만족도", stats["satisfaction"])
+        st.markdown("😊 **주민만족도**")
+        st.progress(stats["satisfaction"] / 100)
+        st.caption(f"{stats['satisfaction']} / 100")
     with col3:
-        progress_bar("🌱 생태지표", stats["ecology"])
+        st.markdown("🌱 **생태지표**")
+        st.progress(stats["ecology"] / 100)
+        st.caption(f"{stats['ecology']} / 100")
 
     budget = START_BUDGET_BASE + stats["tourism"] // 2
-    st.markdown(f"**이번 턴 예산: {budget} 포인트**")
+    st.markdown(f"""
+    <div class='res-bar'>
+      <div class='res-chip'>💰 이번 턴 예산 <span class='val'>{budget}</span></div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("### 정책 카드를 선택하세요 (예산 내에서 자유롭게)")
     selected_idx = []
     total_cost = 0
-    for i, card in enumerate(st.session_state.options):
-        with st.container():
-            st.markdown(
-                f"""
-                <div class="policy-card">
-                <b>{card['name']}</b> (비용 {card['cost']})<br>
-                <span style="font-size:13px;color:#666;">{card['desc']}</span><br>
-                <span style="font-size:12px;">관광 {card['tourism']:+d} · 만족도 {card['satisfaction']:+d} · 생태 {card['ecology']:+d}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            if st.checkbox(f"'{card['name']}' 선택", key=f"chk_{st.session_state.turn}_{i}"):
-                selected_idx.append(i)
-                total_cost += card["cost"]
+    for i, card in enumerate(st.session_state.jeju_options):
+        st.markdown(
+            f"""
+            <div class="eco-card">
+            <b style='color:var(--accent-primary);'>{card['name']}</b> (비용 {card['cost']})<br>
+            <span style="color:var(--text-muted); font-size:.9rem;">{card['desc']}</span><br>
+            <span style="color:var(--text-caption); font-size:.82rem;">관광 {card['tourism']:+d} · 만족도 {card['satisfaction']:+d} · 생태 {card['ecology']:+d}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if st.checkbox(f"'{card['name']}' 선택", key=f"jeju_chk_{st.session_state.jeju_turn}_{i}"):
+            selected_idx.append(i)
+            total_cost += card["cost"]
 
     if total_cost > budget:
         st.error(f"예산 초과! 선택한 비용 {total_cost} > 예산 {budget}. 일부를 해제하세요.")
@@ -168,36 +180,42 @@ if not st.session_state.game_over:
         st.markdown(f"선택한 비용: {total_cost} / {budget}")
 
     if st.button("이번 턴 확정", disabled=(total_cost > budget)):
-        chosen = [st.session_state.options[i] for i in selected_idx]
+        chosen = [st.session_state.jeju_options[i] for i in selected_idx]
         apply_choices(chosen)
         st.rerun()
 
-    if st.session_state.log:
+    if st.session_state.jeju_log:
         with st.expander("지난 턴 기록 보기"):
-            for entry in reversed(st.session_state.log):
+            for entry in reversed(st.session_state.jeju_log):
                 st.write("- " + entry)
 
 else:
     title, desc = ending(stats)
     st.markdown(
         f"""
-        <div class="ending-card">
-        <h2>{title}</h2>
-        <p>{desc}</p>
+        <div class="eco-card" style="text-align:center; border-color:var(--accent-primary);">
+        <h2 style="color:var(--accent-primary);">{title}</h2>
+        <p style="color:var(--text-muted);">{desc}</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
     col1, col2, col3 = st.columns(3)
     with col1:
-        progress_bar("🏖️ 관광수입", stats["tourism"])
+        st.markdown("🏖️ **관광수입**")
+        st.progress(stats["tourism"] / 100)
+        st.caption(f"{stats['tourism']} / 100")
     with col2:
-        progress_bar("😊 주민만족도", stats["satisfaction"])
+        st.markdown("😊 **주민만족도**")
+        st.progress(stats["satisfaction"] / 100)
+        st.caption(f"{stats['satisfaction']} / 100")
     with col3:
-        progress_bar("🌱 생태지표", stats["ecology"])
+        st.markdown("🌱 **생태지표**")
+        st.progress(stats["ecology"] / 100)
+        st.caption(f"{stats['ecology']} / 100")
 
     with st.expander("전체 정책 기록"):
-        for entry in st.session_state.log:
+        for entry in st.session_state.jeju_log:
             st.write("- " + entry)
 
     if st.button("다시 시작하기"):
