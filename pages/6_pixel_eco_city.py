@@ -1,10 +1,66 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from shared import apply_css
+from shared import apply_css, lesson_flow
 
 apply_css()
 
 st.markdown("## 🏙️ 픽셀 에코시티")
+
+lesson_flow(
+    "pixel_city",
+    concept=[
+        {"title": "📘 Chapter 1 · 시스템 사고란?", "body": """
+<p style='line-height:1.8'>
+<b>시스템 사고(Systems Thinking)</b>는 어떤 것을 <b>따로 노는 부품이 아니라, 서로 연결된
+하나의 전체</b>로 보는 관점입니다.<br><br>
+도시가 대표적인 시스템이에요. 공장 하나를 지으면 → <b>일자리·수입</b>이 늘지만 → <b>대기오염</b>이
+심해지고 → <b>주민 건강·만족도</b>가 떨어지고 → 다시 도시 매력이 줄어듭니다. 이렇게
+<b>한 곳을 건드리면 다른 곳이 연쇄적으로 움직이는</b> 것이 시스템의 핵심 특징입니다.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>💡 그래서 "좋아 보이는 선택"도 다른 곳에 부작용을 남길 수 있어요.</p>
+"""},
+        {"title": "📗 Chapter 2 · 도시의 환경 요소들", "body": """
+<p style='line-height:1.8'>
+이 게임의 도시는 세 가지 지표로 움직여요. 각 건물이 이 지표들을 서로 다르게 바꿉니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>🌫️ 오염도:</b> 공장이 늘리고, 태양광·공원·재활용센터가 낮춥니다.</li>
+<li><b>😊 주민만족도:</b> 공원·재활용·편의시설이 올리고, 오염이 낮춥니다.</li>
+<li><b>☀️ 에너지자립:</b> 태양광이 올리고, 공장이 전력을 소모합니다.</li>
+</ul>
+<p style='line-height:1.8'>
+친환경 인프라(태양광·공원·재활용)는 도시를 맑게 하지만 <b>돈(예산)</b>이 듭니다.
+공장은 <b>수입</b>을 주지만 오염을 남기죠.
+</p>
+"""},
+        {"title": "📙 Chapter 3 · 친환경 전환의 비용과 편익", "body": """
+<p style='line-height:1.8'>
+환경을 지키는 데는 <b>비용</b>이 들지만, 그 <b>편익</b>은 시간이 지나며 돌아옵니다.
+깨끗한 도시는 주민을 모으고, 관광·투자를 부르며, 장기적으로 더 튼튼해져요.<br><br>
+문제는 <b>예산이 한정</b>되어 있다는 것. 그래서 "지금 무엇을 먼저 지을지" 순서와 우선순위를
+정하는 <b>전략적 판단</b>이 필요합니다. 오염을 한 번에 없애려다 예산이 바닥나면 도시가 멈추니까요.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 예산 안에서 어떤 건물을 배치해 오염을 줄이고 만족도를 지킬 것인가?</p>
+"""},
+    ],
+    discuss=[
+        "오염도를 낮추면서 주민만족도를 유지하려면 어떤 순서로 지어야 할까요?",
+        "공장을 완전히 없애는 게 최선일까요? 무엇을 잃게 되나요?",
+        "'한 곳을 건드리면 다른 곳이 움직인다'를 게임에서 느낀 순간은?",
+        "우리 실제 도시(제주)에 적용한다면 가장 먼저 바꿀 한 가지는?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 우리 도시 설계안</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>최종 도시의 <b>오염·만족·에너지</b> 수치와 스크린샷</li>
+<li>핵심 <b>설계 전략</b> (무엇을 우선했나)</li>
+<li>더 발전시킨다면 추가할 정책</li>
+</ul>
+</div>
+""",
+)
+
 st.markdown("오염된 마을을 직접 도시 계획해서 살려보세요. 친환경 건물을 지을수록 도시의 색과 분위기가 실시간으로 바뀝니다.")
 
 st.markdown("""
