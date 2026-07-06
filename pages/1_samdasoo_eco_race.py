@@ -6,7 +6,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.image import imread
-from shared import apply_css, _korean_font, get_chart_colors
+from shared import apply_css, _korean_font, get_chart_colors, lesson_flow
 apply_css()
 
 # ─────────────────────────────────────────────
@@ -228,7 +228,63 @@ init_state()
 #  화면 구성
 # ─────────────────────────────────────────────
 st.markdown("## 🎮 삼다수 에코 레이스")
-st.markdown("제주도 랜드마크를 최적의 경로로 탐험하세요. 탄소를 아끼고 시간과 비용도 관리해야 합니다!")
+
+lesson_flow(
+    "samdasoo",
+    concept=[
+        {"title": "📘 Chapter 1 · 탄소발자국이란?", "body": """
+<p style='line-height:1.8'>
+<b>탄소발자국(Carbon Footprint)</b>은 우리가 어떤 활동을 할 때 대기로 배출되는 온실가스(주로 CO₂)의
+총량을 말합니다. 밥 먹기, 전기 쓰기, 이동하기 등 거의 모든 활동에 탄소발자국이 있어요.<br><br>
+그중에서도 <b>'이동(교통)'</b>은 개인 탄소발자국에서 큰 비중을 차지합니다. 특히 자동차·비행기처럼
+화석연료를 태우는 이동수단은 짧은 거리에도 많은 CO₂를 내뿜죠. 그래서 <b>"어떻게 이동하는가"</b>를
+바꾸는 것만으로도 탄소를 크게 줄일 수 있습니다.
+</p>
+<ul style='line-height:1.8; color:var(--text-muted)'>
+<li>도보·자전거: 배출 <b>0에 가까움</b></li>
+<li>버스·지하철: 여러 명이 나눠 타 <b>1인당 배출이 적음</b></li>
+<li>자동차(1인 탑승): <b>1인당 배출이 큼</b></li>
+</ul>
+"""},
+        {"title": "📗 Chapter 2 · 버스 vs 전기차, 무엇이 더 친환경일까?", "body": """
+<p style='line-height:1.8'>
+<b>버스</b>는 한 대에 수십 명이 함께 타기 때문에, 연료를 많이 써도 <b>1인당 나누면 탄소가 적습니다</b>.
+'공유'가 곧 친환경이 되는 예시예요.<br><br>
+<b>전기차</b>는 달릴 때 배기가스가 없어 깨끗해 보이지만, 함정이 있어요. 전기차의 진짜 친환경 여부는
+<b>그 전기를 어떻게 만들었는가(전력믹스)</b>에 달려 있습니다. 석탄으로 만든 전기로 충전하면
+생각보다 탄소가 많이 남죠. 즉 <b>전기차는 '전력이 깨끗할 때' 비로소 친환경</b>입니다.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>💡 그래서 이 게임에서도 버스와 전기차의 탄소·시간·비용이 다르게 설정돼 있어요.</p>
+"""},
+        {"title": "📙 Chapter 3 · 트레이드오프와 최적 의사결정", "body": """
+<p style='line-height:1.8'>
+현실의 선택은 <b>모든 걸 동시에 최고로 만들 수 없습니다</b>. 탄소를 아끼려 버스만 타면
+<b>시간</b>이 오래 걸리고, 빠른 전기차는 <b>비용·탄소</b>가 늘 수 있어요. 이렇게 하나를 얻으면
+다른 하나를 포기해야 하는 관계를 <b>트레이드오프(trade-off)</b>라고 합니다.<br><br>
+좋은 의사결정은 "무엇을 <b>우선</b>할지 정하고, 그에 맞게 <b>포기할 것을 받아들이는</b>" 과정이에요.
+이 게임의 목표는 정답 하나를 찾는 게 아니라, <b>제한된 자원(탄소·시간·비용) 속에서 나만의
+최적 경로</b>를 설계하고 그 이유를 설명할 수 있게 되는 것입니다.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 탄소를 최소로 쓰면서 모든 곳을 방문하려면 어떤 순서·수단을 골라야 할까?</p>
+"""},
+    ],
+    discuss=[
+        "버스가 전기차보다 1인당 탄소가 적은 이유는 무엇일까요?",
+        "전기차는 '완전한 친환경'일까요? 전기는 어떻게 만들어질까요?",
+        "탄소·시간·비용 중 무엇을 포기했나요? 왜 그게 덜 중요했나요?",
+        "우리 일상의 등하교/이동에서 탄소를 줄이려면 무엇을 바꿀 수 있을까요?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 우리 모둠의 최적 경로</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>우리가 선택한 <b>경로와 이동수단</b>은?</li>
+<li>최종 <b>탄소·시간·비용</b> 결과와, 가장 고민했던 선택</li>
+<li>다시 한다면 <b>바꿀 한 가지</b>와 그 이유</li>
+</ul>
+</div>
+""",
+)
 
 # ── Resource display ──
 time_pct   = st.session_state.time_left   / 480   * 100
