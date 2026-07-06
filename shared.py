@@ -504,6 +504,52 @@ def show_theory():
     """학술 이론 라벨/개념을 노출할지 여부 (전체·고등·대학/성인 선택 시 True)."""
     return current_level() in THEORY_LEVELS
 
+
+# ─────────────────────────────────────────────
+#  LESSON FLOW (개념 설명 → 실습 → 토론 → 발표)
+#  각 게임 페이지 상단에서 lesson_flow(...)를 호출하면
+#  단계 버튼이 그려지고, '실습'이 아닌 단계에서는 해당 콘텐츠를 렌더 후 st.stop().
+#  '실습' 단계에서는 함수가 그냥 반환되어 아래의 게임 코드가 실행됨.
+# ─────────────────────────────────────────────
+LESSON_STEPS = ["📖 개념 설명", "🎮 실습", "💬 토론", "🎤 발표"]
+
+
+def lesson_flow(key, concept, discuss, present, default_step=0):
+    """수업 4단계 네비게이션.
+
+    concept: 챕터 리스트 [{"title": "Chapter 1 · ...", "body": "<html>"}, ...]
+             (호환용으로 문자열 하나를 줘도 단일 카드로 표시)
+    discuss: 질문 리스트, present: HTML 문자열.
+    """
+    sk = f"lesson_{key}"
+    if sk not in st.session_state:
+        st.session_state[sk] = LESSON_STEPS[default_step]
+    st.radio("수업 단계", LESSON_STEPS, key=sk, horizontal=True, label_visibility="collapsed")
+    st.markdown("---")
+    i = LESSON_STEPS.index(st.session_state[sk])
+    if i == 0:
+        st.markdown("### 📖 개념 설명 · 문제 제시")
+        st.caption("아래 챕터를 펼쳐 개념을 충분히 익힌 뒤 실습으로 넘어가세요.")
+        if isinstance(concept, str):
+            st.markdown(concept, unsafe_allow_html=True)
+        else:
+            for idx, ch in enumerate(concept):
+                with st.expander(ch["title"], expanded=(idx == 0)):
+                    st.markdown(ch["body"], unsafe_allow_html=True)
+        st.info("개념을 이해했다면 위의 **🎮 실습** 버튼을 눌러 직접 해보세요.")
+        st.stop()
+    elif i == 2:
+        st.markdown("### 💬 토론하기")
+        st.caption("정답을 맞히는 게 아니라, 생각을 꺼내고 서로 부딪혀보세요.")
+        for q in discuss:
+            st.markdown(f"<div class='eco-card'>❓ {q}</div>", unsafe_allow_html=True)
+        st.stop()
+    elif i == 3:
+        st.markdown("### 🎤 발표 · 산출물")
+        st.markdown(present, unsafe_allow_html=True)
+        st.stop()
+    # i == 1 (실습) → 반환하여 아래 게임 코드 실행
+
 # ─────────────────────────────────────────────
 #  CHART COLOR PALETTE (matplotlib용)
 #  색상 변경 시 여기만 수정하면 모든 페이지 차트에 반영됨
