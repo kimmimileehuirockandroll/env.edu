@@ -1,15 +1,67 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from shared import apply_css
+from shared import apply_css, lesson_flow
 
 apply_css()
 
 st.markdown("## 🏃 플로깅 러쉬")
+
+lesson_flow(
+    "plogging",
+    concept=[
+        {"title": "📘 Chapter 1 · 왜 분리배출을 할까?", "body": """
+<p style='line-height:1.8'>
+쓰레기를 종류별로 나누는 이유는 <b>자원을 다시 쓰기(재활용) 위해서</b>입니다. 플라스틱·캔·종이는
+잘 모으면 <b>새 제품의 원료</b>가 되지만, 뒤섞이면 골라내기 어려워 결국 <b>태우거나 묻어야</b> 해요.<br><br>
+분리배출은 이 재활용 과정의 <b>맨 첫 단추</b>입니다. 우리가 집·학교에서 어떻게 버리느냐가
+그 쓰레기가 <b>자원으로 되살아날지, 폐기물로 끝날지</b>를 결정해요.
+</p>
+"""},
+        {"title": "📗 Chapter 2 · 헷갈리는 함정 품목들", "body": """
+<p style='line-height:1.8'>
+분리배출이 쉬워 보여도, "이건 어디에 버리지?" 헷갈리는 <b>함정 품목</b>이 많습니다. 겉모습이
+아니라 <b>재질과 처리 방법</b>으로 판단해야 해요.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>종이컵 → 일반쓰레기:</b> 안쪽에 물이 새지 않게 <b>플라스틱 코팅</b>이 돼 있어 종이 재활용이 안 됩니다.</li>
+<li><b>계란껍질 → 일반쓰레기:</b> 음식물처럼 보이지만 <b>동물 사료가 될 수 없어</b> 음식물이 아니에요.</li>
+<li><b>깨진 유리 → 일반쓰레기:</b> 수거 작업자가 다칠 수 있어 <b>신문지에 싸서</b> 일반으로 버립니다.</li>
+<li><b>부탄가스 → 구멍 뚫어 캔류:</b> 남은 가스를 비우고 배출해야 안전합니다.</li>
+</ul>
+"""},
+        {"title": "📙 Chapter 3 · 한 개의 오류가 부르는 연쇄", "body": """
+<p style='line-height:1.8'>
+분리배출에서 정확도가 중요한 이유는 <b>'오염' 때문</b>입니다. 재활용품 더미에 이물질이나
+잘못된 품목이 섞이면, 그 주변까지 오염돼 <b>한 무더기 전체가 재활용 불가</b>가 될 수 있어요.<br><br>
+즉 <b>한 사람의 잘못된 배출이 여러 사람의 노력을 헛되게</b> 만듭니다. 반대로, 각자 조금만
+정확히 버려도 재활용률이 크게 올라가요. 작은 정확함이 모여 큰 차이를 만듭니다.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 제한시간 안에 품목을 정확한 수거함에 넣을 수 있는가?</p>
+"""},
+    ],
+    discuss=[
+        "종이컵이 '종이'가 아니라 '일반쓰레기'인 이유는 무엇일까요?",
+        "우리 집·교실에서 자주 틀리는 분리배출은 무엇이 있나요?",
+        "한 명이 잘못 버리면 왜 재활용 전체에 문제가 생길까요?",
+        "분리배출을 더 잘하게 만들려면 어떤 안내·표시가 필요할까요?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 우리 반 분리배출 가이드</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>게임에서 <b>가장 많이 틀린 품목</b>과 정답</li>
+<li>우리 반이 함께 지킬 <b>분리배출 규칙 3가지</b></li>
+<li>친구들에게 알려주고 싶은 '함정 품목' 한 가지</li>
+</ul>
+</div>
+""",
+)
+
 st.markdown("달리면서 쓰레기를 줍고(최대 3개), **헷갈리는 품목을 올바른 분리수거함**에 넣으세요! 움직이는 오염 웅덩이는 피하기.")
 
 st.markdown("""
 <div class='hero-banner'>
-  <div class='hero-title'>줍go · 분류하go · 달리go!</div>
+  <div class='hero-title'>🏃 줍go · 분류하go · 달리go!</div>
   <div class='hero-sub'>
   화면을 클릭한 뒤 플레이하세요. 쓰레기는 <b>한 번에 3개</b>까지 줍고, 수거함 위에서 <b>내려놓기</b>로 분류해요.<br>
   맞으면 시간 +2초, 틀리면 −3초(정답을 알려줘요). 움직이는 웅덩이도 피하세요!
@@ -102,8 +154,8 @@ GAME_HTML = r"""
   const MAX_HOLD = 3;
 
   const BINS_DEF = [
-    { type:"general", label:"일반쓰레기",   color:"#9aa0a6" },
-    { type:"plastic", label:"플라스틱",   color:"#4aa3ff" },
+    { type:"general", label:"일반",   color:"#9aa0a6" },
+    { type:"plastic", label:"플라",   color:"#4aa3ff" },
     { type:"can",     label:"캔",     color:"#ff7043" },
     { type:"paper",   label:"종이",   color:"#ffd166" },
     { type:"food",    label:"음식물", color:"#46c46a" },
