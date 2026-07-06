@@ -1,9 +1,68 @@
 import streamlit as st
-from shared import apply_css
+from shared import apply_css, lesson_flow
 
 apply_css()
 
 st.markdown("## 🪲 살충사건 수사본부")
+
+lesson_flow(
+    "insect",
+    concept=[
+        {"title": "📘 Chapter 1 · 곤충의 생태적 역할", "body": """
+<p style='line-height:1.8'>
+곤충은 작지만 생태계에서 <b>없어서는 안 될 세 가지 역할</b>을 합니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>꽃가루받이(수분):</b> 벌·나비가 꽃가루를 옮겨 열매·씨앗을 맺게 합니다. 우리가 먹는 작물의
+상당수가 곤충의 수분에 의존해요.</li>
+<li><b>먹이사슬의 기초:</b> 새·개구리·물고기의 먹이가 되어 더 큰 동물들을 먹여 살립니다.</li>
+<li><b>분해자:</b> 죽은 생물과 배설물을 분해해 흙으로 되돌려, <b>물질 순환</b>을 완성합니다.</li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>즉 곤충이 무너지면 생태계 전체가 흔들립니다.</p>
+"""},
+        {"title": "📗 Chapter 2 · 곤충이 사라지는 이유 (용의자들)", "body": """
+<p style='line-height:1.8'>
+전 세계적으로 곤충 개체수가 빠르게 줄고 있어요. 원인은 하나가 아니라 여럿이 얽혀 있습니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>기후변화:</b> 기온·강수 패턴이 바뀌어 곤충의 생활사(부화·활동 시기)가 어긋납니다.</li>
+<li><b>서식지 파괴:</b> 농지·도시 개발로 살 곳과 먹이가 사라집니다.</li>
+<li><b>농약:</b> 해충을 잡으려는 살충제가 이로운 곤충까지 죽입니다.</li>
+<li><b>빛 공해:</b> 밤의 인공 조명이 야행성 곤충의 이동·번식을 방해합니다.</li>
+<li><b>외래종:</b> 천적 없는 침입종이 토종 곤충을 밀어냅니다.</li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>🔎 이번 사건의 '진짜 범인'도 이 용의자들 속에 있어요.</p>
+"""},
+        {"title": "📙 Chapter 3 · 곤충이 사라지면 우리에게 생기는 일", "body": """
+<p style='line-height:1.8'>
+곤충 감소는 '벌레가 줄었네' 정도의 문제가 아닙니다. <b>도미노처럼</b> 인간에게 돌아와요.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>식량 위기:</b> 수분해줄 곤충이 없으면 과일·채소 생산이 줄고 값이 오릅니다.</li>
+<li><b>생태계 붕괴:</b> 곤충을 먹는 새·양서류가 줄고, 그 위 포식자까지 연쇄적으로 감소합니다.</li>
+<li><b>토양 악화:</b> 분해자가 줄어 영양 순환이 느려지고 땅이 척박해집니다.</li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 제주에서 곤충이 사라지고 있다. 진짜 원인(범인)은 누구일까?</p>
+"""},
+    ],
+    discuss=[
+        "여러 용의자(기후변화·외래종·농지개발·토양오염) 중 진짜 원인은? 근거는?",
+        "곤충이 사라지면 우리 식탁과 생태계에는 어떤 일이 벌어질까요?",
+        "인간 활동 중 곤충에게 가장 큰 위협은 무엇일까요?",
+        "우리가 곤충을 지키기 위해 당장 할 수 있는 일 한 가지는?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 수사 결론 브리핑</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>우리 탐정단이 지목한 <b>범인(핵심 원인)</b>과 결정적 <b>단서</b></li>
+<li>그렇게 판단한 이유</li>
+<li>제안하는 <b>해결책 한 가지</b></li>
+</ul>
+</div>
+""",
+)
+
 st.markdown("곤충 탐정단이 되어 사건의 원인을 추리하고, 환경 문제와 곤충 생태를 연결해봅니다.")
 
 # ─────────────────────────────────────────────
