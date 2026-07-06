@@ -2,7 +2,7 @@ import random
 
 import streamlit as st
 
-from shared import apply_css, get_chart_colors
+from shared import apply_css, get_chart_colors, lesson_flow
 
 apply_css()
 
@@ -118,7 +118,64 @@ def restart():
 
 
 st.markdown("## 🌋 제주 생태계 밸런스 시뮬레이터")
-st.markdown("당신은 제주의 촌장입니다. 6번의 턴에 걸쳐 정책을 선택해 **관광수입 · 주민만족도 · 생태지표**의 균형을 잡아보세요.")
+
+lesson_flow(
+    "jeju_balance",
+    concept=[
+        {"title": "📘 Chapter 1 · 지속가능발전이란?", "body": """
+<p style='line-height:1.8'>
+<b>지속가능발전(Sustainable Development)</b>은 "<b>미래 세대의 필요를 해치지 않으면서
+현재 세대의 필요를 충족하는</b> 발전"을 뜻합니다. 지금 다 써버리는 게 아니라, 다음 세대도
+누릴 수 있게 남겨두자는 생각이에요.<br><br>
+이를 위해서는 세 가지를 <b>함께</b> 봐야 합니다 — 흔히 <b>지속가능성의 세 기둥</b>이라 불러요.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>경제 (관광수입):</b> 지역이 먹고살 수 있는가</li>
+<li><b>사회 (주민만족도):</b> 사는 사람들이 행복한가</li>
+<li><b>환경 (생태지표):</b> 자연이 건강하게 유지되는가</li>
+</ul>
+"""},
+        {"title": "📗 Chapter 2 · 트레이드오프와 제주의 딜레마", "body": """
+<p style='line-height:1.8'>
+세 기둥은 서로 부딪힐 때가 많습니다. 관광을 늘리면 <b>수입(경제)</b>은 오르지만 쓰레기·혼잡으로
+<b>생태·주민 삶</b>이 나빠질 수 있어요. 이렇게 하나를 얻으면 다른 걸 잃는 관계가
+<b>트레이드오프</b>입니다.<br><br>
+실제 제주도 이 딜레마를 겪고 있어요:
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>과잉관광:</b> 관광객 급증 → 쓰레기·교통난·물 부족 → 주민 불만</li>
+<li><b>개발 압력:</b> 리조트·도로 건설 → 곶자왈·해안 훼손</li>
+<li><b>인구·물가:</b> 관광 경제가 커지며 주민 삶의 비용 상승</li>
+</ul>
+"""},
+        {"title": "📙 Chapter 3 · 자원은 한정, 정답은 없다", "body": """
+<p style='line-height:1.8'>
+정책을 펼치려면 <b>예산(자원)이 필요</b>하고, 자원은 늘 부족합니다. 그래서
+"무엇을 <b>먼저</b> 할지" 우선순위를 정해야 해요. 모든 지표를 동시에 100점 만드는 마법은 없습니다.<br><br>
+그래서 이 게임엔 <b>정답이 없습니다</b>. 관광 중심의 섬, 보존 중심의 섬, 균형 잡힌 섬 —
+어떤 결말이든 당신의 <b>가치 선택</b>이 만든 결과예요. 중요한 건 "왜 그렇게 선택했는지"
+설명할 수 있는 것입니다.
+</p>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 촌장이 되어 6턴 동안 어떤 정책으로 세 축의 균형을 잡을 것인가?</p>
+"""},
+    ],
+    discuss=[
+        "당신은 무엇을 위해 무엇을 포기했나요? 그 선택이 옳았나요?",
+        "관광수입만 극대화하면 어떤 일이 벌어질까요? (실제 과잉관광 사례)",
+        "현실의 제주가 겪는 개발 vs 보전 딜레마는 무엇이 있을까요?",
+        "'지속가능한 균형'이란 모두를 100점 만드는 것일까요, 아니면 다른 무엇일까요?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 우리 촌장의 정책 철학</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>우리가 <b>우선한 가치</b>와 그 이유</li>
+<li>가장 어려웠던 <b>트레이드오프</b> 결정</li>
+<li>최종 결말(엔딩)과, 다시 한다면 바꿀 정책</li>
+</ul>
+</div>
+""",
+)
 
 st.markdown("""
 <div class='hero-banner'>
