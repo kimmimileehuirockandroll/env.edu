@@ -1,10 +1,70 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from shared import apply_css
+from shared import apply_css, lesson_flow
 
 apply_css()
 
 st.markdown("## 🦌 오름이와 마른 샘물의 비밀")
+
+lesson_flow(
+    "oreumi",
+    concept=[
+        {"title": "📘 Chapter 1 · 환경 문제는 왜 복잡할까?", "body": """
+<p style='line-height:1.8'>
+환경 문제는 대부분 <b>'증상'과 '원인'이 다릅니다</b>. 샘물이 마르는 것은 눈에 보이는 <b>증상</b>일 뿐,
+진짜 <b>원인</b>은 그 뒤에 숨어 있어요. 게다가 원인은 보통 <b>하나가 아니라 여럿(다인과)</b>이
+얽혀 있습니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li>가뭄·기후변화 같은 <b>자연적 요인</b></li>
+<li>상류의 무단 용수 사용 같은 <b>인간 활동</b></li>
+<li>외래종 유입 같은 <b>생태적 교란</b></li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>그래서 "누구 탓"이라고 단정하기 전에 <b>추적</b>이 필요합니다.</p>
+"""},
+        {"title": "📗 Chapter 2 · 원인을 추적하는 방법", "body": """
+<p style='line-height:1.8'>
+과학적 문제 해결은 <b>탐정의 수사</b>와 비슷해요. 증거를 모으고, 가설을 세우고, 검증합니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>① 관찰:</b> 현장을 직접 살피기 (샘물 상류를 따라가 보기)</li>
+<li><b>② 자료:</b> 데이터 찾기 (강수량 기록, 통계)</li>
+<li><b>③ 증언:</b> 사람들에게 묻기 (마을 어른의 경험)</li>
+<li><b>④ 검증:</b> 여러 단서를 맞춰 가설을 확인·기각하기</li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>💡 한 가지 증거만으로 결론짓지 않는 것이 중요해요.</p>
+"""},
+        {"title": "📙 Chapter 3 · 갈등을 조율해 해결하기", "body": """
+<p style='line-height:1.8'>
+원인을 찾아도 끝이 아닙니다. 대부분의 환경 문제엔 <b>이해관계자(관련된 사람들)</b>가 있어요.
+샘물을 많이 쓴 펜션 사장에게도 <b>사정</b>이 있죠. 그래서 해결 방식이 여럿입니다.
+</p>
+<ul style='line-height:1.9; color:var(--text-muted)'>
+<li><b>설득:</b> 데이터를 보여주며 차분히 협조를 구하기 (관계 유지)</li>
+<li><b>규제·신고:</b> 제도로 강제하기 (빠르지만 반발 가능)</li>
+<li><b>타협:</b> 양쪽 이익을 함께 살리는 방법 찾기 (지원금 연계 등)</li>
+</ul>
+<p style='color:var(--text-caption); font-size:.85rem'>🎯 문제: 곶자왈 샘물이 마르는 진짜 원인은? 그리고 어떻게 해결할까?</p>
+"""},
+    ],
+    discuss=[
+        "당신은 어떤 단서로 원인을 좁혀갔나요?",
+        "원인 제공자(펜션)와의 갈등을 어떻게 풀었나요? 설득·신고·타협 중 무엇이 나았을까요?",
+        "환경 문제 해결에서 '증거(데이터)'와 '관계(설득)' 중 무엇이 더 중요할까요?",
+        "우리 주변에서 원인을 추적해볼 만한 환경 변화가 있나요?",
+    ],
+    present="""
+<div class='eco-card'>
+<b style='color:var(--accent-primary)'>🎤 발표: 사건 해결 스토리</b>
+<ul style='color:var(--text-muted); line-height:1.8'>
+<li>내가 밝혀낸 <b>원인</b>과 결정적 단서</li>
+<li>선택한 <b>해결 방식</b>과 그 결과(엔딩)</li>
+<li>현실에 적용할 교훈 한 가지</li>
+</ul>
+</div>
+""",
+)
+
 st.markdown("곶자왈 요정 **오름이**와 함께 말라가는 샘물의 원인을 추적하는 5장 분량의 픽셀 비주얼노블입니다.")
 
 st.markdown("""
