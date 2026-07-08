@@ -1,4 +1,5 @@
 import json
+import re
 
 import pandas as pd
 import streamlit as st
@@ -45,12 +46,14 @@ def load_data():
     good_col = next((c for c in e.columns if "좋은" in c and "안" not in c), None)
     bad_col  = next((c for c in e.columns if "안" in c), None)
     effects = []
-    for _, r in e.iterrows():
+    for i, (_, r) in enumerate(e.iterrows()):
         sq = _s(r.get(sq_col))
         if not sq:
             continue
+        digits = re.sub(r"[^0-9]", "", sq)
         effects.append({
             "sq": sq,
+            "num": int(digits) if digits else i + 1,
             "good": _s(r.get(good_col)) if good_col else "",
             "bad": _s(r.get(bad_col)) if bad_col else "",
         })
@@ -107,11 +110,22 @@ else:
     .bq-ans .ans-big { font-size:40px; color:#FF8FB1; margin:10px 0 18px; }
     .bq-ans .ans-exp { font-size:21px; line-height:1.8; color:#e8e8e8; white-space:pre-line; }
 
-    /* 칸 선택 바 */
-    .bq-sqsel { display:flex; align-items:center; gap:10px; background:#1A1A1A; color:#fff;
-                border-radius:12px; padding:10px 14px; font-size:16px; }
-    .bq-sqsel select { font-family:inherit; font-size:17px; padding:7px 10px; border-radius:8px;
-                       border:2px solid #FF2D6B; background:#fff; color:#1A1A1A; cursor:pointer; flex:1; }
+    /* 칸 선택 그리드 (10 x 3) */
+    .bq-grid-wrap { background:#1A1A1A; border-radius:12px; padding:10px; }
+    .bq-grid-wrap .lbl { color:#fff; font-size:14px; margin-bottom:8px; }
+    .bq-grid { display:grid; grid-template-columns:repeat(10, 1fr); gap:4px; }
+    .bq-grid button { font-family:inherit; aspect-ratio:1; min-height:24px; border:2px solid #444;
+                      border-radius:6px; background:#fff; color:#1A1A1A; font-size:12px; font-weight:700;
+                      cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center; }
+    .bq-grid button:hover { border-color:#FF2D6B; }
+    .bq-grid button.sel { background:#FF2D6B; color:#fff; border-color:#FF2D6B; box-shadow:0 0 8px rgba(255,45,107,.6); }
+
+    /* 이동 지시 강조 배지 */
+    .fx-move { font-size:24px; font-weight:800; text-align:center; padding:12px; border-radius:12px;
+               margin-top:12px; letter-spacing:.5px; }
+    .fx-move.empty { display:none; }
+    .bq-front.pos .fx-move { background:rgba(154,242,192,.14); color:#9af2c0; border:2px solid #9af2c0; }
+    .bq-front.neg .fx-move { background:rgba(255,154,176,.12); color:#ff9ab0; border:2px solid #ff9ab0; }
 
     /* ── 효과 카드 2개 (위:정답 / 아래:오답) ── */
     .bq-cards { flex:1 1 320px; display:flex; flex-direction:column; gap:14px; min-height:720px; }
@@ -185,9 +199,9 @@ else:
 
     <!-- 칸 선택 + 효과 카드 -->
     <div class="bq-cards">
-      <div class="bq-sqsel">
-        <span>🎲 보드 칸</span>
-        <select id="bq-square"></select>
+      <div class="bq-grid-wrap">
+        <div class="lbl">🎲 보드 칸 선택 (지금 말이 있는 칸)</div>
+        <div class="bq-grid" id="bq-grid"></div>
       </div>
       <!-- 정답(좋은 효과) -->
       <div class="bq-card" id="bq-card-pos">
@@ -200,8 +214,9 @@ else:
           </div>
           <div class="bq-face bq-front pos">
             <button class="fx-x" id="bq-fx-x-pos">✕</button>
-            <div class="fx-label" id="bq-fx-label-pos">🍀 좋은 효과</div>
+            <div class="fx-label">🍀 좋은 효과</div>
             <div class="fx-text" id="bq-fx-text-pos"></div>
+            <div class="fx-move empty" id="bq-fx-move-pos"></div>
           </div>
         </div>
       </div>
@@ -216,8 +231,9 @@ else:
           </div>
           <div class="bq-face bq-front neg">
             <button class="fx-x" id="bq-fx-x-neg">✕</button>
-            <div class="fx-label" id="bq-fx-label-neg">⚠️ 안 좋은 효과</div>
+            <div class="fx-label">⚠️ 안 좋은 효과</div>
             <div class="fx-text" id="bq-fx-text-neg"></div>
+            <div class="fx-move empty" id="bq-fx-move-neg"></div>
           </div>
         </div>
       </div>
@@ -282,34 +298,57 @@ else:
   };
   document.getElementById("bq-ans-x").onclick=function(){ document.getElementById("bq-ans").classList.remove("show"); };
 
-  // ── 칸 선택 ──
-  const sel = document.getElementById("bq-square");
-  EFF.forEach(function(e, i){
-    const o = document.createElement("option");
-    o.value = i; o.textContent = e.sq;
-    sel.appendChild(o);
-  });
-
+  // ── 칸 선택 그리드 (1~30) ──
+  const GRID_N = 30;
+  const byNum = {};
+  EFF.forEach(function(e){ byNum[e.num] = e; });
+  const grid = document.getElementById("bq-grid");
+  let selNum = 1;
+  const cells = {};
+  for(let n=1; n<=GRID_N; n++){
+    const b = document.createElement("button");
+    b.textContent = n;
+    b.onclick = function(){ selNum = n; highlight(); resetCards(); };
+    grid.appendChild(b); cells[n] = b;
+  }
+  function highlight(){
+    for(let n=1; n<=GRID_N; n++) cells[n].classList.toggle("sel", n===selNum);
+  }
   function resetCards(){
     document.getElementById("bq-card-pos").classList.remove("flipped");
     document.getElementById("bq-card-neg").classList.remove("flipped");
   }
-  sel.onchange = resetCards;
+  highlight();
+
+  // 효과 문구 끝의 "(앞으로 3칸)" 같은 이동 지시를 분리
+  function splitMove(txt){
+    const m = txt.match(/\(([^)]*)\)\s*$/);
+    if(m){ return { body: txt.slice(0, m.index).trim(), move: m[1].trim() }; }
+    return { body: txt, move: "" };
+  }
+  function moveIcon(move){
+    if(move.indexOf("앞")>=0) return "➡️ ";
+    if(move.indexOf("뒤")>=0) return "⬅️ ";
+    if(move.indexOf("쉬")>=0) return "⏸ ";
+    return "🎯 ";
+  }
 
   // ── 효과 카드: 선택한 칸의 좋은/안 좋은 효과 공개 ──
   function setupCard(kind){
     const card=document.getElementById("bq-card-"+kind);
     const back=document.getElementById("bq-back-"+kind);
     const textEl=document.getElementById("bq-fx-text-"+kind);
-    const labelEl=document.getElementById("bq-fx-label-"+kind);
+    const moveEl=document.getElementById("bq-fx-move-"+kind);
     const x=document.getElementById("bq-fx-x-"+kind);
     back.onclick=function(){
-      const e = EFF[parseInt(sel.value||"0")];
-      if(!e){ textEl.textContent="(효과 데이터 없음)"; }
+      const e = byNum[selNum];
+      const raw = e ? (kind==="pos" ? e.good : e.bad) : "";
+      if(!raw){ textEl.textContent="(이 칸의 효과가 없습니다)"; moveEl.className="fx-move empty"; }
       else {
-        textEl.textContent = (kind==="pos" ? e.good : e.bad) || "(내용 없음)";
-        labelEl.textContent = (kind==="pos" ? "🍀 " : "⚠️ ") + e.sq +
-                              (kind==="pos" ? " · 좋은 효과" : " · 안 좋은 효과");
+        const s = splitMove(raw);
+        textEl.textContent = s.body || raw;
+        if(s.move){ moveEl.textContent = moveIcon(s.move) + s.move; moveEl.className="fx-move"; }
+        else { moveEl.className="fx-move empty"; }
       }
       card.classList.add("flipped");
     };
