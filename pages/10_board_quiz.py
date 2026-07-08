@@ -200,7 +200,7 @@ else:
     <!-- 칸 선택 + 효과 카드 -->
     <div class="bq-cards">
       <div class="bq-grid-wrap">
-        <div class="lbl">🎲 보드 칸 선택 (지금 말이 있는 칸)</div>
+        <div class="lbl">🎲 보드 칸 선택</div>
         <div class="bq-grid" id="bq-grid"></div>
       </div>
       <!-- 정답(좋은 효과) -->
