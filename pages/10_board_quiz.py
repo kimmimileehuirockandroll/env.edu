@@ -8,13 +8,16 @@ from shared import apply_css
 
 apply_css()
 
-SHEET_ID   = "1M7VPCfhe4A4PZY2e8BBgRqW2J9YGoIWypiroIi611Y0"
+# 문제(퀴즈) 시트
+QUIZ_SHEET = "1M7VPCfhe4A4PZY2e8BBgRqW2J9YGoIWypiroIi611Y0"
 QUIZ_GID   = "0"
-EFFECT_GID = "1746431369"
+# 칸별 효과 시트 (칸 | 좋은 효과 | 안 좋은 효과)
+FX_SHEET   = "1rNsdapCZt2KNABWxTp-Qc_57ZowMJFT7idEy1SuZvRs"
+FX_GID     = "0"
 
 
-def _csv_url(gid):
-    return f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}"
+def _csv(sheet, gid):
+    return f"https://docs.google.com/spreadsheets/d/{sheet}/export?format=csv&gid={gid}"
 
 
 def _s(v):
@@ -25,7 +28,7 @@ def _s(v):
 
 @st.cache_data(ttl=300)
 def load_data():
-    q = pd.read_csv(_csv_url(QUIZ_GID))
+    q = pd.read_csv(_csv(QUIZ_SHEET, QUIZ_GID))
     q.columns = [str(c).strip() for c in q.columns]
     if "주제" in q.columns:
         q["주제"] = q["주제"].ffill()
@@ -36,30 +39,39 @@ def load_data():
         for _, r in q.iterrows()
     ]
 
-    e = pd.read_csv(_csv_url(EFFECT_GID))
+    e = pd.read_csv(_csv(FX_SHEET, FX_GID))
     e.columns = [str(c).strip() for c in e.columns]
-    pcol = next((c for c in e.columns if "긍정" in c), None)
-    ncol = next((c for c in e.columns if "부정" in c), None)
-    pos = [_s(x) for x in e[pcol].dropna() if _s(x)] if pcol else []
-    neg = [_s(x) for x in e[ncol].dropna() if _s(x)] if ncol else []
-    return quizzes, pos, neg
+    sq_col   = next((c for c in e.columns if "칸" in c), e.columns[0])
+    good_col = next((c for c in e.columns if "좋은" in c and "안" not in c), None)
+    bad_col  = next((c for c in e.columns if "안" in c), None)
+    effects = []
+    for _, r in e.iterrows():
+        sq = _s(r.get(sq_col))
+        if not sq:
+            continue
+        effects.append({
+            "sq": sq,
+            "good": _s(r.get(good_col)) if good_col else "",
+            "bad": _s(r.get(bad_col)) if bad_col else "",
+        })
+    return quizzes, effects
 
 
 st.markdown("## 🧊 아이스브레이킹")
-st.markdown("문제를 **앞뒤로 넘기며** 출제하고, **정답이면 위(긍정) 카드 · 오답이면 아래(부정) 카드**를 뽑으세요.")
+st.markdown("문제를 출제하고, **보드 칸을 고른 뒤** — 맞히면 그 칸의 **좋은 효과**, 틀리면 **안 좋은 효과**를 확인하세요.")
 
 try:
-    quizzes, pos_effects, neg_effects = load_data()
+    quizzes, effects = load_data()
     err = None
 except Exception as ex:
-    quizzes, pos_effects, neg_effects, err = [], [], [], str(ex)
+    quizzes, effects, err = [], [], str(ex)
 
 if err:
     st.error(f"구글 시트를 불러오지 못했습니다: {err}")
 elif not quizzes:
     st.warning("문제가 없습니다.")
 else:
-    DATA = json.dumps({"quizzes": quizzes, "pos": pos_effects, "neg": neg_effects}, ensure_ascii=False)
+    DATA = json.dumps({"quizzes": quizzes, "effects": effects}, ensure_ascii=False)
 
     HTML = r"""
 <div id="bq-root">
@@ -95,10 +107,16 @@ else:
     .bq-ans .ans-big { font-size:40px; color:#FF8FB1; margin:10px 0 18px; }
     .bq-ans .ans-exp { font-size:21px; line-height:1.8; color:#e8e8e8; white-space:pre-line; }
 
-    /* ── 효과 카드 2개 (위:긍정 / 아래:부정) ── */
-    .bq-cards { flex:1 1 320px; display:flex; flex-direction:column; gap:18px; min-height:720px; }
-    .bq-card { perspective:1400px; flex:1; min-height:340px; }
-    .bq-card-inner { position:relative; width:100%; height:100%; min-height:340px;
+    /* 칸 선택 바 */
+    .bq-sqsel { display:flex; align-items:center; gap:10px; background:#1A1A1A; color:#fff;
+                border-radius:12px; padding:10px 14px; font-size:16px; }
+    .bq-sqsel select { font-family:inherit; font-size:17px; padding:7px 10px; border-radius:8px;
+                       border:2px solid #FF2D6B; background:#fff; color:#1A1A1A; cursor:pointer; flex:1; }
+
+    /* ── 효과 카드 2개 (위:정답 / 아래:오답) ── */
+    .bq-cards { flex:1 1 320px; display:flex; flex-direction:column; gap:14px; min-height:720px; }
+    .bq-card { perspective:1400px; flex:1; min-height:300px; }
+    .bq-card-inner { position:relative; width:100%; height:100%; min-height:300px;
                      transition:transform .7s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
     .bq-card.flipped .bq-card-inner { transform:rotateY(180deg); }
     .bq-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:16px;
@@ -106,13 +124,12 @@ else:
 
     /* 뒷면 공통 */
     .bq-back { display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; }
-    .bq-back .moon { font-size:58px; }
-    .bq-back .title { font-size:22px; margin-top:12px; letter-spacing:1px; }
-    .bq-back .hint { font-size:15px; margin-top:6px; }
+    .bq-back .moon { font-size:52px; }
+    .bq-back .title { font-size:21px; margin-top:10px; letter-spacing:1px; }
+    .bq-back .hint { font-size:14px; margin-top:6px; }
     .bq-back .stars { position:absolute; inset:0; pointer-events:none; }
     .bq-back .st { position:absolute; width:3px; height:3px; background:#fff; box-shadow:0 0 6px #fff; opacity:.8; }
     .bq-back .frame { position:absolute; inset:8px; border:2px dashed rgba(255,255,255,.4); border-radius:12px; pointer-events:none; }
-    /* 긍정 뒷면 (금/초록 몽환) */
     .bq-back.pos { border-color:#1f5a3a; background:
         radial-gradient(circle at 30% 25%, #d9a441 0%, transparent 45%),
         radial-gradient(circle at 70% 75%, #2e8b57 0%, transparent 50%),
@@ -121,7 +138,6 @@ else:
     .bq-back.pos .moon { filter:drop-shadow(0 0 14px #ffe08a); }
     .bq-back.pos .title { color:#d8ffe6; }
     .bq-back.pos .hint { color:#9be0b6; }
-    /* 부정 뒷면 (보라 몽환) */
     .bq-back.neg { border-color:#2a1840; background:
         radial-gradient(circle at 30% 25%, #6b3fa0 0%, transparent 45%),
         radial-gradient(circle at 70% 75%, #3a1d6e 0%, transparent 50%),
@@ -137,7 +153,7 @@ else:
     .bq-front.neg { background:linear-gradient(160deg,#241141,#160a2c); color:#f0e8ff; }
     .bq-front .fx-x { align-self:flex-end; background:none; border:2px solid rgba(255,255,255,.6); color:#fff;
                       width:36px; height:36px; border-radius:8px; cursor:pointer; font-size:18px; }
-    .bq-front .fx-label { font-size:21px; font-weight:700; margin:6px 0 12px; letter-spacing:1px; }
+    .bq-front .fx-label { font-size:20px; font-weight:700; margin:6px 0 12px; letter-spacing:1px; }
     .bq-front.pos .fx-label { color:#9af2c0; }
     .bq-front.neg .fx-label { color:#ff9ab0; }
     .bq-front .fx-text { font-size:18px; line-height:1.85; white-space:pre-line; overflow:auto; flex:1;
@@ -167,36 +183,40 @@ else:
       </div>
     </div>
 
-    <!-- 효과 카드 2개 -->
+    <!-- 칸 선택 + 효과 카드 -->
     <div class="bq-cards">
-      <!-- 긍정 (정답 시) -->
+      <div class="bq-sqsel">
+        <span>🎲 보드 칸</span>
+        <select id="bq-square"></select>
+      </div>
+      <!-- 정답(좋은 효과) -->
       <div class="bq-card" id="bq-card-pos">
         <div class="bq-card-inner">
           <div class="bq-face bq-back pos" id="bq-back-pos">
             <div class="frame"></div><div class="stars" id="bq-stars-pos"></div>
             <div class="moon">☀️</div>
-            <div class="title">긍정 카드</div>
-            <div class="hint">정답! 탭하여 뽑기</div>
+            <div class="title">정답 카드</div>
+            <div class="hint">맞혔다면 탭! (좋은 효과)</div>
           </div>
           <div class="bq-face bq-front pos">
             <button class="fx-x" id="bq-fx-x-pos">✕</button>
-            <div class="fx-label">🍀 긍정적 효과</div>
+            <div class="fx-label" id="bq-fx-label-pos">🍀 좋은 효과</div>
             <div class="fx-text" id="bq-fx-text-pos"></div>
           </div>
         </div>
       </div>
-      <!-- 부정 (오답 시) -->
+      <!-- 오답(안 좋은 효과) -->
       <div class="bq-card" id="bq-card-neg">
         <div class="bq-card-inner">
           <div class="bq-face bq-back neg" id="bq-back-neg">
             <div class="frame"></div><div class="stars" id="bq-stars-neg"></div>
             <div class="moon">🌙</div>
-            <div class="title">부정 카드</div>
-            <div class="hint">오답… 탭하여 뽑기</div>
+            <div class="title">오답 카드</div>
+            <div class="hint">틀렸다면 탭… (안 좋은 효과)</div>
           </div>
           <div class="bq-face bq-front neg">
             <button class="fx-x" id="bq-fx-x-neg">✕</button>
-            <div class="fx-label">⚠️ 부정적 효과</div>
+            <div class="fx-label" id="bq-fx-label-neg">⚠️ 안 좋은 효과</div>
             <div class="fx-text" id="bq-fx-text-neg"></div>
           </div>
         </div>
@@ -208,7 +228,7 @@ else:
 <script>
 (function(){
   const DATA = __DATA__;
-  const Q = DATA.quizzes, POS = DATA.pos, NEG = DATA.neg;
+  const Q = DATA.quizzes, EFF = DATA.effects;
   const canvas = document.getElementById("bqBg"), ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   let idx = 0;
@@ -262,21 +282,41 @@ else:
   };
   document.getElementById("bq-ans-x").onclick=function(){ document.getElementById("bq-ans").classList.remove("show"); };
 
-  // ── 효과 카드 2개 (각자 자기 종류만 뽑음) ──
-  function setupCard(kind, pool){
+  // ── 칸 선택 ──
+  const sel = document.getElementById("bq-square");
+  EFF.forEach(function(e, i){
+    const o = document.createElement("option");
+    o.value = i; o.textContent = e.sq;
+    sel.appendChild(o);
+  });
+
+  function resetCards(){
+    document.getElementById("bq-card-pos").classList.remove("flipped");
+    document.getElementById("bq-card-neg").classList.remove("flipped");
+  }
+  sel.onchange = resetCards;
+
+  // ── 효과 카드: 선택한 칸의 좋은/안 좋은 효과 공개 ──
+  function setupCard(kind){
     const card=document.getElementById("bq-card-"+kind);
     const back=document.getElementById("bq-back-"+kind);
     const textEl=document.getElementById("bq-fx-text-"+kind);
+    const labelEl=document.getElementById("bq-fx-label-"+kind);
     const x=document.getElementById("bq-fx-x-"+kind);
     back.onclick=function(){
-      if(!pool.length){ textEl.textContent="(효과 데이터 없음)"; }
-      else { textEl.textContent = pool[Math.floor(Math.random()*pool.length)]; }
+      const e = EFF[parseInt(sel.value||"0")];
+      if(!e){ textEl.textContent="(효과 데이터 없음)"; }
+      else {
+        textEl.textContent = (kind==="pos" ? e.good : e.bad) || "(내용 없음)";
+        labelEl.textContent = (kind==="pos" ? "🍀 " : "⚠️ ") + e.sq +
+                              (kind==="pos" ? " · 좋은 효과" : " · 안 좋은 효과");
+      }
       card.classList.add("flipped");
     };
-    x.onclick=function(e){ e.stopPropagation(); card.classList.remove("flipped"); };
+    x.onclick=function(ev){ ev.stopPropagation(); card.classList.remove("flipped"); };
   }
-  setupCard("pos", POS);
-  setupCard("neg", NEG);
+  setupCard("pos");
+  setupCard("neg");
 
   makeStars("bq-stars-pos");
   makeStars("bq-stars-neg");
@@ -287,4 +327,4 @@ else:
     HTML = HTML.replace("__DATA__", DATA)
     components.html(HTML, height=780, scrolling=True)
 
-    st.caption(f"📚 문제 {len(quizzes)}개 · 긍정 효과 {len(pos_effects)} · 부정 효과 {len(neg_effects)} (구글 시트 자동 연동, 5분 캐시)")
+    st.caption(f"📚 문제 {len(quizzes)}개 · 보드 칸 효과 {len(effects)}칸 (구글 시트 자동 연동, 5분 캐시)")
