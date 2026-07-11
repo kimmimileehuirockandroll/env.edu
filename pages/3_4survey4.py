@@ -53,7 +53,7 @@ PROFILE_COLORS = {
 # ─────────────────────────────────────────────
 #  데이터 로드 & 전처리
 # ─────────────────────────────────────────────
-@st.cache_data # (ttl=60)
+@st.cache_data(ttl=60)
 def load_sheet():
     try:
         df = pd.read_csv(SHEET_URL)
