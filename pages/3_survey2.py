@@ -158,76 +158,92 @@ def draw_dynamic_network(responses, height=620):
     nodes_json = json.dumps(nodes, ensure_ascii=False)
     edges_json = json.dumps(edges, ensure_ascii=False)
 
-    legend_items = "".join(
-        f'<span style="display:inline-flex;align-items:center;gap:4px;margin-right:10px;">'
-        f'<span style="width:12px;height:12px;border-radius:50%;background:{col};display:inline-block;"></span>'
-        f'<span style="font-size:12px;color:var(--text-base);">{prof}</span></span>'
-        for prof, col in PROFILE_COLORS.items()
-    )
-
-    html = f"""
+    html = """
 <div style="background:var(--bg-card);border:1px solid var(--border-main);border-radius:14px;padding:14px;">
-  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;">
-    <b style="font-size:13px;color:var(--text-base);">성향 범례</b>
-    {legend_items}
+  <div style="font-size:18px;font-weight:800;color:var(--text-base);margin-bottom:10px;font-family:'Noto Sans KR',sans-serif;">
+    🎨 유형 버튼을 눌러보세요 — 고른 유형만 선명하게, 나머지는 흐려집니다
   </div>
-  <div id="sigma-container" style="width:100%;height:{height}px;background:var(--bg-base);border:1px solid var(--border-main);border-radius:10px;overflow:hidden;position:relative;"></div>
-  <div style="font-size:11px;color:var(--text-caption);margin-top:6px;text-align:right;">
-    노드 {G.number_of_nodes()}명 &nbsp;|&nbsp; 연결 {G.number_of_edges()}개 &nbsp;|&nbsp; 코사인 유사도 ≥ 0.92
-  </div>
+  <div id="chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"></div>
+  <div id="sigma-container" style="width:100%;height:__HEIGHT__px;background:var(--bg-base);border:1px solid var(--border-main);border-radius:10px;overflow:hidden;position:relative;"></div>
+  <div id="fx-explain" style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#f3f7f4;color:#1b3a2a;font-size:18px;line-height:1.6;font-family:'Noto Sans KR',sans-serif;">👆 위 유형 버튼을 누르면, 그 유형 설명이 여기에 나타나요.</div>
 </div>
 <script type="module">
 import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.26.0/+esm";
-import {{ Sigma }} from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
+import { Sigma } from "https://cdn.jsdelivr.net/npm/sigma@2.4.0/+esm";
 import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/+esm";
 
-const nodes = {nodes_json};
-const edges = {edges_json};
+const nodes = __NODES__;
+const edges = __EDGES__;
 const container = document.getElementById("sigma-container");
 const graph = new Graph();
-
-nodes.forEach(n => {{
-    graph.addNode(n.id, {{
+nodes.forEach(n => {
+    graph.addNode(n.id, {
         label: n.label, profile: n.profile,
         x: Math.random()*2-1, y: Math.random()*2-1,
-        size: n.size, color: n.color, hidden: false
-    }});
-}});
-edges.forEach((e, i) => {{
+        size: n.size, color: n.color, origColor: n.color, origSize: n.size, hidden: false
+    });
+});
+edges.forEach((e, i) => {
     if (graph.hasNode(e.source) && graph.hasNode(e.target))
-        graph.addEdgeWithKey("e"+i, e.source, e.target,
-            {{ size: e.weight, color: "#90caf9" }});
-}});
-
-const renderer = new Sigma(graph, container, {{
-    labelColor: {{ color: "#1b3a2a" }},
-    labelSize: 10, labelWeight: "bold",
-}});
-
+        graph.addEdgeWithKey("e"+i, e.source, e.target, { size: e.weight, color: "#90caf9" });
+});
+const renderer = new Sigma(graph, container, { labelColor:{color:"#1b3a2a"}, labelSize:15, labelWeight:"bold" });
 const settings = forceAtlas2.inferSettings(graph);
 let running = true;
-(function animate() {{
-    if (running) forceAtlas2.assign(graph, {{
-        iterations: 1,
-        settings: {{ ...settings, gravity:0.08, scalingRatio:15, slowDown:6 }}
-    }});
+(function animate(){
+    if (running) forceAtlas2.assign(graph, { iterations:1, settings:{...settings, gravity:0.08, scalingRatio:15, slowDown:6} });
     renderer.refresh();
     requestAnimationFrame(animate);
-}})();
+})();
+
+const COLORS = {"적극 실천형":"#69f0ae","사회 규범형":"#40c4ff","자신감형":"#ffd740","가치 인식형":"#ff6e40","무관심형":"#b0bec5","나(직접 참여)":"#ea80fc"};
+const EXPLAIN = {
+  "적극 실천형":{e:"💪",d:"텀블러 쓰기·일회용품 안 쓰기처럼 친환경 행동을 실제로 꾸준히 실천하는 유형! 앞으로도 계속하고 친구에게도 권하는 아주 훌륭한 친구들이에요 ㅎㅎ"},
+  "사회 규범형":{e:"👥",d:"가족·친구가 실천하길 바라고, 어른들이 강조하면 '나도 해야지' 도덕심이 드는 유형. 사회의 규칙을 잘 지키는 멋진 친구들이죠."},
+  "자신감형":{e:"✨",d:"마음만 먹으면 분리수거·텀블러쯤 어렵지 않게 할 수 있다는 자신감이 있는 유형. 매번 지키긴 어려워도 웬만하면 지키려 노력해요~"},
+  "가치 인식형":{e:"💡",d:"분리수거 같은 불편함도 '의미 있는 일'이라 여겨, 실천하고 나면 뿌듯하고 기분 좋은 유형! 어때요, 잘 맞나요?"},
+  "무관심형":{e:"🍃",d:"아직 환경에 관심이 적은 유형이에요. 만약 나왔다면, 지금부터 환경을 아끼고 지키려는 작은 노력을 시작해봐요!"},
+  "나(직접 참여)":{e:"🙋",d:"직접 설문에 참여한 '나'의 위치예요. 나와 가장 가까운 친구는 누구인지 찾아보세요."},
+};
+const ORDER = ["적극 실천형","사회 규범형","자신감형","가치 인식형","무관심형","나(직접 참여)"];
+const present = new Set(nodes.map(n => n.profile));
+const chipBox = document.getElementById("chips");
+const explainBox = document.getElementById("fx-explain");
+const chipEls = {};
+let active = null;
+ORDER.filter(p => present.has(p)).forEach(p => {
+    const b = document.createElement("button");
+    b.textContent = (EXPLAIN[p] ? EXPLAIN[p].e : "") + " " + p;
+    b.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:800;padding:9px 16px;border-radius:999px;border:3px solid " + (COLORS[p]||"#ccc") + ";background:" + (COLORS[p]||"#eee") + ";color:#123;cursor:pointer;";
+    b.onclick = () => select(active === p ? null : p);
+    chipBox.appendChild(b); chipEls[p] = b;
+});
+function select(p){
+    active = p;
+    ORDER.forEach(q => { if(!chipEls[q]) return; chipEls[q].style.opacity=(!p||q===p)?"1":"0.45"; chipEls[q].style.boxShadow=(q===p)?"0 0 0 4px rgba(27,58,42,.35)":"none"; });
+    graph.forEachNode((n,a) => { const on = !p || a.profile===p; graph.setNodeAttribute(n,"color", on?a.origColor:"#e6e6e6"); graph.setNodeAttribute(n,"size", on?a.origSize:a.origSize*0.55); });
+    graph.forEachEdge((e,a,s,t) => { const on = !p || graph.getNodeAttribute(s,"profile")===p || graph.getNodeAttribute(t,"profile")===p; graph.setEdgeAttribute(e,"color", on?"#90caf9":"#eeeeee"); });
+    if(!p){ explainBox.innerHTML="👆 위 유형 버튼을 누르면, 그 유형 설명이 여기에 나타나요."; explainBox.style.background="#f3f7f4"; }
+    else { const ex=EXPLAIN[p]||{e:"",d:""}; explainBox.innerHTML="<span style='font-size:24px;'>"+ex.e+"</span> <b style='font-size:20px;'>"+p+"</b><br>"+ex.d; explainBox.style.background=(COLORS[p]||"#f3f7f4")+"33"; }
+    renderer.refresh();
+}
 
 let dragged = null, dragging = false;
-renderer.on("downNode", e => {{ dragging=true; dragged=e.node; running=false; }});
-renderer.getMouseCaptor().on("mousemovebody", e => {{
+renderer.on("downNode", e => { dragging=true; dragged=e.node; running=false; });
+renderer.getMouseCaptor().on("mousemovebody", e => {
     if (!dragging||!dragged) return;
     const p = renderer.viewportToGraph(e);
     graph.setNodeAttribute(dragged,"x",p.x);
     graph.setNodeAttribute(dragged,"y",p.y);
     e.preventSigmaDefault(); e.original.preventDefault(); e.original.stopPropagation();
-}});
-renderer.getMouseCaptor().on("mouseup", () => {{ dragging=false; dragged=null; }});
+});
+renderer.getMouseCaptor().on("mouseup", () => { dragging=false; dragged=null; });
 </script>
 """
-    components.html(html, height=height + 120)
+    html = (html.replace("__HEIGHT__", str(height))
+                .replace("__NODES__", nodes_json)
+                .replace("__EDGES__", edges_json))
+    components.html(html, height=height + 250)
     
 def draw_construct_bar(responses):
     ch = get_chart_colors()
@@ -306,39 +322,79 @@ if not responses:
     st.warning("아직 유효한 응답이 없습니다. 구글 폼에 응답이 제출되면 자동으로 표시됩니다.")
     st.stop()
 
-# 상단 지표
+# ── 인트로 ──
+st.markdown("""
+<div style="font-size:1.3rem; line-height:1.7; background:var(--bg-card); border:1px solid var(--border-main);
+     border-radius:16px; padding:1.3rem 1.5rem; margin-bottom:.8rem;">
+<b style="color:var(--accent-primary); font-size:1.5rem;">🌱 3일 동안 열심히 환경 교육에 참여한 우리 반!</b><br>
+이제 우리 반은 환경을 어떻게 생각하고 있을까요? 설문 결과로 <b>우리 반 '생각의 지도'</b>가 그려집니다. 함께 알아봐요!
+</div>
+""", unsafe_allow_html=True)
+# ── 목표 ──
+st.markdown("""
+<div style="font-size:1.25rem; line-height:1.7; background:var(--bg-metric); border-radius:14px;
+     padding:1rem 1.4rem; margin-bottom:1rem;">
+🎯 <b>목표</b> — 우리 반이 환경에 대해 <b>어떻게 생각하는지</b>, 그리고 <b>누구와 생각이 비슷한지</b> 알아보기
+</div>
+""", unsafe_allow_html=True)
+
+# 상단 지표 + 갱신
 all_scores_np = np.array([r["scores"] for r in responses])
 avg_all       = all_scores_np.mean(axis=0)
-
 c1, c2, c3 = st.columns(3)
 c1.metric("👥 총 응답자", f"{len(responses)}명")
 c2.metric("🌿 평균 태도", f"{avg_all[0:4].mean():.2f} / 7")
 c3.metric("💪 평균 행동 의도", f"{avg_all[12:].mean():.2f} / 7")
-
 st.caption("⏱️ 데이터는 60초마다 자동 갱신됩니다.")
 if st.button("🔄 지금 갱신"):
     st.cache_data.clear()
     st.rerun()
 
 st.markdown("---")
-tab1, tab2 = st.tabs(["🕸️ 네트워크", "📊 구인별 분석"])
-# tab1, tab2, tab3 = st.tabs(["🕸️ 네트워크", "📊 구인별 분석", "📋 원시 데이터"])
+# ── 네트워크 ──
+draw_dynamic_network(responses)
 
-with tab1:
-    st.markdown("### 🕸️ 환경행동 유사도 네트워크")
-    st.caption("응답 벡터 간 코사인 유사도 ≥ 0.92인 학생끼리 연결됩니다. 노드를 드래그해 이동할 수 있습니다.")
-    draw_dynamic_network(responses)
+# ── 네트워크 읽는 법 ──
+st.markdown("""
+<div class='eco-card' style="font-size:1.18rem; line-height:1.95;">
+<b style="color:var(--accent-primary); font-size:1.4rem;">🕸️ 네트워크(생각의 지도) 읽는 법</b>
+<ul style="margin:.6rem 0 0;">
+<li><b>점 = 우리 반 친구 한 명</b></li>
+<li><b>점끼리 가까우면 = 생각(응답)이 비슷하다</b> ← 가장 중요!</li>
+<li><b>색깔 = 5가지 환경 유형</b> (위 버튼으로 골라보세요)</li>
+<li><b>뭉쳐 있는 무리 = 생각이 비슷한 친구들의 모임</b></li>
+<li><b>가운데 = 우리 반 평균에 가까운 생각 / 바깥 외톨이 = 남과 다른 독특한 생각</b></li>
+</ul>
+<div style="margin-top:.6rem;">👉 그래서 <b>"누가 누구와 가까운지"</b>, <b>"우리 반에 어떤 생각 그룹이 있는지"</b>를 한눈에 볼 수 있어요.</div>
+</div>
+""", unsafe_allow_html=True)
 
-with tab2:
-    st.markdown("### 📊 TPB 구인별 평균 점수")
-    fig_c = draw_construct_bar(responses)
-    st.pyplot(fig_c, use_container_width=True)
-    plt.close(fig_c)
+# ── 우리 반 요약 (진짜 결과 반영) ──
+from collections import Counter as _Counter
+_pc = _Counter(r["profile"] for r in responses if r["profile"] != "나(직접 참여)")
+if _pc:
+    top_t = max(_pc, key=_pc.get)
+    low_t = min(_pc, key=_pc.get)
+    good = top_t != "무관심형"
+    tone = "환경에 관심이 많은 <b>훌륭한 반</b>" if good else "<b>조금 더 노력이 필요한 반</b>"
+    st.markdown(f"""
+<div class='eco-card' style="font-size:1.18rem; line-height:1.85; margin-top:1rem;">
+<b style="color:var(--accent-primary); font-size:1.35rem;">🏫 우리 반 요약</b><br>
+우리 반은 <b>{top_t}</b>이(가) 가장 많고, <b>{low_t}</b>이(가) 가장 적어요.<br>
+그러니까 {tone}이네요! 3일 동안 환경을 배운 만큼, 앞으로도 관심을 갖고 노력하면
+훨씬 더 살기 좋은 지구를 가꾸어 나갈 수 있을 거예요 🌍
+</div>
+""", unsafe_allow_html=True)
 
-    st.markdown("### 👤 환경 성향 분포")
-    fig_p = draw_profile_bar(responses)
-    st.pyplot(fig_p, use_container_width=True)
-    plt.close(fig_p)
+# ── 주의사항 ──
+st.markdown("""
+<div class='eco-card' style="font-size:1.18rem; line-height:1.85; border:2px solid var(--accent-primary);">
+<b style="color:var(--accent-primary); font-size:1.4rem;">🙏 주의사항</b><br>
+• <b>솔직하게</b> 답해주세요 — 정답은 없어요!<br>
+• 완전 <b>익명</b>이라 누가 어떤 답을 했는지 알 수 없어요.<br>
+• 좋아 보이려고 하지 말고 <b>진짜 내 생각</b>을 골라야, 우리 반의 진짜 모습이 보여요.
+</div>
+""", unsafe_allow_html=True)
 
 # with tab3:
 #     st.markdown("### 📋 원시 데이터")
