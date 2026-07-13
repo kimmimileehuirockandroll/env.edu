@@ -321,12 +321,12 @@ def draw_dynamic_response_network(responses, height=650):
     
     const COLORS = {"적극 실천형":"#69f0ae","사회 규범형":"#40c4ff","자신감형":"#ffd740","가치 인식형":"#ff6e40","무관심형":"#b0bec5","나(직접 참여)":"#ea80fc"};
     const EXPLAIN = {
-      "적극 실천형":{e:"💪",d:"생각도 의지도 강해서 이미 환경 행동을 잘 실천하는 편이에요."},
-      "사회 규범형":{e:"👥",d:"'다들 하니까·어른들이 강조하니까' 주변의 영향을 크게 받는 편이에요."},
-      "자신감형":{e:"✨",d:"'나는 할 수 있어!' 실천에 대한 자신감이 높은 편이에요."},
-      "가치 인식형":{e:"💡",d:"환경이 중요하다는 건 잘 알지만, 아직 행동으로는 덜 옮기는 편이에요."},
-      "무관심형":{e:"🍃",d:"아직 환경 행동에 관심·의지가 낮은 편이에요. 지금부터 시작하면 돼요!"},
-      "나(직접 참여)":{e:"🙋",d:"직접 설문에 참여한 '나'의 위치예요. 나와 가까운 친구를 찾아보세요."},
+      "적극 실천형":{e:"💪",d:"텀블러 쓰기·일회용품 안 쓰기처럼 친환경 행동을 실제로 꾸준히 실천하는 유형! 앞으로도 계속하고 친구에게도 권하는 아주 훌륭한 친구들이에요 ㅎㅎ"},
+      "사회 규범형":{e:"👥",d:"가족·친구가 실천하길 바라고, 어른들이 강조하면 '나도 해야지' 도덕심이 드는 유형. 사회의 규칙을 잘 지키는 멋진 친구들이죠."},
+      "자신감형":{e:"✨",d:"마음만 먹으면 분리수거·텀블러쯤 어렵지 않게 할 수 있다는 자신감이 있는 유형. 매번 지키긴 어려워도 웬만하면 지키려 노력해요~"},
+      "가치 인식형":{e:"💡",d:"분리수거 같은 불편함도 '의미 있는 일'이라 여겨, 실천하고 나면 뿌듯하고 기분 좋은 유형! 어때요, 잘 맞나요?"},
+      "무관심형":{e:"🍃",d:"아직 환경에 관심이 적은 유형이에요. 만약 나왔다면, 지금부터 환경을 아끼고 지키려는 작은 노력을 시작해봐요!"},
+      "나(직접 참여)":{e:"🙋",d:"직접 설문에 참여한 '나'의 위치예요. 나와 가장 가까운 친구는 누구인지 찾아보세요."},
     };
     const ORDER = ["적극 실천형","사회 규범형","자신감형","가치 인식형","무관심형","나(직접 참여)"];
     const present = new Set(nodes.map((n) => n.profile));
@@ -574,6 +574,34 @@ with tab2:
 <div style="margin-top:.6rem;">👉 그래서 <b>"누가 누구와 가까운지"</b>, <b>"우리 반에 어떤 생각 그룹이 있는지"</b>를 한눈에 볼 수 있어요.</div>
 </div>
 """, unsafe_allow_html=True)
+
+        # ── 우리 반 유형 요약 ──
+        _pc = Counter(r["profile"] for r in responses if r["profile"] != "나(직접 참여)")
+        if _pc:
+            top_t = max(_pc, key=_pc.get)
+            low_t = min(_pc, key=_pc.get)
+            good = top_t != "무관심형"
+            tone = "환경에 관심이 많은 <b>훌륭한 반</b>" if good else "<b>조금 더 노력이 필요한 반</b>"
+            st.markdown(f"""
+<div class='eco-card' style="font-size:1.18rem; line-height:1.85; margin-top:1rem;">
+<b style="color:var(--accent-primary); font-size:1.35rem;">🏫 우리 반 요약</b><br>
+우리 반은 <b>{top_t}</b>이(가) 가장 많고, <b>{low_t}</b>이(가) 가장 적어요.<br>
+그러니까 {tone}이네요! 3일 동안 환경을 배운 만큼, 앞으로도 관심을 갖고 노력하면
+훨씬 더 살기 좋은 지구를 가꾸어 나갈 수 있을 거예요 🌍
+</div>
+""", unsafe_allow_html=True)
+
+        # Data table (expander)
+        with st.expander("📋 원시 데이터 테이블 보기"):
+            import pandas as pd
+            rows = []
+            for r in responses:
+                row = {"닉네임": r["name"], "성향": r["profile"]}
+                for i, s in enumerate(r["scores"]):
+                    row[f"Q{i+1}"] = s
+                rows.append(row)
+            df = pd.DataFrame(rows)
+            st.dataframe(df, use_container_width=True)
 
     # ── 주의사항 ──
     st.markdown("""
