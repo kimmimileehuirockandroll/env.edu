@@ -407,7 +407,7 @@ def draw_dynamic_response_network(responses, height=650):
         .replace("__EDGES__", edges_json)
     )
     
-    components.html(html, height=height + 80)
+    components.html(html, height=height + 250)
 
 def init_state():
     """설문 데이터를 담을 session_state 기본값을 설정 (이미 있으면 건너뜀)."""
