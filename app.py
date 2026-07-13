@@ -24,6 +24,7 @@ game7 = st.Page("pages/9_eco_hero.py", title="플로깅 러쉬", icon="🏃")
 game8 = st.Page("pages/10_board_quiz.py", title="아이스브레이킹", icon="🧊")
 work1 = st.Page("pages/11_trade_network.py", title="데이터로 읽는 국제무역", icon="🌐")
 work2 = st.Page("pages/12_patent_network.py", title="데이터로 읽는 특허", icon="📜")
+network0 = st.Page("pages/2_environment_action_network.py", title="우리반 네트워크(예시)", icon="📊")
 network1 = st.Page("pages/3_survey2.py", title="1반 환경행동 네트워크", icon="📊")
 network2 = st.Page("pages/3_2survey2.py", title="2반 환경행동 네트워크", icon="📊")
 network3 = st.Page("pages/3_3survey3.py", title="3반 환경행동 네트워크", icon="📊")
@@ -50,6 +51,7 @@ SECTIONS = [
         (game8, "아이스브레이킹", "🧊", ["초등", "중등"]),
     ]),
     ("Survey", [
+        (network0, "우리반 네트워크(예시)", "📊", ["중등", "고등", "대학·성인"]),
         (network1, "1반 환경행동 네트워크", "📊", ["중등", "고등", "대학·성인"]),
         (network2, "2반 환경행동 네트워크", "📊", ["중등", "고등", "대학·성인"]),
         (network3, "3반 환경행동 네트워크", "📊", ["중등", "고등", "대학·성인"]),
