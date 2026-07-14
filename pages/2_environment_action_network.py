@@ -579,7 +579,7 @@ with tab2:
         try:
             _G = build_response_network(responses)
             _bc = nx.betweenness_centrality(_G) if _G.number_of_nodes() > 2 else {}
-            _ranked = [(n, v) for n, v in sorted(_bc.items(), key=lambda x: -x[1]) if v > 0][:5]
+            _ranked = sorted(_bc.items(), key=lambda x: -x[1])
         except Exception:
             _ranked = []
         if _ranked:
@@ -594,7 +594,7 @@ with tab2:
 서로 다른 생각 그룹을 이어주는 <b>'다리' 역할</b>을 많이 하는 친구예요.
 이 친구를 거쳐 여러 무리가 연결돼요. (점수가 높을수록 더 중요한 다리)
 </div>
-<ul style="margin:0;">{_rows}</ul>
+<ul style="margin:0; max-height:360px; overflow:auto;">{_rows}</ul>
 </div>
 """, unsafe_allow_html=True)
         else:
