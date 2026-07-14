@@ -61,12 +61,15 @@ def load_sheet():
         return None, f"시트 읽기 실패: {e}"
 
     cols = list(df.columns)
+    # 마지막 '별명 또는 이름' 열 자동 탐지 (헤더에 별명/이름 포함)
+    name_col = next((c for c in cols if ("별명" in str(c)) or ("이름" in str(c))), None)
     rename = {cols[0]: "timestamp"}
     for i, col in enumerate(cols[1:16], start=1):
         rename[col] = str(i)
     df = df.rename(columns=rename)
 
     responses = []
+    used_names = set()
     for _, row in df.iterrows():
         scores = []
         valid = True
@@ -90,8 +93,20 @@ def load_sheet():
             continue
 
         profile = _classify_profile(scores)
+
+        # 별명/이름 → 노드 라벨 (빈 값은 익명N, 중복은 _2, _3 …)
+        raw_name = str(row.get(name_col, "")).strip() if name_col else ""
+        if not raw_name or raw_name.lower() == "nan":
+            raw_name = f"익명{len(responses) + 1}"
+        disp = raw_name
+        _k = 2
+        while disp in used_names:
+            disp = f"{raw_name}_{_k}"
+            _k += 1
+        used_names.add(disp)
+
         responses.append({
-            "name":    f"응답자_{len(responses)+1:03d}",
+            "name":    disp,
             "scores":  scores,
             "profile": profile,
             "time":    str(row.get("timestamp", "")),
