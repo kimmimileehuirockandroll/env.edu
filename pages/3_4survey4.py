@@ -384,6 +384,32 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ── 연결의 다리 (매개 중심성) ──
+try:
+    _G = build_response_network(responses)
+    _bc = nx.betweenness_centrality(_G) if _G.number_of_nodes() > 2 else {}
+    _ranked = sorted(_bc.items(), key=lambda x: -x[1])
+except Exception:
+    _ranked = []
+
+if _ranked:
+    _rows = "".join(
+        f"<li><b>{i+1}위. {n}</b> &nbsp;<span style='color:var(--text-caption);'>다리 점수 {v:.3f}</span></li>"
+        for i, (n, v) in enumerate(_ranked)
+    )
+    st.markdown(f"""
+<div class='eco-card' style="font-size:1.18rem; line-height:1.95; margin-top:1rem;">
+<b style="color:var(--accent-primary); font-size:1.35rem;">🌉 연결의 다리 (매개 중심성)</b>
+<div style="color:var(--text-muted); font-size:1.02rem; margin:.3rem 0 .6rem;">
+서로 다른 생각 그룹을 이어주는 <b>'다리' 역할</b>을 많이 하는 친구예요.
+이 친구를 거쳐 여러 무리가 연결돼요. (점수가 높을수록 더 중요한 다리)
+</div>
+<ul style="margin:0; max-height:360px; overflow:auto;">{_rows}</ul>
+</div>
+""", unsafe_allow_html=True)
+else:
+    st.caption("🌉 아직 뚜렷한 '다리 역할'(매개 중심성) 친구가 없어요. 응답이 늘면 나타납니다.")
+
 # ── 우리 반 요약 (진짜 결과 반영) ──
 from collections import Counter as _Counter
 _pc = _Counter(r["profile"] for r in responses if r["profile"] != "나(직접 참여)")
