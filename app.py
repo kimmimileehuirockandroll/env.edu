@@ -2,7 +2,7 @@ import streamlit as st
 from shared import apply_css, level_selector, page_visible
 
 st.set_page_config(
-    page_title="Eco Lab. Jeju",
+    page_title="Eco Lab.",
     page_icon="🌷",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -14,9 +14,9 @@ apply_css()
 #  페이지 등록
 # ─────────────────────────────────────────────
 home = st.Page("home.py", title="HOME", icon="🏠")
-game1 = st.Page("pages/1_samdasoo_eco_race.py", title="삼다수 에코 레이스", icon="🎮")
+game1 = st.Page("pages/1_samdasoo_eco_race.py", title="에코 레이스", icon="🎮")
 game2 = st.Page("pages/4_insect_murder_case.py", title="살충사건 수사본부", icon="🪲")
-game3 = st.Page("pages/5_jeju_ecosystem_balance.py", title="제주 생태계 밸런스", icon="🌋")
+game3 = st.Page("pages/5_jeju_ecosystem_balance.py", title="생태계 밸런스", icon="🌋")
 game4 = st.Page("pages/6_pixel_eco_city.py", title="픽셀 에코시티", icon="🏙️")
 game5 = st.Page("pages/7_oreumi_diary.py", title="오름이의 환경 다이어리", icon="🦌")
 game6 = st.Page("pages/8_ecocity_2050.py", title="에코시티 2050", icon="🏙️")
