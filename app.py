@@ -68,7 +68,7 @@ with st.sidebar:
     st.markdown(
         """
         <a href="./" target="_self" class="brand-link">
-            <div class="brand-title">🌷</br> Eco Lab. Jeju</div>
+            <div class="brand-title">🌷</br> Eco Lab.</div>
             <div class="brand-subtitle">에코랩</div>
         </a>
         """,
