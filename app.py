@@ -41,9 +41,9 @@ SECTIONS = [
         (home, "HOME", "🏠", None),
     ]),
     ("Network", [
-        (game1, "삼다수 에코 레이스", "🎮", ["초등", "고등"]),
+        (game1, "에코 레이스", "🎮", ["초등", "고등"]),
         (game2, "살충사건 수사본부", "🪲", ["초등", "중등"]),
-        (game3, "제주 생태계 밸런스", "🌋", ["고등", "대학·성인"]),
+        (game3, "생태계 밸런스", "🌋", ["고등", "대학·성인"]),
         (game4, "픽셀 에코시티", "🏙️", ["고등"]),
         (game5, "오름이의 환경 다이어리", "🦌", ["초등"]),
         (game6, "에코시티 2050", "🏙️", ["고등", "대학·성인"]),
@@ -69,7 +69,7 @@ with st.sidebar:
         """
         <a href="./" target="_self" class="brand-link">
             <div class="brand-title">🌷</br> Eco Lab. Jeju</div>
-            <div class="brand-subtitle">에코랩 제주</div>
+            <div class="brand-subtitle">에코랩</div>
         </a>
         """,
         unsafe_allow_html=True,
@@ -105,8 +105,8 @@ with st.sidebar:
         """
 <div style='font-size:.8rem; color:var(--text-muted); line-height:1.6;'>
 데이터 사이언스 × 환경 교육<br>
-제주 대정중학교 교육 프로그램 <br><br>
-제작: 서울대학교 샤오름
+체험 프로그램 <br><br>
+제작: 환경1짱 미미
 </div>
 """,
         unsafe_allow_html=True,
