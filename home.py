@@ -14,7 +14,7 @@ st.markdown("""
 
 st.markdown("""
 <div class='hero-banner'>
-  <div class='hero-title'>🌷<br>에코랩 제주</div>
+  <div class='hero-title'>🌷<br>에코랩</div>
   <div class='hero-sub'>데이터 사이언스 × 환경 교육</div>
 </div>
 """, unsafe_allow_html=True)
@@ -23,7 +23,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown("""
 <div class='eco-card'>
-  <h3>🎮 삼다수 에코 레이스</h3>
+  <h3>🎮 에코 레이스</h3>
   <p style='color:var(--text-muted); font-size:.95rem;'>
   제주도의 6개 랜드마크를 탐험하는 네트워크 게임!<br>
   대중교통 vs. 전기 렌터카 중 최적의 이동 수단을 선택하며<br>
@@ -95,6 +95,6 @@ with c3:
 
 st.markdown("""
 <div class='eco-footer'>
-제주특별자치도 환경 교육 프로그램 · 네트워크 사이언스 & 데이터 사이언스 체험 수업
+환경 교육 프로그램 · 네트워크 사이언스 & 데이터 사이언스 체험 수업
 </div>
 """, unsafe_allow_html=True)
